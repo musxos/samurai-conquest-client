@@ -9,18 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^0.12.7",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "classnames": "^2.3.2",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
+    "ethers": "5",
     "gsap": "^3.11.5",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "^0.151.3",
-    "typescript": "5.0.3"
+    "typescript": "5.0.3",
+    "wagmi": "^0.12.10"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
