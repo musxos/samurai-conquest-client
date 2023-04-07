@@ -13,7 +13,9 @@ export function Map ()
         setup();
     }, [])
 
-    return <div id="canvas"></div>;
+    return <div className="max-h-full max-w-full">
+        <div id="canvas"></div>
+    </div>;
 }
 
 function setup ()

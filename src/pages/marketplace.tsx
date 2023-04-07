@@ -1,12 +1,10 @@
-import { Navbar } from "@/components/layout/navbar.component"
 import { AgentCard } from "@/components/marketplace/agent.card"
 import { DefaultLayout } from "@/layouts/default.layout"
 
 export default function Marketplace ()
 {
     return (<div className="px-8 py-6 text-white">
-        <Navbar className="marketplace-animate-navbar"></Navbar>
-        <div className="flex flex-col mt-12">
+        <div className="flex flex-col mt-24">
             <h1 className="font-inter text-2xl font-semibold marketplace-animate-left">Top Collection</h1>
             <div className="flex items-center justify-between mt-6">
                 <div className="flex gap-4 marketplace-animate-left">

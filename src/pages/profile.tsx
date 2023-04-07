@@ -3,7 +3,7 @@ import { DefaultLayout } from "@/layouts/default.layout"
 
 export default function Profile ()
 {
-    return <div className="grid grid-cols-5 px-12 py-8 gap-8">
+    return <div className="grid grid-cols-5 px-12 py-8 gap-8 mt-24">
         <div className="col-span-1">
             <div className="flex flex-col items-center w-full gap-4">
                 <div className="bg-neutral-800 px-6 py-8 rounded-xl w-full flex flex-col items-center">

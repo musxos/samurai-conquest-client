@@ -39,7 +39,7 @@ export default function Inventory ()
     }
 
 
-    return <div className="h-full gap-x-12 flex px-8 py-12">
+    return <div className="h-full gap-x-12 flex px-8 py-12 mt-24">
         <div className="w-2/3 inventory-left-in">
             <h1 className="text-2xl font-semibold text-white">Inventory</h1>
             <p className="w-2/3 text-neutral-300 text-sm mt-2">
