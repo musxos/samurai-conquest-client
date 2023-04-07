@@ -122,8 +122,12 @@ function setup ()
 
         //
 
-        renderer = new THREE.WebGLRenderer()
-        renderer.setPixelRatio(window.devicePixelRatio)
+        renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            powerPreference: 'high-performance',
+        });
+
+        renderer.setPixelRatio(window.devicePixelRatio * 0.9)
         renderer.setSize(window.innerWidth, window.innerHeight)
         renderer.toneMapping = THREE.ACESFilmicToneMapping
         container.appendChild(renderer.domElement)
@@ -132,7 +136,7 @@ function setup ()
 
         scene = new THREE.Scene()
 
-        camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 1, 20000)
+        camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 1, 5000)
         camera.rotation.x = -Math.PI / 2
         camera.position.set(0, 2400, 0)
 
@@ -142,7 +146,7 @@ function setup ()
 
         // Water
 
-        const waterGeometry = new THREE.PlaneGeometry(10000, 10000)
+        const waterGeometry = new THREE.PlaneGeometry(5000, 5000)
 
         water = new Water(waterGeometry, {
             textureWidth: 512,
@@ -268,6 +272,7 @@ function setup ()
         requestAnimationFrame(animate)
 
         cloudPlaneMaterial.alphaMap.offset.y -= 0.00005
+        // console.log("Number of Triangles :", renderer.info.render.triangles);
 
         render()
     }
