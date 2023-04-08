@@ -73,7 +73,7 @@ export default function Profile ()
                 </div>
             </div>
         </div>
-        <div className="col-span-2 lg:col-span-1">
+        <div className="col-span-2 lg:col-span-3">
             <div className="flex flex-col items-center w-full gap-4">
                 <div className="bg-neutral-800 px-6 py-4 rounded-xl flex flex-col items-center w-full">
                     <div className="flex flex-row items-center justify-between w-full mb-2">
