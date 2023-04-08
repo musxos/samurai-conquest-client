@@ -73,6 +73,7 @@ function setup ()
 
     function onMouseMove (event: MouseEvent)
     {
+        return;
         mouse.x = (event.clientX / container.clientWidth) * 2 - 1
         mouse.y = -(event.clientY / container.clientHeight) * 2 + 1
         raycaster.setFromCamera(mouse, camera)
@@ -95,6 +96,7 @@ function setup ()
             material.color.set(0xff0000)
         }
     }
+
     function onMouseClick (event: MouseEvent)
     {
         mouse.x = (event.clientX / container.clientWidth) * 2 - 1
@@ -129,7 +131,6 @@ function setup ()
 
         renderer.setPixelRatio(window.devicePixelRatio * 0.9)
         renderer.setSize(window.innerWidth, window.innerHeight)
-        renderer.toneMapping = THREE.ACESFilmicToneMapping
         container.appendChild(renderer.domElement)
 
         //
@@ -138,7 +139,7 @@ function setup ()
 
         camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 1, 5000)
         camera.rotation.x = -Math.PI / 2
-        camera.position.set(0, 2400, 0)
+        camera.position.set(0, 2800, 0)
 
         //
 
@@ -146,19 +147,19 @@ function setup ()
 
         // Water
 
-        const waterGeometry = new THREE.PlaneGeometry(5000, 5000)
+        const waterGeometry = new THREE.PlaneGeometry(10000, 10000)
 
         water = new Water(waterGeometry, {
             textureWidth: 512,
             textureHeight: 512,
-            waterNormals: new THREE.TextureLoader().load('/waternormals.jpg', function (texture)
+            waterNormals: new THREE.TextureLoader().load('/water4.jpg', function (texture)
             {
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping
             }),
             sunDirection: new THREE.Vector3(),
             sunColor: 0xffffff,
-            waterColor: 0x001e0f,
-            distortionScale: 3.7,
+            waterColor: 0x005DFF,
+            distortionScale: 120,
             fog: scene.fog !== undefined,
         })
 
@@ -218,13 +219,14 @@ function setup ()
         cloud.rotation.x = -Math.PI / 2
         scene.add(cloud)
 
-        let light = new THREE.AmbientLight(0xcccccc, 1.5)
-        light.position.set(0, 2400, 0)
+        let light = new THREE.AmbientLight(0xffffff, 1)
+        light.position.set(0, 1200, 0)
         light.lookAt(0, 0, 0)
         scene.add(light)
 
-        let directionalLight = new THREE.DirectionalLight(0xcccccc, 1)
-        directionalLight.position.set(600, 2400, 0)
+        let directionalLight = new THREE.DirectionalLight(0xffffff, 1)
+        directionalLight.shadow.mapSize.width = 10000
+        directionalLight.position.set(600, 1200, 0)
         directionalLight.lookAt(0, 0, 0)
         scene.add(directionalLight)
 
@@ -243,7 +245,8 @@ function setup ()
                 })
 
                 new THREE.Box3().setFromObject(object).getCenter(object.position).multiplyScalar(-1)
-                object.position.y = -100
+                object.position.y = -200
+                object.rotation.y = -Math.PI / 2
 
                 scene.add(object)
             },
