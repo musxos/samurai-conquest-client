@@ -7,7 +7,7 @@ export type DefaultLayoutProps = {
 
 export function DefaultLayout ({ children }: DefaultLayoutProps)
 {
-    return <div className="flex min-h-screen">
+    return <div className="flex">
         <Aside></Aside>
         <main className="grow relative max-w-full">
             <div className="px-6 py-8 flex w-full absolute">

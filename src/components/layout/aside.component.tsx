@@ -2,11 +2,7 @@ import classNames from "classnames";
 import Link from "next/link"
 import { useState } from "react";
 
-export type AsideProps = {
-    className?: string;
-}
-
-export function Aside ({ className }: AsideProps = {})
+export function Aside ()
 {
     const [ modal, setModal ] = useState(false)
 
@@ -17,7 +13,7 @@ export function Aside ({ className }: AsideProps = {})
 
     return (<>
         <aside
-            className={`sticky top-0 min-h-screen h-full w-16 bg-neutral-900 flex flex-col items-center px-4 py-6 z-10 border-r border-r-neutral-800 text-neutral-600 ${className}`}
+            className="sticky top-0 w-16 h-screen bg-neutral-900 flex flex-col items-center px-4 py-6 z-50 border-r border-r-neutral-800 text-neutral-600"
         >
             <Link
                 active-class="!text-violet-500"
