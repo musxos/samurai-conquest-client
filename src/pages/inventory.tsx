@@ -1,6 +1,7 @@
 import { AgentCard } from '@/components/inventory/agent.card'
+import { useLayout } from '@/hooks/useLayout'
 import { DefaultLayout } from '@/layouts/default.layout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type InventoryItem = {
     number: number
@@ -38,6 +39,18 @@ export default function Inventory ()
         setActive({ ...active, assign: false })
     }
 
+    const { update: updateLayout } = useLayout();
+
+    useEffect(() =>
+    {
+        updateLayout({
+            messages: true,
+            notifications: true,
+            profile: true,
+            wallet: true,
+            search: true
+        })
+    }, [])
 
     return <div className="h-full gap-x-12 flex px-8 py-12 mt-24">
         <div className="w-2/3 inventory-left-in">

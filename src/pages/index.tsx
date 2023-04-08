@@ -1,9 +1,24 @@
 import { Map } from '@/components/map.component'
+import { useLayout } from '@/hooks/useLayout'
 import { DefaultLayout } from '@/layouts/default.layout'
 import Head from 'next/head'
+import { useEffect } from 'react';
 
 export default function Home ()
 {
+  const { update: updateLayout } = useLayout();
+
+  useEffect(() =>
+  {
+    updateLayout({
+      messages: false,
+      notifications: false,
+      profile: false,
+      wallet: true,
+      search: false
+    })
+  }, [])
+
   return (
     <>
       <Head>

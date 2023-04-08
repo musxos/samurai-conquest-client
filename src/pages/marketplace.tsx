@@ -1,8 +1,23 @@
 import { AgentCard } from "@/components/marketplace/agent.card"
+import { useLayout } from "@/hooks/useLayout";
 import { DefaultLayout } from "@/layouts/default.layout"
+import { useEffect } from "react";
 
 export default function Marketplace ()
 {
+    const { update: updateLayout } = useLayout();
+
+    useEffect(() =>
+    {
+        updateLayout({
+            messages: true,
+            notifications: true,
+            profile: true,
+            wallet: true,
+            search: true
+        })
+    }, [])
+
     return (<div className="px-8 py-6 text-white">
         <div className="flex flex-col mt-24">
             <h1 className="font-inter text-2xl font-semibold marketplace-animate-left">Top Collection</h1>

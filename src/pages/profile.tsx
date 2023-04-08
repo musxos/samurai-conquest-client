@@ -1,8 +1,23 @@
 import { AgentCard } from "@/components/inventory/agent.card"
+import { useLayout } from "@/hooks/useLayout";
 import { DefaultLayout } from "@/layouts/default.layout"
+import { useEffect } from "react";
 
 export default function Profile ()
 {
+    const { update: updateLayout } = useLayout();
+
+    useEffect(() =>
+    {
+        updateLayout({
+            messages: true,
+            notifications: true,
+            profile: true,
+            wallet: true,
+            search: true
+        })
+    }, [])
+
     return <div className="grid grid-cols-5 px-12 py-8 gap-8 mt-24">
         <div className="col-span-1">
             <div className="flex flex-col items-center w-full gap-4">
@@ -55,14 +70,6 @@ export default function Profile ()
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div className="bg-neutral-800 px-6 py-4 rounded-xl w-full flex flex-col items-center">
-                    <h2 className="w-full text-lg font-medium">Reference</h2>
-                    <p className="w-full text-white/60 text-sm">Invite your friends and take <span className="text-yellow-500 inline-flex items-center">
-                        <i className="ri-coin-line mr-1"></i>500</span> coin.</p>
-
-                    <input className="mt-4 w-full px-4 py-4 rounded-xl bg-neutral-900" type="text" disabled value={"JOHNDUE-KING102X2"} />
                 </div>
             </div>
         </div>
