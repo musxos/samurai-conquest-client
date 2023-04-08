@@ -61,7 +61,7 @@ export default function Inventory ()
                 possimus? Cumque, mollitia.
             </p>
 
-            <div className="grid grid-cols-4 gap-4 mt-16">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
                 {inventory.map((item, i) => <AgentCard assign={item.assign} image={item.image} name={item.name} number={item.number} onClick={() => show(i)} key={i}></AgentCard>)}
             </div>
         </div >

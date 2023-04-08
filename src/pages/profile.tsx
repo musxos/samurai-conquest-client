@@ -18,8 +18,8 @@ export default function Profile ()
         })
     }, [])
 
-    return <div className="grid grid-cols-5 px-12 py-8 gap-8 mt-24">
-        <div className="col-span-1">
+    return <div className="grid grid-cols-2 lg:grid-cols-5 px-12 py-8 gap-8 mt-24">
+        <div className="col-span-2 lg:col-span-1">
             <div className="flex flex-col items-center w-full gap-4">
                 <div className="bg-neutral-800 px-6 py-8 rounded-xl w-full flex flex-col items-center">
                     <div className="w-32 h-32 relative">
@@ -73,7 +73,7 @@ export default function Profile ()
                 </div>
             </div>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-2 lg:col-span-1">
             <div className="flex flex-col items-center w-full gap-4">
                 <div className="bg-neutral-800 px-6 py-4 rounded-xl flex flex-col items-center w-full">
                     <div className="flex flex-row items-center justify-between w-full mb-2">
@@ -89,7 +89,7 @@ export default function Profile ()
             </div>
         </div>
 
-        <div className="col-span-1">
+        <div className="col-span-2 lg:col-span-1">
             <div className="flex flex-col gap-4">
                 <div className="bg-neutral-800 px-6 py-4 rounded-xl w-full flex flex-col items-center">
                     <h2 className="text-left w-full text-xl font-medium">Daily Quests</h2>
