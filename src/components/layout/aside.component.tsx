@@ -54,6 +54,13 @@ export function Aside() {
         >
           <i className="ri-gift-line text-2xl"></i>
         </Link>
+        <Link
+          href="/top"
+          active-class="!text-violet-500"
+          className="flex h-12 w-12 items-center justify-center rounded-full hover:bg-neutral-800"
+        >
+          <i className="ri-arrow-up-double-line text-2xl"></i>
+        </Link>
         <button
           onClick={handleModal}
           className="flex h-12 w-12 items-center justify-center rounded-full hover:bg-neutral-800"
