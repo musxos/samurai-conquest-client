@@ -16,7 +16,7 @@ export function AgentCard({
   onClick,
 }: AgentCardProps) {
   const style = classNames(
-    'relative flex flex-col px-6 py-4 bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 rounded-2xl group hover:bg-neutral-800/80 transition cursor-pointer',
+    'relative flex flex-col px-6 py-4 bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 rounded-2xl group hover:bg-neutral-800/50 transition cursor-pointer',
     {
       'bg-violet-800': assign,
       'bg-neutral-800': !assign,
