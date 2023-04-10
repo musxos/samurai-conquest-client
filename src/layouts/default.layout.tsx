@@ -17,7 +17,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
           <div className="absolute flex w-full px-6 py-8">
             <Navbar className="w-full"></Navbar>
           </div>
-          <div className="min-h-screen w-full">{children}</div>
+          <div className="min-h-screen min-w-full">{children}</div>
         </main>
       </div>
     </>
