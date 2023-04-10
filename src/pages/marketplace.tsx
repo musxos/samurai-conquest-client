@@ -18,31 +18,31 @@ export default function Marketplace() {
 
   return (
     <div className="px-8 py-6 text-white">
-      <div className="flex flex-col mt-24">
-        <h1 className="font-inter text-2xl font-semibold marketplace-animate-left">
+      <div className="mt-24 flex flex-col">
+        <h1 className="font-inter marketplace-animate-left text-2xl font-semibold">
           Top Collection
         </h1>
-        <div className="flex items-center justify-between mt-6">
-          <div className="flex gap-2 lg:gap-4 marketplace-animate-left">
-            <button className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-violet-500 font-inter">
+        <div className="mt-6 flex items-center justify-between">
+          <div className="marketplace-animate-left flex gap-2 lg:gap-4">
+            <button className="font-inter h-12 min-w-[3rem] rounded-full bg-violet-500 px-5 py-3 lg:min-w-[6rem]">
               Female
             </button>
-            <button className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-sm border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter">
+            <button className="font-inter h-12 min-w-[3rem] rounded-full border border-violet-500/10 bg-neutral-900/50 px-5 py-3 font-medium backdrop-blur-sm transition hover:bg-violet-500 lg:min-w-[6rem]">
               Male
             </button>
-            <button className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-sm border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter">
+            <button className="font-inter h-12 min-w-[3rem] rounded-full border border-violet-500/10 bg-neutral-900/50 px-5 py-3 font-medium backdrop-blur-sm transition hover:bg-violet-500 lg:min-w-[6rem]">
               Super Hero
             </button>
-            <button className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-sm border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter">
+            <button className="font-inter h-12 min-w-[3rem] rounded-full border border-violet-500/10 bg-neutral-900/50 px-5 py-3 font-medium backdrop-blur-sm transition hover:bg-violet-500 lg:min-w-[6rem]">
               Legendary
             </button>
           </div>
-          <button className="marketplace-animate-right px-6 py-3 h-12 min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-3xl border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter">
+          <button className="marketplace-animate-right font-inter h-12 min-w-[6rem] rounded-full border border-violet-500/10 bg-neutral-900/50 px-6 py-3 font-medium backdrop-blur-3xl transition hover:bg-violet-500">
             View All
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-5 mt-12 marketplace-fade-in">
+        <div className="marketplace-fade-in mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
           {new Array(99).fill(0).map((_, i) => (
             <AgentCard index={i + 1} key={i}></AgentCard>
           ))}

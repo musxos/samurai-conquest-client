@@ -49,17 +49,17 @@ export default function Inventory() {
   }, []);
 
   return (
-    <div className="h-full gap-x-12 flex px-8 py-12 mt-24">
-      <div className="w-2/3 inventory-left-in">
+    <div className="mt-24 flex h-full gap-x-12 px-8 py-12">
+      <div className="inventory-left-in w-2/3">
         <h1 className="text-2xl font-semibold text-white">Inventory</h1>
-        <p className="w-2/3 text-neutral-300 text-sm mt-2">
+        <p className="mt-2 w-2/3 text-sm text-neutral-300">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quaerat
           dolore veniam maxime laudantium modi quos debitis commodi architecto
           inventore distinctio esse itaque nostrum tempora, deserunt, sed
           possimus? Cumque, mollitia.
         </p>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+        <div className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {inventory.map((item, i) => (
             <AgentCard
               assign={item.assign}
@@ -72,7 +72,7 @@ export default function Inventory() {
           ))}
         </div>
       </div>
-      <div className="w-1/3 text-white inventory-right-in">
+      <div className="inventory-right-in w-1/3 text-white">
         {active && (
           <div className="sticky top-5 flex flex-col">
             <img className="rounded-2xl" src={active.image} alt="" />
@@ -90,7 +90,7 @@ export default function Inventory() {
             {!active.assign && (
               <button
                 onClick={() => assign()}
-                className="bg-violet-500 px-8 py-3 rounded-full ml-auto mt-24"
+                className="ml-auto mt-24 rounded-full bg-violet-500 px-8 py-3"
               >
                 Assign
               </button>
@@ -98,7 +98,7 @@ export default function Inventory() {
             {active.assign && (
               <button
                 onClick={() => unassign()}
-                className="bg-violet-500 px-8 py-3 rounded-full ml-auto mt-24"
+                className="ml-auto mt-24 rounded-full bg-violet-500 px-8 py-3"
               >
                 Unassign
               </button>
