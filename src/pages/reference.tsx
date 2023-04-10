@@ -54,21 +54,6 @@ export default function Reference() {
             <span>Invite 100000 friend</span>
           </li>
         </ul>
-        <div className="flex flex-col">
-          <div className="mx-auto h-8 w-full rounded-full bg-neutral-800">
-            <div className="relative flex h-8 w-1/2 items-center justify-center rounded-full border border-violet-500/50 bg-violet-500/20 backdrop-blur-lg">
-              50%
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute right-5 top-5">
-          <Player className="h-48 w-48" autoplay loop src={Comment}></Player>
-        </div>
-      </div>
-
-      <div className="mt-12 flex flex-col rounded-xl border border-violet-500/10 bg-neutral-900/10 px-6 py-8 backdrop-blur-3xl">
-        <h2>Get Reference Code</h2>
 
         <div className="mt-8 flex flex-col gap-4">
           <input
@@ -77,6 +62,10 @@ export default function Reference() {
             placeholder="Click to get reference code"
             type="text"
           />
+        </div>
+
+        <div className="absolute right-5 top-5">
+          <Player className="h-48 w-48" autoplay loop src={Comment}></Player>
         </div>
       </div>
     </div>

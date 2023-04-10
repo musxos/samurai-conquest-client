@@ -78,62 +78,70 @@ export default function Giveaway() {
 
   return (
     <div className="mt-24 flex flex-col gap-8 px-8 py-6">
-      <div className="flex flex-col">
-        <h1 className="text-3xl font-medium">Giveaway</h1>
-        <p className="mt-2 max-w-2xl text-white/80">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. A magni
-          reprehenderit alias molestiae maiores non minus, placeat, fuga quo
-          assumenda, perspiciatis eaque quod et? Ullam dignissimos nobis neque
-          nam ipsam!
-        </p>
-      </div>
-
-      <div className="relative flex flex-col rounded-xl border border-violet-500/10 bg-neutral-900/10 px-6 py-8 backdrop-blur-lg">
-        <h1 className="text-3xl font-medium">Progress</h1>
-        <ul className="mb-8 mt-8">
-          <li className="flex items-center gap-2">
-            <i className="ri-check-line text-xl"></i>
-            <span>Task #1</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-check-line text-xl"></i>
-            <span>Task #2</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-close-line text-xl"></i>
-            <span>Task #3</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-close-line text-xl"></i>
-            <span>Task #4</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-close-line text-xl"></i>
-            <span>Task #5</span>
-          </li>
-        </ul>
-        <div className="flex flex-col">
-          <div className="mx-auto h-8 w-full rounded-full bg-neutral-800">
-            <div className="relative flex h-8 w-1/2 items-center justify-center rounded-full border border-violet-500/50 bg-violet-500/20 backdrop-blur-lg">
-              50%
-            </div>
+      <div className="relative mx-auto flex w-full max-w-screen-md flex-col rounded-xl border border-violet-500/10 bg-neutral-900/10 backdrop-blur-lg">
+        <div className="grid grid-cols-3">
+          <div className="col-span-1 flex flex-col items-center justify-center border-b-2 border-b-red-500 px-4 py-4">
+            <h3 className="text-xl font-bold">25</h3>
+            <p>Your Entries</p>
+          </div>
+          <div className="col-span-1 flex flex-col items-center justify-center border-b-2 border-b-blue-500 px-4 py-4">
+            <h3 className="text-xl font-bold">595</h3>
+            <p>Total Entries</p>
+          </div>
+          <div className="col-span-1 flex flex-col items-center justify-center border-b-2 border-b-purple-500 px-4 py-4">
+            <h3 className="text-xl font-bold">3</h3>
+            <p>Days left</p>
           </div>
         </div>
 
-        <div className="absolute right-5 top-5">
-          <Player className="h-48 w-48" autoplay loop src={Gift}></Player>
-        </div>
-      </div>
+        <div className="relative flex flex-col px-6 py-8 ">
+          <div className="flex flex-col items-center text-center">
+            <h3 className="mb-4 text-2xl font-semibold">
+              Samurai Conquest Legendary Agen Win
+            </h3>
+            <p className="max-w-screen-sm">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+              aut consequatur, libero necessitatibus, error recusandae quaerat
+              cum eos minus veniam dignissimos vel alias pariatur aspernatur
+              tempore placeat itaque reiciendis. Sunt!
+            </p>
+          </div>
 
-      <div className="grid grid-cols-3 gap-8">
-        {tasks.map((task, index) => (
-          <Task
-            name={task.name}
-            completed={task.completed}
-            tasks={task.tasks}
-            key={index}
-          ></Task>
-        ))}
+          <div className="mt-12 flex flex-col items-center">
+            <ul className="w-full">
+              <li className="flex w-full items-center gap-2 px-4 py-4 text-center hover:bg-neutral-900/50">
+                <i className="ri-youtube-line text-2xl"></i>
+                <span>Subscribe to our Youtube channel</span>
+                <i className="ri-check-line ml-auto text-2xl"></i>
+              </li>
+              <li className="flex w-full items-center gap-2 px-4 py-4 text-center hover:bg-neutral-900/50">
+                <i className="ri-youtube-line text-2xl"></i>
+                <span>Subscribe to our Youtube channel</span>
+                <i className="ri-check-line ml-auto text-2xl"></i>
+              </li>
+              <li className="flex w-full items-center gap-2 px-4 py-4 text-center hover:bg-neutral-900/50">
+                <i className="ri-youtube-line text-2xl"></i>
+                <span>Subscribe to our Youtube channel</span>
+                <i className="ri-close-line ml-auto text-2xl"></i>
+              </li>
+              <li className="flex w-full items-center gap-2 px-4 py-4 text-center hover:bg-neutral-900/50">
+                <i className="ri-youtube-line text-2xl"></i>
+                <span>Subscribe to our Youtube channel</span>
+                <i className="ri-close-line ml-auto text-2xl"></i>
+              </li>
+              <li className="flex w-full items-center gap-2 px-4 py-4 text-center hover:bg-neutral-900/50">
+                <i className="ri-youtube-line text-2xl"></i>
+                <span>Subscribe to our Youtube channel</span>
+                <i className="ri-close-line ml-auto text-2xl"></i>
+              </li>
+              <li className="flex w-full items-center gap-2 px-4 py-4 text-center hover:bg-neutral-900/50">
+                <i className="ri-youtube-line text-2xl"></i>
+                <span>Subscribe to our Youtube channel</span>
+                <i className="ri-close-line ml-auto text-2xl"></i>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
