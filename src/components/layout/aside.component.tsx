@@ -13,7 +13,7 @@ export function Aside ()
 
     return (<>
         <aside
-            className="sticky top-0 w-16 h-screen bg-neutral-950/10 flex flex-col items-center px-4 py-6 z-50 backdrop-blur-lg border-r border-r-neutral-900 text-neutral-600"
+            className="sticky top-0 w-16 h-screen bg-neutral-950/10 flex flex-col items-center px-4 py-6 z-50 backdrop-blur-lg border-r border-r-violet-500/20 text-neutral-600"
         >
             <Link
                 active-class="!text-violet-500"
