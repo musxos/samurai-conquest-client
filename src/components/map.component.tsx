@@ -141,7 +141,7 @@ function setup() {
 
     //
 
-    sun = new THREE.Vector3();
+    sun = new THREE.Vector3(1000, 1000, 0);
 
     // Water
 
@@ -159,7 +159,7 @@ function setup() {
       sunDirection: new THREE.Vector3(),
       sunColor: 0xffffff,
       waterColor: 0x005dff,
-      distortionScale: 120,
+      distortionScale: 3.7,
       fog: scene.fog !== undefined,
     });
 
@@ -226,32 +226,44 @@ function setup() {
     scene.add(cloud);
 
     let light = new THREE.AmbientLight(0xffffff, 1);
-    light.position.set(0, 1200, 0);
+    light.position.set(700, 50, 0);
     light.lookAt(0, 0, 0);
+
+    light.castShadow = true;
     scene.add(light);
 
-    let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.shadow.mapSize.width = 10000;
-    directionalLight.position.set(600, 1200, 0);
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight.castShadow = true;
+    directionalLight.position.set(600, 1000, 0);
     directionalLight.lookAt(0, 0, 0);
+
+    directionalLight.shadow.mapSize.width = 10000;
+    directionalLight.shadow.mapSize.height = 10000;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 5000;
+
     scene.add(directionalLight);
 
     const loader = new FBXLoader();
+    loader.setResourcePath('/');
 
     loader.load(
-      '/map.fbx',
+      '/GameLevel_present.fbx',
       function (object) {
         object.traverse(function (child) {
           if (child instanceof THREE.Mesh) {
             child.name = 'side';
           }
+
+          child.castShadow = true;
+          child.receiveShadow = true;
         });
 
         new THREE.Box3()
           .setFromObject(object)
           .getCenter(object.position)
           .multiplyScalar(-1);
-        object.position.y = -200;
+        object.position.y = 20;
         object.rotation.y = -Math.PI / 2;
 
         scene.add(object);
