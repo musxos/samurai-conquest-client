@@ -6,145 +6,149 @@
 @tailwind utilities;
 
 @layer base {
-    * {
-        font-family: 'Inter', sans-serif;
-        @apply text-white;
-    }
+  * {
+    font-family: 'Inter', sans-serif;
+    @apply text-white;
+  }
 
-    body,
-    html {
-        @apply min-h-screen bg-neutral-950;
-    }
+  body,
+  html {
+    @apply min-h-screen bg-neutral-950;
+  }
 
-    .font-inter {
-        font-family: 'Inter', sans-serif;
-    }
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
 
-    .font-roboto {
-        font-family: 'Roboto', sans-serif;
-    }
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
 
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
 
-    ::-webkit-scrollbar-thumb {
-        @apply bg-neutral-800;
-    }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-800;
+  }
 
-    ::-webkit-scrollbar-thumb:hover {
-        @apply bg-neutral-700;
-    }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-700;
+  }
 }
 
 @layer components {
-    @keyframes stats-animate-in {
-        0% {
-            opacity: 0;
-            width: 0%;
-        }
-
-        1% {
-            opacity: 1;
-        }
-
-        100% {
-            width: 100%;
-        }
+  @keyframes stats-animate-in {
+    0% {
+      opacity: 0;
+      width: 0%;
     }
 
-    .stats {
-        animation: stats-animate-in 1s ease-in-out;
+    1% {
+      opacity: 1;
     }
 
-    @keyframes marketplace-navbar-animate-in {
-        0% {
-            transform: translateY(-100%);
-        }
+    100% {
+      width: 100%;
+    }
+  }
 
-        100% {
-            transform: translateY(0);
-        }
+  .stats {
+    animation: stats-animate-in 1s ease-in-out;
+  }
+
+  @keyframes marketplace-navbar-animate-in {
+    0% {
+      transform: translateY(-100%);
     }
 
-    .marketplace-animate-navbar {
-        animation: marketplace-navbar-animate-in var(--marketplace-animation-duration) ease-in-out;
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .marketplace-animate-navbar {
+    animation: marketplace-navbar-animate-in
+      var(--marketplace-animation-duration) ease-in-out;
+  }
+
+  .marketplace-animate-right {
+    animation: marketplace-right-in var(--marketplace-animation-duration)
+      ease-in-out;
+  }
+
+  .marketplace-animate-left {
+    animation: marketplace-left-in var(--marketplace-animation-duration)
+      ease-in-out;
+  }
+
+  .marketplace-fade-in {
+    animation: marketplace-fade-in var(--marketplace-animation-duration)
+      ease-in-out;
+  }
+
+  @keyframes marketplace-fade-in {
+    0% {
+      opacity: 0;
     }
 
-    .marketplace-animate-right {
-        animation: marketplace-right-in var(--marketplace-animation-duration) ease-in-out;
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes marketplace-left-in {
+    0% {
+      transform: translateX(-100%);
     }
 
-    .marketplace-animate-left {
-        animation: marketplace-left-in var(--marketplace-animation-duration) ease-in-out;
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes marketplace-right-in {
+    0% {
+      transform: translateX(100%);
     }
 
-    .marketplace-fade-in {
-        animation: marketplace-fade-in var(--marketplace-animation-duration) ease-in-out;
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes inventory-right-in {
+    0% {
+      transform: translateX(100%);
     }
 
-    @keyframes marketplace-fade-in {
-        0% {
-            opacity: 0;
-        }
+    100% {
+      transform: translateX(0);
+    }
+  }
 
-        100% {
-            opacity: 1;
-        }
+  .inventory-right-in {
+    animation: inventory-right-in var(--inventory-animation-duration)
+      ease-in-out;
+  }
+
+  .inventory-left-in {
+    animation: inventory-left-in var(--inventory-animation-duration) ease-in-out;
+  }
+
+  @keyframes inventory-left-in {
+    0% {
+      transform: translateX(-100%);
     }
 
-    @keyframes marketplace-left-in {
-        0% {
-            transform: translateX(-100%);
-        }
-
-        100% {
-            transform: translateX(0);
-        }
+    100% {
+      transform: translateX(0);
     }
-
-    @keyframes marketplace-right-in {
-        0% {
-            transform: translateX(100%);
-        }
-
-        100% {
-            transform: translateX(0);
-        }
-    }
-
-
-    @keyframes inventory-right-in {
-        0% {
-            transform: translateX(100%);
-        }
-
-        100% {
-            transform: translateX(0);
-        }
-    }
-
-    .inventory-right-in {
-        animation: inventory-right-in var(--inventory-animation-duration) ease-in-out;
-    }
-
-    .inventory-left-in {
-        animation: inventory-left-in var(--inventory-animation-duration) ease-in-out;
-    }
-
-    @keyframes inventory-left-in {
-        0% {
-            transform: translateX(-100%);
-        }
-
-        100% {
-            transform: translateX(0);
-        }
-    }
+  }
 }
 
 :root {
-    --marketplace-animation-duration: 0.3s;
-    --inventory-animation-duration: 0.3s;
-    --agent-stats-animation-duration: 0.3s;
+  --marketplace-animation-duration: 0.3s;
+  --inventory-animation-duration: 0.3s;
+  --agent-stats-animation-duration: 0.3s;
 }

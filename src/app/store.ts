@@ -3,8 +3,8 @@ import layoutReducer from '@/features/layout/layout-slice';
 
 export const store = configureStore({
   reducer: {
-    layout: layoutReducer
-  }
+    layout: layoutReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

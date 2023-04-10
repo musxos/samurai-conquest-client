@@ -10,10 +10,10 @@ export interface LayoutState {
 
 const initialState: LayoutState = {
   wallet: true,
-    search: true,
-    notifications: true,
-    messages: true,
-    profile: true
+  search: true,
+  notifications: true,
+  messages: true,
+  profile: true,
 };
 
 const layoutSlice = createSlice({
@@ -21,12 +21,12 @@ const layoutSlice = createSlice({
   initialState,
   reducers: {
     update(state, action: PayloadAction<LayoutState>) {
-        return {
-            ...state,
-            ...action.payload,
-        };
-    }
-  }
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+  },
 });
 
 export const { update } = layoutSlice.actions;

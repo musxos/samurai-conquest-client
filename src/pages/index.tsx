@@ -1,23 +1,21 @@
-import { Map } from '@/components/map.component'
-import { useLayout } from '@/hooks/useLayout'
-import { DefaultLayout } from '@/layouts/default.layout'
-import Head from 'next/head'
+import { Map } from '@/components/map.component';
+import { useLayout } from '@/hooks/useLayout';
+import { DefaultLayout } from '@/layouts/default.layout';
+import Head from 'next/head';
 import { useEffect } from 'react';
 
-export default function Home ()
-{
+export default function Home() {
   const { update: updateLayout } = useLayout();
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     updateLayout({
       messages: false,
       notifications: false,
       profile: false,
       wallet: true,
-      search: false
-    })
-  }, [])
+      search: false,
+    });
+  }, []);
 
   return (
     <>
@@ -29,10 +27,9 @@ export default function Home ()
       </Head>
       <Map></Map>
     </>
-  )
+  );
 }
 
-Home.getLayout = (page: JSX.Element) =>
-{
-  return <DefaultLayout>{page}</DefaultLayout>
-}
+Home.getLayout = (page: JSX.Element) => {
+  return <DefaultLayout>{page}</DefaultLayout>;
+};
