@@ -41,8 +41,8 @@ export default function Top() {
   ];
 
   return (
-    <div className="mt-24 grid grid-cols-2 gap-8 px-8 py-6">
-      <div className="col-span-2 mb-12">
+    <div className="mt-24 grid grid-cols-1 gap-8 px-8 py-6 lg:grid-cols-2">
+      <div className="col-span-full mb-12">
         <h1 className="text-center text-3xl font-bold">Top 10</h1>
         <p className="mx-auto mt-4 max-w-screen-md text-center text-white/80">
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi
