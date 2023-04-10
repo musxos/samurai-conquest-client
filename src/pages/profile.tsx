@@ -21,7 +21,7 @@ export default function Profile ()
     return <div className="grid grid-cols-2 lg:grid-cols-5 px-12 py-8 gap-8 mt-24">
         <div className="col-span-2 lg:col-span-1">
             <div className="flex flex-col items-center w-full gap-4">
-                <div className="bg-neutral-800 px-6 py-8 rounded-xl w-full flex flex-col items-center">
+                <div className="bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 px-6 py-8 rounded-xl w-full flex flex-col items-center">
                     <div className="w-32 h-32 relative">
                         <img className="w-32 h-32 rounded-full" src="/1.png" alt="" />
                         <i className="ri-vip-crown-2-line text-2xl bg-white p-2 text-yellow-500 rounded-full absolute top-0 right-0 w-11 h-11 flex items-center justify-center"></i>
@@ -30,7 +30,7 @@ export default function Profile ()
                     <p className="text-center mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, rem consectetur harum in tempora atque, iste repudiandae aliquam nobis maiores ut temporibus sequi nemo repellendus. Qui provident accusantium debitis dolores!</p>
                 </div>
 
-                <div className="bg-neutral-800 px-6 pt-4 pb-8 rounded-xl w-full flex flex-col items-center">
+                <div className="bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 px-6 pt-4 pb-8 rounded-xl w-full flex flex-col items-center">
                     <h2 className="text-left w-full text-xl font-medium">Your Details</h2>
 
                     <div className="flex flex-col gap-4 mt-4 w-full">
@@ -75,7 +75,7 @@ export default function Profile ()
         </div>
         <div className="col-span-2 lg:col-span-3">
             <div className="flex flex-col items-center w-full gap-4">
-                <div className="bg-neutral-800 px-6 py-4 rounded-xl flex flex-col items-center w-full">
+                <div className="bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 px-6 py-4 rounded-xl flex flex-col items-center w-full">
                     <div className="flex flex-row items-center justify-between w-full mb-2">
                         <h2 className="text-left w-full text-xl font-medium">Your Best Agents</h2>
                         <button className="w-32">All Invetory</button>
@@ -91,7 +91,7 @@ export default function Profile ()
 
         <div className="col-span-2 lg:col-span-1">
             <div className="flex flex-col gap-4">
-                <div className="bg-neutral-800 px-6 py-4 rounded-xl w-full flex flex-col items-center">
+                <div className="bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 px-6 py-4 rounded-xl w-full flex flex-col items-center">
                     <h2 className="text-left w-full text-xl font-medium">Daily Quests</h2>
 
                     <div className="flex flex-col gap-4 mt-4 w-full">
@@ -139,7 +139,7 @@ export default function Profile ()
                         </div>
                     </div>
                 </div>
-                <div className="bg-neutral-800 px-6 py-4 rounded-xl w-full flex flex-col items-center">
+                <div className="bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 px-6 py-4 rounded-xl w-full flex flex-col items-center">
                     <h2 className="text-left w-full text-xl font-medium">Giveaway Tasks</h2>
 
                     <div className="flex flex-col gap-4 mt-4 w-full">

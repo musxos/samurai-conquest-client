@@ -13,7 +13,7 @@ export function Aside ()
 
     return (<>
         <aside
-            className="sticky top-0 w-16 h-screen bg-neutral-900 flex flex-col items-center px-4 py-6 z-50 border-r border-r-neutral-800 text-neutral-600"
+            className="sticky top-0 w-16 h-screen bg-neutral-950/10 flex flex-col items-center px-4 py-6 z-50 backdrop-blur-lg border-r border-r-neutral-900 text-neutral-600"
         >
             <Link
                 active-class="!text-violet-500"
@@ -36,11 +36,14 @@ export function Aside ()
             >
                 <i className="ri-briefcase-3-line text-2xl"></i>
             </Link>
+            <Link href="/profile" active-class="!text-violet-500" className="w-12 h-12 hover:bg-neutral-800 rounded-full flex items-center justify-center">
+                <i className="ri-user-line text-2xl"></i>
+            </Link>
+            <Link href="/reference" active-class="!text-violet-500" className="w-12 h-12 hover:bg-neutral-800 rounded-full flex items-center justify-center">
+                <i className="ri-shining-line text-2xl"></i>
+            </Link>
             <button onClick={handleModal} className="w-12 h-12 hover:bg-neutral-800 rounded-full flex items-center justify-center">
                 <i className="ri-indent-increase text-2xl"></i>
-            </button>
-            <button className="w-12 h-12 hover:bg-neutral-800 rounded-full flex items-center justify-center">
-                <i className="ri-global-line text-2xl"></i>
             </button>
             <button className="w-12 h-12 hover:bg-neutral-800 rounded-full flex items-center justify-center mt-auto">
                 <i className="ri-question-mark text-violet-500 text-2xl"></i>

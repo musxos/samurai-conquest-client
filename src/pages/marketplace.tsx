@@ -27,23 +27,23 @@ export default function Marketplace ()
                         Female
                     </button>
                     <button
-                        className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-800 hover:bg-violet-500 font-medium transition font-inter"
+                        className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-sm border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter"
                     >
                         Male
                     </button>
                     <button
-                        className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-800 hover:bg-violet-500 font-medium transition font-inter"
+                        className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-sm border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter"
                     >
                         Super Hero
                     </button>
                     <button
-                        className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-800 hover:bg-violet-500 font-medium transition font-inter"
+                        className="px-5 py-3 h-12 min-w-[3rem] lg:min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-sm border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter"
                     >
                         Legendary
                     </button>
                 </div>
                 <button
-                    className="marketplace-animate-right px-6 py-3 h-12 min-w-[6rem] rounded-full bg-neutral-800 hover:bg-violet-500 font-medium transition font-inter"
+                    className="marketplace-animate-right px-6 py-3 h-12 min-w-[6rem] rounded-full bg-neutral-900/50 backdrop-blur-3xl border border-violet-500/10 hover:bg-violet-500 font-medium transition font-inter"
                 >
                     View All
                 </button>
