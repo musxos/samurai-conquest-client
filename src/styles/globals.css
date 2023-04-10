@@ -38,33 +38,8 @@
 }
 
 @layer components {
-  @keyframes stats-animate-in {
-    0% {
-      opacity: 0;
-      width: 0%;
-    }
-
-    1% {
-      opacity: 1;
-    }
-
-    100% {
-      width: 100%;
-    }
-  }
-
   .stats {
     animation: stats-animate-in 1s ease-in-out;
-  }
-
-  @keyframes marketplace-navbar-animate-in {
-    0% {
-      transform: translateY(-100%);
-    }
-
-    100% {
-      transform: translateY(0);
-    }
   }
 
   .marketplace-animate-navbar {
@@ -85,6 +60,40 @@
   .marketplace-fade-in {
     animation: marketplace-fade-in var(--marketplace-animation-duration)
       ease-in-out;
+  }
+
+  .inventory-right-in {
+    animation: inventory-right-in var(--inventory-animation-duration)
+      ease-in-out;
+  }
+
+  .inventory-left-in {
+    animation: inventory-left-in var(--inventory-animation-duration) ease-in-out;
+  }
+
+  @keyframes stats-animate-in {
+    0% {
+      opacity: 0;
+      width: 0%;
+    }
+
+    1% {
+      opacity: 1;
+    }
+
+    100% {
+      width: 100%;
+    }
+  }
+
+  @keyframes marketplace-navbar-animate-in {
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
   }
 
   @keyframes marketplace-fade-in {
@@ -125,15 +134,6 @@
     100% {
       transform: translateX(0);
     }
-  }
-
-  .inventory-right-in {
-    animation: inventory-right-in var(--inventory-animation-duration)
-      ease-in-out;
-  }
-
-  .inventory-left-in {
-    animation: inventory-left-in var(--inventory-animation-duration) ease-in-out;
   }
 
   @keyframes inventory-left-in {
