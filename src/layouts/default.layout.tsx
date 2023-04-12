@@ -13,7 +13,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
       </div>
       <div className="flex">
         <Aside></Aside>
-        <main className="flex flex-col relative max-w-full grow">
+        <main className="relative flex max-w-full grow flex-col">
           <div className="absolute flex w-full px-6 py-8">
             <Navbar className="w-full"></Navbar>
           </div>

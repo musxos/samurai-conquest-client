@@ -17,7 +17,7 @@ export default function Marketplace() {
   }, []);
 
   return (
-    <div className="px-8 py-6 text-white">
+    <div className="px-8 py-6 text-white mx-auto">
       <div className="mt-24 flex flex-col">
         <h1 className="font-inter marketplace-animate-left text-2xl font-semibold">
           Top Collection

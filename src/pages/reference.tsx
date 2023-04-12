@@ -5,10 +5,12 @@ import { useEffect } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import Comment from '@/assets/lottie/Comment.json';
 
-export default function Reference() {
+export default function Reference ()
+{
   const layout = useLayout();
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     layout.update({
       messages: false,
       notifications: false,
@@ -19,59 +21,74 @@ export default function Reference() {
   }, []);
 
   return (
-    <div className="mt-24 flex flex-col gap-8 px-8 py-6">
-      <div className="flex flex-col">
-        <h1 className="text-3xl font-medium">Reference</h1>
-        <p className="mt-2 max-w-2xl text-white/80">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. A magni
-          reprehenderit alias molestiae maiores non minus, placeat, fuga quo
-          assumenda, perspiciatis eaque quod et? Ullam dignissimos nobis neque
-          nam ipsam!
-        </p>
-      </div>
+    <div className="mx-auto mt-24 flex max-w-screen-2xl flex-col gap-8 px-8 py-6">
+      <div className="grid grid-cols-9 gap-8 min-h-full">
+        <div className="col-span-3 h-full">
+          <div className='flex flex-col gap-4 rounded-md bg-neutral-950/30 backdrop-blur-2xl px-6 py-4 h-full'>
+            <h2 className='text-xl font-medium mb-2'>Your Account</h2>
+            <p>
+              In order to track your ZETA points, you must verify your wallet and
+              Twitter.
+            </p>
 
-      <div className="relative flex flex-col rounded-xl border border-violet-500/10 bg-neutral-900/10 px-6 py-8 backdrop-blur-lg">
-        <h1 className="text-3xl font-medium">Progress</h1>
-        <ul className="mb-8 mt-8">
-          <li className="flex items-center gap-2">
-            <i className="ri-check-line text-xl"></i>
-            <span>Invite 10 friend</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-check-line text-xl"></i>
-            <span>Invite 100 friend</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-close-line text-xl"></i>
-            <span>Invite 1000 friend</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-close-line text-xl"></i>
-            <span>Invite 10000 friend</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="ri-close-line text-xl"></i>
-            <span>Invite 100000 friend</span>
-          </li>
-        </ul>
+            <div className="flex flex-col mt-12">
+              <button className="rounded px-6 py-3 font-medium bg-violet-500/50 backdrop-blur-2xl">
+                Connect Wallet
+              </button>
+            </div>
 
-        <div className="mt-8 flex flex-col gap-4">
-          <input
-            className="w-96 rounded-xl border border-violet-500/10 bg-transparent px-6 py-4 outline-none"
-            disabled
-            placeholder="Click to get reference code"
-            type="text"
-          />
+            <div className="my-auto text-center">
+              <span className='text-neutral-500/50'>
+                Your Samuria Conquest and stats will appear here after
+                connectiong.
+              </span>
+            </div>
+          </div>
         </div>
+        <div className='col-span-6'>
+          <div className='flex flex-col gap-8'>
+            <div className='items-end bg-neutral-950/30 backdrop-blur-2xl rounded-md  px-8 py-5'>
+              <div className='flex justify-between items-end'>
+                <h2 className='text-xl'>Top Accounts</h2>
+                <span className='text-sm'>Total Accounts: 1.3M</span>
+              </div>
 
-        <div className="absolute right-5 top-5">
-          <Player className="h-48 w-48" autoplay loop src={Comment}></Player>
+              <div className='w-full mt-6'>
+                <table className='w-full'>
+                  <thead>
+                    <tr className='text-left border-b border-neutral-800'>
+                      <th className='pb-2'>Address</th>
+                      <th className='pb-2'>SC Points</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className='text-sm divide-y divide-neutral-900'>
+                    {new Array(5).fill(0).map(x => <tr key={x}>
+                      <td className='py-3'>0x117439E571556Ca211F443f4fc724c85A8e1d28d</td>
+                      <td className='py-3'>48,240,500</td>
+                    </tr>)}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className='flex flex-col bg-neutral-950/30 backdrop-blur-2xl rounded-md  px-8 py-5 min-h-[256px]'>
+              <div className='flex justify-between items-end'>
+                <h2 className='text-xl'>Your Invites</h2>
+                <span className='text-sm'>Total Confirmed: 33</span>
+              </div>
+
+              <div className='grow flex items-center justify-center'>
+                <span className='text-neutral-500/50'>No invites yet!</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-Reference.getLayout = function getLayout(page) {
+Reference.getLayout = function getLayout (page)
+{
   return <DefaultLayout>{page}</DefaultLayout>;
 };

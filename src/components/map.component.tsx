@@ -11,7 +11,23 @@ export function Map() {
   }, []);
 
   return (
-    <div className='w-full h-screen' id="canvas"></div>
+    <div className="relative h-screen w-full">
+      <div className="h-full w-full" id="canvas"></div>
+      <div className="absolute top-5 flex w-full justify-center gap-2">
+        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
+          <img className="rounded-full" alt="test" src="/1.png" />
+        </div>
+        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
+          <img className="rounded-full" alt="test" src="/2.png" />
+        </div>
+        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
+          <img className="rounded-full" alt="test" src="/3.png" />
+        </div>
+        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
+          <img className="rounded-full" alt="test" src="/4.png" />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -100,8 +116,8 @@ function setup() {
 
     moveSmooth({
       x: point.x,
-      y: 640,
-      z: point.z + 200,
+      y: 1080,
+      z: point.z - 200,
     });
     rotateSmooth({
       x: -Math.PI / 3.5,

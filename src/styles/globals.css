@@ -38,6 +38,10 @@
 }
 
 @layer components {
+  .top-path {
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  }
+
   .stats {
     animation: stats-animate-in 1s ease-in-out;
   }
