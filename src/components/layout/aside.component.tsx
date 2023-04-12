@@ -119,7 +119,7 @@ export function Aside() {
             </div>
           </div>
         </div>
-      )}{' '}
+      )}
     </>
   );
 }

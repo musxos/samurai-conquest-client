@@ -20,7 +20,7 @@ export function Navbar({ className }: NavbarProps) {
         </div>
       )}
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 ml-auto">
         {layout.wallet && (
           <div className="backdrop-filter-xl flex h-14 items-center rounded-xl border border-violet-500/10 bg-neutral-900/10 px-4 lg:px-6">
             <i className="ri-wallet-line mr-2 text-lg text-neutral-400"></i>

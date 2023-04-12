@@ -11,9 +11,7 @@ export function Map() {
   }, []);
 
   return (
-    <div className="max-h-full max-w-full">
-      <div id="canvas"></div>
-    </div>
+    <div className='w-full h-screen' id="canvas"></div>
   );
 }
 
@@ -123,7 +121,7 @@ function setup() {
     });
 
     renderer.setPixelRatio(window.devicePixelRatio * 0.9);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
     //
