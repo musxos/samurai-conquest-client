@@ -95,12 +95,22 @@ export default function Giveaway ()
   }, []);
 
   return (
-    <div className="mt-24 flex flex-col gap-8 px-8 py-6">
+    <div className="py-16 min-h-screen flex flex-col gap-8 px-8">
+      <div className='max-w-screen-lg text-center mx-auto'>
+        <h1 className="text-2xl font-semibold text-white">Giveaway</h1>
+        <p className="mt-2 text-sm text-neutral-300 ">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quaerat
+          dolore veniam maxime laudantium modi quos debitis commodi architecto
+          inventore distinctio esse itaque nostrum tempora, deserunt, sed
+          possimus? Cumque, mollitia.
+        </p>
+      </div>
+
       <Swiper
         className='max-w-screen-md w-full'
         effect='cards'
         grabCursor={true}
-        modules={[EffectCards]}
+        modules={[ EffectCards ]}
       >
         <SwiperSlide>
           <Card></Card>
