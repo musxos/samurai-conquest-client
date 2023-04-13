@@ -12,9 +12,11 @@ type InventoryItem = {
   assign: boolean;
 };
 
-export default function Inventory() {
-  const [inventory, setInventory] = useState(
-    new Array(30).fill(0).map((_, i) => {
+export default function Inventory ()
+{
+  const [ inventory, setInventory ] = useState(
+    new Array(30).fill(0).map((_, i) =>
+    {
       return {
         number: i + 1,
         name: 'Green Eyes Samurai',
@@ -26,31 +28,37 @@ export default function Inventory() {
 
   const modal = useRef(null);
 
-  const [active, setActive] = useState<InventoryItem | null>(null);
+  const [ active, setActive ] = useState<InventoryItem | null>(null);
 
-  const outsideClick = () => {
-    if (active) {
+  const outsideClick = () =>
+  {
+    if (active)
+    {
       setActive(null);
     }
   };
 
   useOutsideAlerter(modal, outsideClick);
 
-  const show = (index: number) => {
-    setActive(inventory[index]);
+  const show = (index: number) =>
+  {
+    setActive(inventory[ index ]);
   };
 
-  const assign = () => {
+  const assign = () =>
+  {
     setActive({ ...active, assign: true });
   };
 
-  const unassign = () => {
+  const unassign = () =>
+  {
     setActive({ ...active, assign: false });
   };
 
   const { update: updateLayout } = useLayout();
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     updateLayout({
       messages: true,
       notifications: true,
@@ -62,32 +70,43 @@ export default function Inventory() {
 
   return (
     <div className="mt-24 flex h-full flex-col gap-x-12 px-8 py-12 lg:flex-row">
-      <div className="inventory-left-in w-full lg:w-2/3">
-        <h1 className="text-2xl font-semibold text-white">Inventory</h1>
-        <p className="mt-2 w-full text-sm text-neutral-300 lg:w-2/3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quaerat
-          dolore veniam maxime laudantium modi quos debitis commodi architecto
-          inventore distinctio esse itaque nostrum tempora, deserunt, sed
-          possimus? Cumque, mollitia.
-        </p>
+      <div className='flex flex-col w-full lg:w-2/3'>
+        <div className="inventory-left-in">
+          <h1 className="text-2xl font-semibold text-white">Inventory</h1>
+          <p className="mt-2 w-full text-sm text-neutral-300 lg:w-2/3">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quaerat
+            dolore veniam maxime laudantium modi quos debitis commodi architecto
+            inventore distinctio esse itaque nostrum tempora, deserunt, sed
+            possimus? Cumque, mollitia.
+          </p>
+        </div>
+        
+        <div className="inventory-left-in">
+          <h1 className="text-2xl font-semibold text-white">Inventory</h1>
+          <p className="mt-2 w-full text-sm text-neutral-300 lg:w-2/3">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quaerat
+            dolore veniam maxime laudantium modi quos debitis commodi architecto
+            inventore distinctio esse itaque nostrum tempora, deserunt, sed
+            possimus? Cumque, mollitia.
+          </p>
 
-        <div className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {inventory.map((item, i) => (
-            <AgentCard
-              assign={item.assign}
-              image={item.image}
-              name={item.name}
-              number={item.number}
-              onClick={() => show(i)}
-              key={i}
-            ></AgentCard>
-          ))}
+          <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {inventory.map((item, i) => (
+              <AgentCard
+                assign={item.assign}
+                image={item.image}
+                name={item.name}
+                number={item.number}
+                onClick={() => show(i)}
+                key={i}
+              ></AgentCard>
+            ))}
+          </div>
         </div>
       </div>
       <div
-        className={`fixed right-0 top-0 h-full w-2/3 lg:sticky lg:w-1/3 ${
-          active ? 'pointer-events-auto' : 'pointer-events-none'
-        }`}
+        className={`fixed right-0 top-0 h-full w-2/3 lg:sticky lg:w-1/3 ${active ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
         ref={modal}
       >
         {active && (
@@ -131,6 +150,7 @@ export default function Inventory() {
   );
 }
 
-Inventory.getLayout = (page: JSX.Element) => {
+Inventory.getLayout = (page: JSX.Element) =>
+{
   return <DefaultLayout>{page}</DefaultLayout>;
 };
