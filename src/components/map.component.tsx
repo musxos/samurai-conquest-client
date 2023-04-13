@@ -136,6 +136,8 @@ function setup() {
       powerPreference: 'high-performance',
     });
 
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
     renderer.setPixelRatio(window.devicePixelRatio * 0.9);
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
@@ -178,8 +180,8 @@ function setup() {
     });
 
     water.rotation.x = -Math.PI / 2;
-
     scene.add(water);
+
 
     // Skybox
 
@@ -243,8 +245,9 @@ function setup() {
     light.position.set(700, 50, 0);
     light.lookAt(0, 0, 0);
 
-    light.castShadow = true;
+    light.castShadow = true;    
     scene.add(light);
+
 
     let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
     directionalLight.castShadow = true;
@@ -255,18 +258,29 @@ function setup() {
     directionalLight.shadow.mapSize.height = 10000;
     directionalLight.shadow.camera.near = 0.5;
     directionalLight.shadow.camera.far = 5000;
-
     scene.add(directionalLight);
+
+
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load('/base_color.jpg');
+
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      metalness: 0.1,
+    });
 
     const loader = new FBXLoader();
     loader.setResourcePath('/');
 
     loader.load(
-      '/GameLevel_present.fbx',
+      '/hexagons.fbx',
       function (object) {
+        object.scale.set(100, 100, 100);
+
         object.traverse(function (child) {
           if (child instanceof THREE.Mesh) {
             child.name = 'side';
+            child.material = material;
           }
 
           child.castShadow = true;
@@ -277,7 +291,7 @@ function setup() {
           .setFromObject(object)
           .getCenter(object.position)
           .multiplyScalar(-1);
-        object.position.y = 20;
+        object.position.y = 50;
         object.rotation.y = -Math.PI / 2;
 
         scene.add(object);
