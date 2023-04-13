@@ -3,7 +3,9 @@ import { useLayout } from '@/hooks/useLayout';
 import useOutsideAlerter from '@/hooks/useOutsideAlerter';
 import { DefaultLayout } from '@/layouts/default.layout';
 import { useEffect, useRef, useState } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
+
+import HealthPotion from '../assets/health_potion.png';
+import Image from 'next/image';
 
 type InventoryItem = {
   number: number;
@@ -12,11 +14,9 @@ type InventoryItem = {
   assign: boolean;
 };
 
-export default function Inventory ()
-{
-  const [ inventory, setInventory ] = useState(
-    new Array(30).fill(0).map((_, i) =>
-    {
+export default function Inventory() {
+  const [inventory, setInventory] = useState(
+    new Array(30).fill(0).map((_, i) => {
       return {
         number: i + 1,
         name: 'Green Eyes Samurai',
@@ -28,37 +28,31 @@ export default function Inventory ()
 
   const modal = useRef(null);
 
-  const [ active, setActive ] = useState<InventoryItem | null>(null);
+  const [active, setActive] = useState<InventoryItem | null>(null);
 
-  const outsideClick = () =>
-  {
-    if (active)
-    {
+  const outsideClick = () => {
+    if (active) {
       setActive(null);
     }
   };
 
   useOutsideAlerter(modal, outsideClick);
 
-  const show = (index: number) =>
-  {
-    setActive(inventory[ index ]);
+  const show = (index: number) => {
+    setActive(inventory[index]);
   };
 
-  const assign = () =>
-  {
+  const assign = () => {
     setActive({ ...active, assign: true });
   };
 
-  const unassign = () =>
-  {
+  const unassign = () => {
     setActive({ ...active, assign: false });
   };
 
   const { update: updateLayout } = useLayout();
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     updateLayout({
       messages: true,
       notifications: true,
@@ -70,17 +64,25 @@ export default function Inventory ()
 
   return (
     <div className="mt-24 flex h-full flex-col gap-x-12 px-8 py-12 lg:flex-row">
-      <div className='flex flex-col w-full lg:w-2/3'>
+      <div className="flex w-full flex-col lg:w-2/3">
         <div className="inventory-left-in">
-          <h1 className="text-2xl font-semibold text-white">Inventory</h1>
+          <h1 className="text-2xl font-semibold text-white">Consumables</h1>
           <p className="mt-2 w-full text-sm text-neutral-300 lg:w-2/3">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quaerat
             dolore veniam maxime laudantium modi quos debitis commodi architecto
             inventore distinctio esse itaque nostrum tempora, deserunt, sed
             possimus? Cumque, mollitia.
           </p>
+
+          <div className="my-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            <div className="relative h-40 w-40 rounded-md border border-violet-500/10 bg-neutral-950/30 backdrop-blur-3xl">
+              <Image src={HealthPotion} alt="asd" />
+
+              <div className="absolute right-3 top-3">+400</div>
+            </div>
+          </div>
         </div>
-        
+
         <div className="inventory-left-in">
           <h1 className="text-2xl font-semibold text-white">Inventory</h1>
           <p className="mt-2 w-full text-sm text-neutral-300 lg:w-2/3">
@@ -90,7 +92,7 @@ export default function Inventory ()
             possimus? Cumque, mollitia.
           </p>
 
-          <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {inventory.map((item, i) => (
               <AgentCard
                 assign={item.assign}
@@ -105,8 +107,9 @@ export default function Inventory ()
         </div>
       </div>
       <div
-        className={`fixed right-0 top-0 h-full w-2/3 lg:sticky lg:w-1/3 ${active ? 'pointer-events-auto' : 'pointer-events-none'
-          }`}
+        className={`fixed right-0 top-0 h-full w-2/3 lg:sticky lg:w-1/3 ${
+          active ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}
         ref={modal}
       >
         {active && (
@@ -125,22 +128,27 @@ export default function Inventory ()
                   aperiam ipsum numquam fuga reprehenderit?
                 </p>
 
-                {!active.assign && (
-                  <button
-                    onClick={() => assign()}
-                    className="ml-auto mt-24 rounded-full bg-violet-500 px-8 py-3"
-                  >
-                    Assign
+                <div className="mt-24 flex w-full flex-row  items-center">
+                  <button className="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-950/50 hover:bg-neutral-900">
+                    <Image className="h-14 w-14" src={HealthPotion} alt="asd" />
                   </button>
-                )}
-                {active.assign && (
-                  <button
-                    onClick={() => unassign()}
-                    className="ml-auto mt-24 rounded-full bg-violet-500 px-8 py-3"
-                  >
-                    Unassign
-                  </button>
-                )}
+                  {!active.assign && (
+                    <button
+                      onClick={() => assign()}
+                      className="ml-auto h-14 rounded-full bg-violet-500 px-8 py-3"
+                    >
+                      Assign
+                    </button>
+                  )}
+                  {active.assign && (
+                    <button
+                      onClick={() => unassign()}
+                      className="ml-auto h-14 rounded-full bg-violet-500 px-8 py-3"
+                    >
+                      Unassign
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -150,7 +158,6 @@ export default function Inventory ()
   );
 }
 
-Inventory.getLayout = (page: JSX.Element) =>
-{
+Inventory.getLayout = (page: JSX.Element) => {
   return <DefaultLayout>{page}</DefaultLayout>;
 };

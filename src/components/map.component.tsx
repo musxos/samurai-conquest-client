@@ -5,6 +5,70 @@ import gsap from 'gsap';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import * as THREE from 'three';
 
+export function TestCard() {
+  return (
+    <div className="absolute bottom-0 flex w-full justify-center">
+      <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
+        <img className="h-20 w-20 rounded-2xl" alt="test" src="/1.png" />
+        <div className="ml-4 flex h-full flex-col">
+          <h4 className="font-medium">Green Samurai</h4>
+          <span>In Bilmem ne krallığı.</span>
+        </div>
+        <div className="ml-auto grid w-full max-w-sm grid-cols-2 gap-4">
+          <div className="col-span-1">
+            <span className="mb-1 flex items-center text-red-500">
+              <i className="ri-sword-fill mr-1"></i>{' '}
+              <span className="text-sm">32</span>
+            </span>
+            <div className="h-2 rounded-full bg-neutral-800">
+              <div
+                className="stats h-2 rounded-full bg-red-500"
+                style={{ maxWidth: '72%' }}
+              ></div>
+            </div>
+          </div>
+          <div className="col-span-1">
+            <span className="mb-1 flex items-center text-blue-500">
+              <i className="ri-shield-fill mr-1"></i>{' '}
+              <span className="text-sm">32</span>
+            </span>
+            <div className="h-2 rounded-full bg-neutral-800">
+              <div
+                className="stats h-2 rounded-full bg-blue-500"
+                style={{ maxWidth: '72%' }}
+              ></div>
+            </div>
+          </div>
+          <div className="col-span-1">
+            <span className="mb-1 flex items-center text-yellow-500">
+              <i className="ri-sword-fill mr-1"></i>{' '}
+              <span className="text-sm">32</span>
+            </span>
+            <div className="h-2 rounded-full bg-neutral-800">
+              <div
+                className="stats h-2 rounded-full bg-yellow-500"
+                style={{ maxWidth: '72%' }}
+              ></div>
+            </div>
+          </div>
+          <div className="col-span-1">
+            <span className="mb-1 flex items-center text-green-500">
+              <i className="ri-sword-fill mr-1"></i>{' '}
+              <span className="text-sm">32</span>
+            </span>
+            <div className="h-2 rounded-full bg-neutral-800">
+              <div
+                className="stats h-2 rounded-full bg-green-500"
+                style={{ maxWidth: '72%' }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Map() {
   useEffect(() => {
     setup();
@@ -14,19 +78,45 @@ export function Map() {
     <div className="relative h-screen w-full">
       <div className="h-full w-full" id="canvas"></div>
       <div className="absolute top-5 flex w-full justify-center gap-2">
-        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
-          <img className="rounded-full" alt="test" src="/1.png" />
+        <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+          <img className="h-14 w-14 rounded-full" alt="test" src="/1.png" />
+        </button>
+        <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+          <img className="h-14 w-14 rounded-full" alt="test" src="/2.png" />
+        </button>
+        <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+          <img className="h-14 w-14 rounded-full" alt="test" src="/3.png" />
+        </button>
+      </div>
+      <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
+        <h1 className="mb-2 text-2xl font-medium">Land Name</h1>
+        <p className="text-sm">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
+          laboriosam culpa cupiditate eligendi quia illo placeat saepe dolor
+          dignissimos nulla?
+        </p>
+        <div className="mb-4 mt-8 flex flex-col gap-4">
+          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
+            <i className="ri-shield-star-fill text-blue-500 text-xl"></i>
+            <span className='ml-2 text-right'>Template Empire</span>
+          </div>
+          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
+            <i className="ri-sword-fill text-red-500 text-xl"></i>
+            <span className='ml-2 text-right'>Template Empire</span>
+          </div>
         </div>
-        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
-          <img className="rounded-full" alt="test" src="/2.png" />
-        </div>
-        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
-          <img className="rounded-full" alt="test" src="/3.png" />
-        </div>
-        <div className="h-12 w-12 rounded-full border-4 border-neutral-700">
-          <img className="rounded-full" alt="test" src="/4.png" />
+        <div className="mt-auto grid grid-cols-2 gap-4">
+          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
+            <i className="ri-database-line text-4xl"></i>
+            <span className="text-xl">1.000</span>
+          </div>
+          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
+            <i className="ri-database-line text-4xl"></i>
+            <span className="text-xl">1.000</span>
+          </div>
         </div>
       </div>
+      <TestCard></TestCard>
     </div>
   );
 }
@@ -182,7 +272,6 @@ function setup() {
     water.rotation.x = -Math.PI / 2;
     scene.add(water);
 
-
     // Skybox
 
     const sky = new Sky();
@@ -245,9 +334,8 @@ function setup() {
     light.position.set(700, 50, 0);
     light.lookAt(0, 0, 0);
 
-    light.castShadow = true;    
+    light.castShadow = true;
     scene.add(light);
-
 
     let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
     directionalLight.castShadow = true;
@@ -259,7 +347,6 @@ function setup() {
     directionalLight.shadow.camera.near = 0.5;
     directionalLight.shadow.camera.far = 5000;
     scene.add(directionalLight);
-
 
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load('/base_color.jpg');
