@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.5.3",
-    "@rainbow-me/rainbowkit": "^0.12.7",
+    "@rainbow-me/rainbowkit": "^0.12.8",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",

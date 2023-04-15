@@ -1,4 +1,5 @@
 import { useLayout } from '@/hooks/useLayout';
+import { CustomConnectButton } from '../rainbow/connect-button.component';
 
 export type NavbarProps = {
   className?: string;
@@ -21,12 +22,7 @@ export function Navbar({ className }: NavbarProps) {
       )}
 
       <div className="ml-auto flex gap-2">
-        {layout.wallet && (
-          <div className="backdrop-filter-xl flex h-14 items-center rounded-xl border border-violet-500/10 bg-neutral-900/10 px-4 lg:px-6">
-            <i className="ri-wallet-line mr-2 text-lg text-neutral-400"></i>
-            <span className="font-semibold text-neutral-400">9.994 ETH</span>
-          </div>
-        )}
+        <CustomConnectButton />
         {layout.notifications && (
           <button className="backdrop-filter-xl h-14 w-14 rounded-xl border border-violet-500/10 bg-neutral-900/10 transition">
             <i className="ri-notification-3-line text-lg"></i>

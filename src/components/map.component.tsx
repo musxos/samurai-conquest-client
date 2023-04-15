@@ -97,12 +97,12 @@ export function Map() {
         </p>
         <div className="mb-4 mt-8 flex flex-col gap-4">
           <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-            <i className="ri-shield-star-fill text-blue-500 text-xl"></i>
-            <span className='ml-2 text-right'>Template Empire</span>
+            <i className="ri-shield-star-fill text-xl text-blue-500"></i>
+            <span className="ml-2 text-right">Template Empire</span>
           </div>
           <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-            <i className="ri-sword-fill text-red-500 text-xl"></i>
-            <span className='ml-2 text-right'>Template Empire</span>
+            <i className="ri-sword-fill text-xl text-red-500"></i>
+            <span className="ml-2 text-right">Template Empire</span>
           </div>
         </div>
         <div className="mt-auto grid grid-cols-2 gap-4">
