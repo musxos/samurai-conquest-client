@@ -5,7 +5,8 @@ import gsap from 'gsap';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import * as THREE from 'three';
 
-export function TestCard() {
+export function TestCard ()
+{
   return (
     <div className="absolute bottom-0 flex w-full justify-center">
       <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
@@ -69,8 +70,10 @@ export function TestCard() {
   );
 }
 
-export function Map() {
-  useEffect(() => {
+export function Map ()
+{
+  useEffect(() =>
+  {
     setup();
   }, []);
 
@@ -121,13 +124,15 @@ export function Map() {
   );
 }
 
-function setup() {
+function setup ()
+{
   let container;
   let camera, scene, renderer;
   let cloudMesh, water, sun;
 
   const textureLoader = new THREE.TextureLoader();
-  const cloudTexture = textureLoader.load('/cloud.jpg', function (texture) {
+  const cloudTexture = textureLoader.load('/cloud.jpg', function (texture)
+  {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
   });
@@ -151,7 +156,8 @@ function setup() {
   document.addEventListener('mousemove', onMouseMove, false);
   document.addEventListener('click', onMouseClick, false);
 
-  function rotateSmooth(rotation: any) {
+  function rotateSmooth (rotation: any)
+  {
     gsap.to(camera.rotation, {
       x: rotation.x,
       y: rotation.y,
@@ -160,7 +166,8 @@ function setup() {
       ease: 'power2.inOut',
     });
   }
-  function moveSmooth(position: any) {
+  function moveSmooth (position: any)
+  {
     gsap.to(camera.position, {
       x: position.x,
       y: position.y - 1,
@@ -170,7 +177,8 @@ function setup() {
     });
   }
 
-  function onMouseMove(event: MouseEvent) {
+  function onMouseMove (event: MouseEvent)
+  {
     return;
     mouse.x = (event.clientX / container.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / container.clientHeight) * 2 + 1;
@@ -180,21 +188,25 @@ function setup() {
       .filter((x) => x.object.name == 'side');
     if (intersects.length == 0) return;
 
-    if (activeSide) {
+    if (activeSide)
+    {
       var material = activeSide.material;
-      if (material.color) {
+      if (material.color)
+      {
         material.color.set(0xffffff);
       }
     }
-    activeSide = intersects[0].object;
-    var material = (intersects[0].object as any).material;
+    activeSide = intersects[ 0 ].object;
+    var material = (intersects[ 0 ].object as any).material;
 
-    if (material.color) {
+    if (material.color)
+    {
       material.color.set(0xff0000);
     }
   }
 
-  function onMouseClick(event: MouseEvent) {
+  function onMouseClick (event: MouseEvent)
+  {
     mouse.x = (event.clientX / container.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / container.clientHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
@@ -202,7 +214,7 @@ function setup() {
       .intersectObjects(scene.children, true)
       .filter((x) => x.object.name == 'side');
     if (intersects.length == 0) return;
-    const point = intersects[0].point;
+    const point = intersects[ 0 ].point;
 
     moveSmooth({
       x: point.x,
@@ -216,7 +228,8 @@ function setup() {
     });
   }
 
-  function init() {
+  function init ()
+  {
     container = document.getElementById('canvas');
 
     //
@@ -226,7 +239,13 @@ function setup() {
       powerPreference: 'high-performance',
     });
 
+    renderer.toneMappingExposure = 1;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
     renderer.outputEncoding = THREE.sRGBEncoding;
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     renderer.setPixelRatio(window.devicePixelRatio * 0.9);
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -258,7 +277,8 @@ function setup() {
       textureHeight: 512,
       waterNormals: new THREE.TextureLoader().load(
         '/water4.jpg',
-        function (texture) {
+        function (texture)
+        {
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         },
       ),
@@ -280,10 +300,10 @@ function setup() {
 
     const skyUniforms = sky.material.uniforms;
 
-    skyUniforms['turbidity'].value = 10;
-    skyUniforms['rayleigh'].value = 2;
-    skyUniforms['mieCoefficient'].value = 0.005;
-    skyUniforms['mieDirectionalG'].value = 0.8;
+    skyUniforms[ 'turbidity' ].value = 10;
+    skyUniforms[ 'rayleigh' ].value = 2;
+    skyUniforms[ 'mieCoefficient' ].value = 0.005;
+    skyUniforms[ 'mieDirectionalG' ].value = 0.8;
 
     const parameters = {
       elevation: 80,
@@ -293,14 +313,15 @@ function setup() {
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     let renderTarget;
 
-    function updateSun() {
+    function updateSun ()
+    {
       const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
       const theta = THREE.MathUtils.degToRad(parameters.azimuth);
 
       sun.setFromSphericalCoords(1, phi, theta);
 
-      sky.material.uniforms['sunPosition'].value.copy(sun);
-      water.material.uniforms['sunDirection'].value.copy(sun).normalize();
+      sky.material.uniforms[ 'sunPosition' ].value.copy(sun);
+      water.material.uniforms[ 'sunDirection' ].value.copy(sun).normalize();
 
       if (renderTarget !== undefined) renderTarget.dispose();
 
@@ -324,7 +345,7 @@ function setup() {
     cloud.name = 'cloud';
     cloud.position.set(
       Math.random() * 800 - 400,
-      300,
+      1200,
       Math.random() * 800 - 400,
     );
     cloud.rotation.x = -Math.PI / 2;
@@ -335,25 +356,20 @@ function setup() {
     light.lookAt(0, 0, 0);
 
     light.castShadow = true;
-    scene.add(light);
 
-    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.castShadow = true;
-    directionalLight.position.set(600, 1000, 0);
+    directionalLight.position.set(100, 150, 0);
     directionalLight.lookAt(0, 0, 0);
 
-    directionalLight.shadow.mapSize.width = 10000;
-    directionalLight.shadow.mapSize.height = 10000;
-    directionalLight.shadow.camera.near = 0.5;
-    directionalLight.shadow.camera.far = 5000;
     scene.add(directionalLight);
 
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load('/base_color.jpg');
 
-    const material = new THREE.MeshStandardMaterial({
+    const material = new THREE.MeshPhongMaterial({
       map: texture,
-      metalness: 0.1,
+      side: THREE.DoubleSide,
     });
 
     const loader = new FBXLoader();
@@ -361,11 +377,14 @@ function setup() {
 
     loader.load(
       '/hexagons.fbx',
-      function (object) {
+      function (object)
+      {
         object.scale.set(100, 100, 100);
 
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
+        object.traverse(function (child)
+        {
+          if (child instanceof THREE.Mesh)
+          {
             child.name = 'side';
             child.material = material;
           }
@@ -383,24 +402,28 @@ function setup() {
 
         scene.add(object);
       },
-      function (xhr) {
+      function (xhr)
+      {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
       },
-      function (error) {
+      function (error)
+      {
         console.log('An error happened');
         console.error(error);
       },
     );
   }
 
-  function onWindowResize() {
+  function onWindowResize ()
+  {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  function animate() {
+  function animate ()
+  {
     requestAnimationFrame(animate);
 
     cloudPlaneMaterial.alphaMap.offset.y -= 0.00005;
@@ -409,8 +432,9 @@ function setup() {
     render();
   }
 
-  function render() {
-    water.material.uniforms['time'].value += 1.0 / 90.0;
+  function render ()
+  {
+    water.material.uniforms[ 'time' ].value += 1.0 / 90.0;
 
     renderer.render(scene, camera);
   }
