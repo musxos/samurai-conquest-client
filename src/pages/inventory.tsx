@@ -1,6 +1,6 @@
 import { AgentCard } from '@/components/inventory/agent.card';
 import { useLayout } from '@/hooks/useLayout';
-import useOutsideAlerter from '@/hooks/useOutsideAlerter';
+import useOutsideAlerter from '@/layouts/useOutsideAlerter';
 import { DefaultLayout } from '@/layouts/default.layout';
 import { useEffect, useRef, useState } from 'react';
 

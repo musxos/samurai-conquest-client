@@ -1,12 +1,32 @@
+'use client';
+
 import { useLayout } from '@/hooks/useLayout';
 import { CustomConnectButton } from '../rainbow/connect-button.component';
+import { useAccount } from 'wagmi';
+import { useUser } from '@/hooks/useUser';
+import { useEffect, useState } from 'react';
 
 export type NavbarProps = {
   className?: string;
 };
 
 export function Navbar({ className }: NavbarProps) {
+  const { user, fetchUser, reset } = useUser();
+  const account = useAccount({
+    onConnect({ address }) {
+      fetchUser(address);
+    },
+    onDisconnect() {
+      reset();
+    },
+  });
   const { layout } = useLayout();
+
+  const [mount, setMount] = useState(false);
+
+  useEffect(() => {
+    setMount(true);
+  }, [account.isConnected, account.address]);
 
   return (
     <nav className={`flex h-14 max-w-full justify-between ${className}`}>
@@ -23,19 +43,19 @@ export function Navbar({ className }: NavbarProps) {
 
       <div className="ml-auto flex gap-2">
         <CustomConnectButton />
-        {layout.notifications && (
+        {mount && account.isConnected && layout.notifications && (
           <button className="backdrop-filter-xl h-14 w-14 rounded-xl border border-violet-500/10 bg-neutral-900/10 transition">
             <i className="ri-notification-3-line text-lg"></i>
           </button>
         )}
-        {layout.messages && (
+        {mount && account.isConnected && layout.messages && (
           <button className="backdrop-filter-xl h-14 w-14 rounded-xl border border-violet-500/10 bg-neutral-900/10 transition">
             <i className="ri-message-3-line text-lg"></i>
           </button>
         )}
-        {layout.profile && (
+        {mount && account.isConnected && layout.profile && (
           <button className="backdrop-filter-xl hidden h-14 rounded-xl border border-violet-500/10 bg-neutral-900/10 px-6 py-3 transition lg:block">
-            ChainMasterTR
+            {user.nickName}
           </button>
         )}
       </div>
