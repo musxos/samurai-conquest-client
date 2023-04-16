@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Water } from 'three/examples/jsm/objects/Water.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import gsap from 'gsap';
@@ -8,9 +8,9 @@ import * as THREE from 'three';
 export function TestCard ()
 {
   return (
-    <div className="absolute bottom-0 flex w-full justify-center">
+    <div className="absolute bottom-0 flex w-full justify-center map-agent-in">
       <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
-        <img className="h-20 w-20 rounded-2xl" alt="test" src="/1.png" />
+        <img className="h-20 w-20 rounded-2xl" alt="test" src="/art/1.png" />
         <div className="ml-4 flex h-full flex-col">
           <h4 className="font-medium">Green Samurai</h4>
           <span>In Bilmem ne krallığı.</span>
@@ -72,61 +72,77 @@ export function TestCard ()
 
 export function Map ()
 {
+  const [ area, setArea ] = useState(null);
+  const [ agent, setAgent ] = useState(null);
+
+  const onAgentSelected = () =>
+  {
+    setAgent('test');
+  }
+
+  const onAreaSelected = () =>
+  {
+    setArea('test');
+  }
+
   useEffect(() =>
   {
-    setup();
+    setup({
+      onAreaSelected
+    });
   }, []);
 
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative h-screen w-full overflow-hidden">
       <div className="h-full w-full" id="canvas"></div>
       <div className="absolute top-5 flex w-full justify-center gap-2">
-        <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+        <button onClick={onAgentSelected} className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
           <img className="h-14 w-14 rounded-full" alt="test" src="/art/1.png" />
         </button>
-        <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+        <button onClick={onAgentSelected} className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
           <img className="h-14 w-14 rounded-full" alt="test" src="/art/2.png" />
         </button>
-        <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+        <button onClick={onAgentSelected} className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
           <img className="h-14 w-14 rounded-full" alt="test" src="/art/3.png" />
         </button>
       </div>
-      {false && (
-        <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
-          <h1 className="mb-2 text-2xl font-medium">Land Name</h1>
-          <p className="text-sm">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
-            laboriosam culpa cupiditate eligendi quia illo placeat saepe dolor
-            dignissimos nulla?
-          </p>
-          <div className="mb-4 mt-8 flex flex-col gap-4">
-            <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-              <i className="ri-shield-star-fill text-xl text-blue-500"></i>
-              <span className="ml-2 text-right">Template Empire</span>
-            </div>
-            <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-              <i className="ri-sword-fill text-xl text-red-500"></i>
-              <span className="ml-2 text-right">Template Empire</span>
-            </div>
+
+      {area && <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl map-land-in">
+        <h1 className="mb-2 text-2xl font-medium">Land Name</h1>
+        <p className="text-sm">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
+          laboriosam culpa cupiditate eligendi quia illo placeat saepe dolor
+          dignissimos nulla?
+        </p>
+        <div className="mb-4 mt-8 flex flex-col gap-4">
+          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
+            <i className="ri-shield-star-fill text-xl text-blue-500"></i>
+            <span className="ml-2 text-right">Template Empire</span>
           </div>
-          <div className="mt-auto grid grid-cols-2 gap-4">
-            <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
-              <i className="ri-database-line text-4xl"></i>
-              <span className="text-xl">1.000</span>
-            </div>
-            <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
-              <i className="ri-database-line text-4xl"></i>
-              <span className="text-xl">1.000</span>
-            </div>
+          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
+            <i className="ri-sword-fill text-xl text-red-500"></i>
+            <span className="ml-2 text-right">Template Empire</span>
           </div>
         </div>
-      )}
-      {false && <TestCard></TestCard>}
+        <div className="mt-auto grid grid-cols-2 gap-4">
+          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
+            <i className="ri-database-line text-4xl"></i>
+            <span className="text-xl">1.000</span>
+          </div>
+          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
+            <i className="ri-database-line text-4xl"></i>
+            <span className="text-xl">1.000</span>
+          </div>
+        </div>
+      </div>}
+      {agent && <TestCard></TestCard>}
     </div>
   );
 }
 
-function setup ()
+function setup ({
+  onAreaSelected
+})
 {
   let container;
   let camera, scene, renderer;
@@ -228,6 +244,8 @@ function setup ()
       y: 0,
       z: 0,
     });
+
+    onAreaSelected();
   }
 
   function init ()
