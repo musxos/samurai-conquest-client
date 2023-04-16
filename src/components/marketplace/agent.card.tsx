@@ -6,7 +6,7 @@ export function AgentCard({ index }) {
       <img
         loading="lazy"
         className="rounded-2xl"
-        src={`/${index}.png`}
+        src={`/art/${index}.png`}
         alt=""
       />
       <div className="mt-4 flex items-center justify-between">

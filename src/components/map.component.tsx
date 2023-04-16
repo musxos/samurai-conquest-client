@@ -82,44 +82,46 @@ export function Map ()
       <div className="h-full w-full" id="canvas"></div>
       <div className="absolute top-5 flex w-full justify-center gap-2">
         <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
-          <img className="h-14 w-14 rounded-full" alt="test" src="/1.png" />
+          <img className="h-14 w-14 rounded-full" alt="test" src="/art/1.png" />
         </button>
         <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
-          <img className="h-14 w-14 rounded-full" alt="test" src="/2.png" />
+          <img className="h-14 w-14 rounded-full" alt="test" src="/art/2.png" />
         </button>
         <button className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
-          <img className="h-14 w-14 rounded-full" alt="test" src="/3.png" />
+          <img className="h-14 w-14 rounded-full" alt="test" src="/art/3.png" />
         </button>
       </div>
-      <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
-        <h1 className="mb-2 text-2xl font-medium">Land Name</h1>
-        <p className="text-sm">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
-          laboriosam culpa cupiditate eligendi quia illo placeat saepe dolor
-          dignissimos nulla?
-        </p>
-        <div className="mb-4 mt-8 flex flex-col gap-4">
-          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-            <i className="ri-shield-star-fill text-xl text-blue-500"></i>
-            <span className="ml-2 text-right">Template Empire</span>
+      {false && (
+        <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
+          <h1 className="mb-2 text-2xl font-medium">Land Name</h1>
+          <p className="text-sm">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
+            laboriosam culpa cupiditate eligendi quia illo placeat saepe dolor
+            dignissimos nulla?
+          </p>
+          <div className="mb-4 mt-8 flex flex-col gap-4">
+            <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
+              <i className="ri-shield-star-fill text-xl text-blue-500"></i>
+              <span className="ml-2 text-right">Template Empire</span>
+            </div>
+            <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
+              <i className="ri-sword-fill text-xl text-red-500"></i>
+              <span className="ml-2 text-right">Template Empire</span>
+            </div>
           </div>
-          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-            <i className="ri-sword-fill text-xl text-red-500"></i>
-            <span className="ml-2 text-right">Template Empire</span>
+          <div className="mt-auto grid grid-cols-2 gap-4">
+            <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
+              <i className="ri-database-line text-4xl"></i>
+              <span className="text-xl">1.000</span>
+            </div>
+            <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
+              <i className="ri-database-line text-4xl"></i>
+              <span className="text-xl">1.000</span>
+            </div>
           </div>
         </div>
-        <div className="mt-auto grid grid-cols-2 gap-4">
-          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
-            <i className="ri-database-line text-4xl"></i>
-            <span className="text-xl">1.000</span>
-          </div>
-          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
-            <i className="ri-database-line text-4xl"></i>
-            <span className="text-xl">1.000</span>
-          </div>
-        </div>
-      </div>
-      <TestCard></TestCard>
+      )}
+      {false && <TestCard></TestCard>}
     </div>
   );
 }
@@ -239,9 +241,6 @@ function setup ()
       powerPreference: 'high-performance',
     });
 
-    renderer.toneMappingExposure = 1;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-
     renderer.outputEncoding = THREE.sRGBEncoding;
 
     renderer.shadowMap.enabled = true;
@@ -259,10 +258,10 @@ function setup ()
       55,
       container.clientWidth / container.clientHeight,
       1,
-      5000,
+      10000,
     );
-    camera.rotation.x = -Math.PI / 2;
-    camera.position.set(0, 2800, 0);
+    camera.rotation.x = -Math.PI / 3;
+    camera.position.set(0, 4000, 2700);
 
     //
 
@@ -270,7 +269,7 @@ function setup ()
 
     // Water
 
-    const waterGeometry = new THREE.PlaneGeometry(10000, 10000);
+    const waterGeometry = new THREE.PlaneGeometry(15000, 15000);
 
     water = new Water(waterGeometry, {
       textureWidth: 512,
@@ -359,7 +358,17 @@ function setup ()
 
     let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.castShadow = true;
-    directionalLight.position.set(100, 150, 0);
+    directionalLight.position.set(4500, 1500, 100);
+
+    directionalLight.shadow.camera.near = 0.1;
+    directionalLight.shadow.camera.far = 10000;
+    directionalLight.shadow.camera.left = -5;
+    directionalLight.shadow.camera.right = 5;
+    directionalLight.shadow.camera.top = 5;
+    directionalLight.shadow.camera.bottom = -5;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+
     directionalLight.lookAt(0, 0, 0);
 
     scene.add(directionalLight);
@@ -398,7 +407,6 @@ function setup ()
           .getCenter(object.position)
           .multiplyScalar(-1);
         object.position.y = 50;
-        object.rotation.y = -Math.PI / 2;
 
         scene.add(object);
       },

@@ -20,7 +20,7 @@ export default function Inventory() {
       return {
         number: i + 1,
         name: 'Green Eyes Samurai',
-        image: `/${i + 1}.png`,
+        image: `/art/${i + 1}.png`,
         assign: false,
       };
     }),
