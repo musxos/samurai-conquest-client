@@ -16,7 +16,7 @@ export function Card({ className, data }: { className?: string; data: any }) {
           <div className="z-20">
             <img
               className="!z-20 h-28 w-28 rounded-3xl backdrop-blur-3xl"
-              src="/1.png"
+              src="/art/1.png"
             />
           </div>
         </div>

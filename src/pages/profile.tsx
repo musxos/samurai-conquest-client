@@ -22,7 +22,7 @@ export default function Profile() {
         <div className="flex w-full flex-col items-center gap-4">
           <div className="flex w-full flex-col items-center rounded-xl border border-violet-500/10 bg-neutral-900/20 px-6 py-8 backdrop-blur-xl">
             <div className="relative h-32 w-32">
-              <img className="h-32 w-32 rounded-full" src="/1.png" alt="" />
+              <img className="h-32 w-32 rounded-full" src="/art/1.png" alt="" />
               <i className="ri-vip-crown-2-line absolute right-0 top-0 flex h-11 w-11 items-center justify-center rounded-full bg-white p-2 text-2xl text-yellow-500"></i>
             </div>
             <h1 className="font-inter mt-4 text-2xl">John Due</h1>
@@ -91,19 +91,19 @@ export default function Profile() {
             <div className="flex flex-row gap-4">
               <AgentCard
                 assign={false}
-                image={'1.png'}
+                image={'/art/1.png'}
                 number={1}
                 name="Test 1"
               ></AgentCard>
               <AgentCard
                 assign={false}
-                image={'2.png'}
+                image={'/art/2.png'}
                 number={1}
                 name="Test 2"
               ></AgentCard>
               <AgentCard
                 assign={false}
-                image={'3.png'}
+                image={'/art/3.png'}
                 number={1}
                 name="Test 3"
               ></AgentCard>
