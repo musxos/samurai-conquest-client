@@ -4,11 +4,12 @@ import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import gsap from 'gsap';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import * as THREE from 'three';
+import { useLandStore } from '@/hooks/useLandStore';
+import { DeployButton } from './commands/deploy.button';
 
-export function TestCard ()
-{
+export function TestCard() {
   return (
-    <div className="absolute bottom-0 flex w-full justify-center map-agent-in">
+    <div className="map-agent-in absolute bottom-0 flex w-full justify-center">
       <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
         <img className="h-20 w-20 rounded-2xl" alt="test" src="/art/1.png" />
         <div className="ml-4 flex h-full flex-col">
@@ -70,25 +71,37 @@ export function TestCard ()
   );
 }
 
-export function Map ()
-{
-  const [ area, setArea ] = useState(null);
-  const [ agent, setAgent ] = useState(null);
+export function Map() {
+  const [area, setArea] = useState(null);
+  const [agent, setAgent] = useState(null);
+  const [land, setLand] = useState(null);
 
-  const onAgentSelected = () =>
-  {
+  const landStore = useLandStore();
+
+  const onAgentSelected = () => {
     setAgent('test');
+  };
+
+  const onAreaSelected = (name: string) => {
+    if (area == name) {
+      return;
+    }
+
+    setArea(name);
+    onAreaChanged(name);
+  };
+
+  async function onAreaChanged(name: string) {
+    const [_, id] = name.split('_');
+
+    const { payload } = await landStore.fetchLand(id);
+
+    setLand(payload);
   }
 
-  const onAreaSelected = () =>
-  {
-    setArea('test');
-  }
-
-  useEffect(() =>
-  {
+  useEffect(() => {
     setup({
-      onAreaSelected
+      onAreaSelected,
     });
   }, []);
 
@@ -96,61 +109,123 @@ export function Map ()
     <div className="relative h-screen w-full overflow-hidden">
       <div className="h-full w-full" id="canvas"></div>
       <div className="absolute top-5 flex w-full justify-center gap-2">
-        <button onClick={onAgentSelected} className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+        <button
+          onClick={onAgentSelected}
+          className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
+        >
           <img className="h-14 w-14 rounded-full" alt="test" src="/art/1.png" />
         </button>
-        <button onClick={onAgentSelected} className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+        <button
+          onClick={onAgentSelected}
+          className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
+        >
           <img className="h-14 w-14 rounded-full" alt="test" src="/art/2.png" />
         </button>
-        <button onClick={onAgentSelected} className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500">
+        <button
+          onClick={onAgentSelected}
+          className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
+        >
           <img className="h-14 w-14 rounded-full" alt="test" src="/art/3.png" />
         </button>
       </div>
 
-      {area && <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl map-land-in">
-        <h1 className="mb-2 text-2xl font-medium">Land Name</h1>
-        <p className="text-sm">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
-          laboriosam culpa cupiditate eligendi quia illo placeat saepe dolor
-          dignissimos nulla?
-        </p>
-        <div className="mb-4 mt-8 flex flex-col gap-4">
-          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-            <i className="ri-shield-star-fill text-xl text-blue-500"></i>
-            <span className="ml-2 text-right">Template Empire</span>
+      {land && (
+        <div className="map-land-in absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
+          <h1 className="mb-2 text-2xl font-medium">{land.city_name}</h1>
+          <p className="text-sm">{land.desc}</p>
+          <div className="mt-6 grid grid-cols-1 gap-4">
+            <div className="col-span-1 flex h-16 items-center justify-between rounded-xl bg-neutral-950/50 px-6">
+              <i className="ri-database-line text-2xl"></i>
+              <span className="text-xl">{land.value}</span>
+            </div>
+            <div className="col-span-1 h-32">
+              <img
+                className="h-full w-full rounded-xl"
+                alt="asd"
+                src="https://cdn.discordapp.com/attachments/1097614586724765806/1097711747361669213/f6357992-6d38-4e53-a7aa-d8c57c026523.jpg"
+              />
+            </div>
           </div>
-          <div className="flex items-center justify-between rounded-xl bg-neutral-950/50 px-6 py-4">
-            <i className="ri-sword-fill text-xl text-red-500"></i>
-            <span className="ml-2 text-right">Template Empire</span>
+          <div className="mt-6">
+            <div className="flex items-center justify-between gap-4 rounded-xl bg-neutral-950/50 px-6 py-6">
+              <div className="flex flex-col items-center">
+                <i className="ri-shield-line text-4xl"></i>
+
+                <span className="mt-2 text-sm">+{land.defendersPower}</span>
+              </div>
+              <div>--------/--------</div>
+              <div className="flex flex-col items-center">
+                <i className="ri-sword-line text-4xl"></i>
+
+                <span className="mt-2 text-sm">+{land.attackersPower}</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6">
+            <div className="flex justify-between gap-4">
+              <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
+                <i className="ri-shield-line text-2xl"></i>
+                <ul className="w-full">
+                  {land.defenderSamurai.map((samurai, index) => (
+                    <li className="flex justify-between" key={index}>
+                      <div>{samurai[0]} </div>
+                      <div className="font-medium">+{samurai[1]}</div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
+                <i className="ri-sword-line text-2xl"></i>
+                <ul className="w-full">
+                  {land.attackerSamurai.map((samurai, index) => (
+                    <li className="flex justify-between" key={index}>
+                      <div>{samurai[0]} </div>
+                      <div className="font-medium">+{samurai[1]}</div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="mt-auto">
+            <div className="mt-auto grid grid-cols-3 gap-3">
+              <DeployButton></DeployButton>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-run-line mr-1 text-2xl"></i>
+                <span>Move</span>
+              </button>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-add-fill mr-1 text-2xl"></i>
+                <span>Heal</span>
+              </button>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-landscape-line mr-1 text-2xl"></i>
+                <span>Camp</span>
+              </button>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-hand-coin-fill mr-1 text-2xl"></i>
+                <span>Collect</span>
+              </button>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-eject-line mr-1 text-2xl"></i>
+                <span>Drop</span>
+              </button>
+            </div>
           </div>
         </div>
-        <div className="mt-auto grid grid-cols-2 gap-4">
-          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
-            <i className="ri-database-line text-4xl"></i>
-            <span className="text-xl">1.000</span>
-          </div>
-          <div className="col-span-1 flex h-32 flex-col items-center justify-center rounded-xl bg-neutral-950/50">
-            <i className="ri-database-line text-4xl"></i>
-            <span className="text-xl">1.000</span>
-          </div>
-        </div>
-      </div>}
+      )}
       {agent && <TestCard></TestCard>}
     </div>
   );
 }
 
-function setup ({
-  onAreaSelected
-})
-{
+function setup({ onAreaSelected }) {
   let container;
   let camera, scene, renderer;
   let cloudMesh, water, sun;
 
   const textureLoader = new THREE.TextureLoader();
-  const cloudTexture = textureLoader.load('/cloud.jpg', function (texture)
-  {
+  const cloudTexture = textureLoader.load('/cloud.jpg', function (texture) {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
   });
@@ -174,8 +249,7 @@ function setup ({
   document.addEventListener('mousemove', onMouseMove, false);
   document.addEventListener('click', onMouseClick, false);
 
-  function rotateSmooth (rotation: any)
-  {
+  function rotateSmooth(rotation: any) {
     gsap.to(camera.rotation, {
       x: rotation.x,
       y: rotation.y,
@@ -184,8 +258,7 @@ function setup ({
       ease: 'power2.inOut',
     });
   }
-  function moveSmooth (position: any)
-  {
+  function moveSmooth(position: any) {
     gsap.to(camera.position, {
       x: position.x,
       y: position.y - 1,
@@ -195,8 +268,7 @@ function setup ({
     });
   }
 
-  function onMouseMove (event: MouseEvent)
-  {
+  function onMouseMove(event: MouseEvent) {
     return;
     mouse.x = (event.clientX / container.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / container.clientHeight) * 2 + 1;
@@ -206,33 +278,29 @@ function setup ({
       .filter((x) => x.object.name == 'side');
     if (intersects.length == 0) return;
 
-    if (activeSide)
-    {
+    if (activeSide) {
       var material = activeSide.material;
-      if (material.color)
-      {
+      if (material.color) {
         material.color.set(0xffffff);
       }
     }
-    activeSide = intersects[ 0 ].object;
-    var material = (intersects[ 0 ].object as any).material;
+    activeSide = intersects[0].object;
+    var material = (intersects[0].object as any).material;
 
-    if (material.color)
-    {
+    if (material.color) {
       material.color.set(0xff0000);
     }
   }
 
-  function onMouseClick (event: MouseEvent)
-  {
+  function onMouseClick(event: MouseEvent) {
     mouse.x = (event.clientX / container.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / container.clientHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster
       .intersectObjects(scene.children, true)
-      .filter((x) => x.object.name == 'side');
+      .filter((x) => x.object.name.includes('side'));
     if (intersects.length == 0) return;
-    const point = intersects[ 0 ].point;
+    const point = intersects[0].point;
 
     moveSmooth({
       x: point.x,
@@ -245,11 +313,10 @@ function setup ({
       z: 0,
     });
 
-    onAreaSelected();
+    onAreaSelected(intersects[0].object.name);
   }
 
-  function init ()
-  {
+  function init() {
     container = document.getElementById('canvas');
 
     //
@@ -294,8 +361,7 @@ function setup ({
       textureHeight: 512,
       waterNormals: new THREE.TextureLoader().load(
         '/water4.jpg',
-        function (texture)
-        {
+        function (texture) {
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         },
       ),
@@ -317,10 +383,10 @@ function setup ({
 
     const skyUniforms = sky.material.uniforms;
 
-    skyUniforms[ 'turbidity' ].value = 10;
-    skyUniforms[ 'rayleigh' ].value = 2;
-    skyUniforms[ 'mieCoefficient' ].value = 0.005;
-    skyUniforms[ 'mieDirectionalG' ].value = 0.8;
+    skyUniforms['turbidity'].value = 10;
+    skyUniforms['rayleigh'].value = 2;
+    skyUniforms['mieCoefficient'].value = 0.005;
+    skyUniforms['mieDirectionalG'].value = 0.8;
 
     const parameters = {
       elevation: 80,
@@ -330,15 +396,14 @@ function setup ({
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     let renderTarget;
 
-    function updateSun ()
-    {
+    function updateSun() {
       const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
       const theta = THREE.MathUtils.degToRad(parameters.azimuth);
 
       sun.setFromSphericalCoords(1, phi, theta);
 
-      sky.material.uniforms[ 'sunPosition' ].value.copy(sun);
-      water.material.uniforms[ 'sunDirection' ].value.copy(sun).normalize();
+      sky.material.uniforms['sunPosition'].value.copy(sun);
+      water.material.uniforms['sunDirection'].value.copy(sun).normalize();
 
       if (renderTarget !== undefined) renderTarget.dispose();
 
@@ -404,15 +469,13 @@ function setup ({
 
     loader.load(
       '/hexagons.fbx',
-      function (object)
-      {
+      function (object) {
         object.scale.set(100, 100, 100);
 
-        object.traverse(function (child)
-        {
-          if (child instanceof THREE.Mesh)
-          {
-            child.name = 'side';
+        object.traverse(function (child) {
+          if (child instanceof THREE.Mesh) {
+            const formattedName = 'side_' + child.name;
+            child.name = formattedName;
             child.material = material;
           }
 
@@ -428,28 +491,24 @@ function setup ({
 
         scene.add(object);
       },
-      function (xhr)
-      {
+      function (xhr) {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
       },
-      function (error)
-      {
+      function (error) {
         console.log('An error happened');
         console.error(error);
       },
     );
   }
 
-  function onWindowResize ()
-  {
+  function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  function animate ()
-  {
+  function animate() {
     requestAnimationFrame(animate);
 
     cloudPlaneMaterial.alphaMap.offset.y -= 0.00005;
@@ -458,9 +517,8 @@ function setup ({
     render();
   }
 
-  function render ()
-  {
-    water.material.uniforms[ 'time' ].value += 1.0 / 90.0;
+  function render() {
+    water.material.uniforms['time'].value += 1.0 / 90.0;
 
     renderer.render(scene, camera);
   }
