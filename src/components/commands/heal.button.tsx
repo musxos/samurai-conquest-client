@@ -6,9 +6,9 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 
-export function DeployButton({ nft_id }: any) {
+export function HealButton({ nft_id }: { nft_id: any }) {
   const { config } = usePrepareContractWrite({
-    address: '0xc9C10e4635937228A554754BD727304905B2259F  ',
+    address: '0xc9C10e4635937228A554754BD727304905B2259F',
     abi: [
       {
         inputs: [
@@ -18,13 +18,13 @@ export function DeployButton({ nft_id }: any) {
             type: 'uint256',
           },
         ],
-        name: 'deploySamurai',
+        name: 'healSamurai',
         outputs: [],
         stateMutability: 'nonpayable',
         type: 'function',
       },
     ],
-    functionName: 'deploySamurai',
+    functionName: 'healSamurai',
     args: [nft_id],
   });
 
@@ -45,9 +45,11 @@ export function DeployButton({ nft_id }: any) {
       className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2 disabled:bg-neutral-950/10"
     >
       <i className="ri-sword-line mr-1 text-2xl"></i>
-      {!isSuccess && <span>{isLoading ? 'Deploying...' : 'Deploy'}</span>}
-      {isSuccess && <span>Deployed</span>}
+      {!isSuccess && <span>{isLoading ? 'Healing...' : 'Heal'}</span>}
+      {isSuccess && <span>Heal</span>}
       {isError && <span className="text-red-500">{error.message}</span>}
     </button>
   );
 }
+
+// TODO: HEAL SAMURAI SADECE BASE NOKTASINDAYKEN ÇALIŞIR (!!KENDİ KLANININ BÖLGESİ!!)

@@ -6,6 +6,8 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import * as THREE from 'three';
 import { useLandStore } from '@/hooks/useLandStore';
 import { DeployButton } from './commands/deploy.button';
+import { MoveButton } from './commands/move.button';
+import { HealButton } from './commands/heal.button';
 
 export function TestCard() {
   return (
@@ -87,14 +89,15 @@ export function Map() {
       return;
     }
 
-    setArea(name);
-    onAreaChanged(name);
-  };
-
-  async function onAreaChanged(name: string) {
     const [_, id] = name.split('_');
 
+    setArea(id);
+    onAreaChanged(id);
+  };
+
+  async function onAreaChanged(id: string) {
     const { payload } = await landStore.fetchLand(id);
+    console.log(id);
 
     setLand(payload);
   }
@@ -189,15 +192,9 @@ export function Map() {
           </div>
           <div className="mt-auto">
             <div className="mt-auto grid grid-cols-3 gap-3">
-              <DeployButton></DeployButton>
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-run-line mr-1 text-2xl"></i>
-                <span>Move</span>
-              </button>
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-add-fill mr-1 text-2xl"></i>
-                <span>Heal</span>
-              </button>
+              <DeployButton nft_id={1}></DeployButton>
+              <MoveButton land_id={1} nft_id={1}></MoveButton>
+              <HealButton nft_id={1}></HealButton>
               <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
                 <i className="ri-landscape-line mr-1 text-2xl"></i>
                 <span>Camp</span>
@@ -301,17 +298,6 @@ function setup({ onAreaSelected }) {
       .filter((x) => x.object.name.includes('side'));
     if (intersects.length == 0) return;
     const point = intersects[0].point;
-
-    moveSmooth({
-      x: point.x,
-      y: 1080,
-      z: point.z - 200,
-    });
-    rotateSmooth({
-      x: -Math.PI / 3.5,
-      y: 0,
-      z: 0,
-    });
 
     onAreaSelected(intersects[0].object.name);
   }
