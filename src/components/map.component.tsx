@@ -11,12 +11,13 @@ import { CampCommandButton } from './commands/camp-command.button';
 import { useGame } from '@/hooks/useGame';
 import { UncampCommandButton } from './commands/uncamp-command.button';
 import { DropButtonCommand } from './commands/drop-command.button';
+import Image from 'next/image';
 
-export function TestCard() {
+export function LandCard() {
   return (
     <div className="map-agent-in absolute bottom-0 flex w-full justify-center">
       <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
-        <img className="h-20 w-20 rounded-2xl" alt="test" src="/art/1.png" />
+        <Image className="h-20 w-20 rounded-2xl" alt="test" src="/art/1.png" />
         <div className="ml-4 flex h-full flex-col">
           <h4 className="font-medium">Green Samurai</h4>
           <span>In Bilmem ne krallığı.</span>
@@ -82,11 +83,11 @@ export function Map() {
   const [land, setLand] = useState(null);
   const { game } = useGame();
 
-  const onAgentSelected = () => {
+  const onAgentSelect = () => {
     setAgent('test');
   };
 
-  const onAreaSelected = (name: string) => {
+  const onAreaSelect = (name: string) => {
     if (area == name) {
       return;
     }
@@ -103,7 +104,7 @@ export function Map() {
 
   useEffect(() => {
     setup({
-      onAreaSelected,
+      onAreaSelect,
     });
   }, []);
 
@@ -112,22 +113,40 @@ export function Map() {
       <div className="h-full w-full" id="canvas"></div>
       <div className="absolute top-5 flex w-full justify-center gap-2">
         <button
-          onClick={onAgentSelected}
+          onClick={onAgentSelect}
           className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
         >
-          <img className="h-14 w-14 rounded-full" alt="test" src="/art/1.png" />
+          <Image
+            height={56}
+            width={56}
+            className="h-14 w-14 rounded-full"
+            alt="test"
+            src="/art/1.png"
+          />
         </button>
         <button
-          onClick={onAgentSelected}
+          onClick={onAgentSelect}
           className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
         >
-          <img className="h-14 w-14 rounded-full" alt="test" src="/art/2.png" />
+          <Image
+            height={56}
+            width={56}
+            className="rounded-full"
+            alt="test"
+            src="/art/2.png"
+          />
         </button>
         <button
-          onClick={onAgentSelected}
+          onClick={onAgentSelect}
           className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
         >
-          <img className="h-14 w-14 rounded-full" alt="test" src="/art/3.png" />
+          <Image
+            height={56}
+            width={56}
+            className="h-14 w-14 rounded-full"
+            alt="test"
+            src="/art/3.png"
+          />
         </button>
       </div>
 
@@ -141,7 +160,7 @@ export function Map() {
               <span className="text-xl">33</span>
             </div>
             <div className="col-span-1 h-32">
-              <img
+              <Image
                 className="h-full w-full rounded-xl"
                 alt="asd"
                 src="https://cdn.discordapp.com/attachments/1097614586724765806/1097711747361669213/f6357992-6d38-4e53-a7aa-d8c57c026523.jpg"
@@ -209,12 +228,12 @@ export function Map() {
           </div>
         </div>
       )}
-      {agent && <TestCard></TestCard>}
+      {agent && <LandCard></LandCard>}
     </div>
   );
 }
 
-function setup({ onAreaSelected }) {
+function setup({ onAreaSelect }) {
   let container;
   let camera, scene, renderer;
   let cloudMesh, water, sun;
@@ -297,7 +316,7 @@ function setup({ onAreaSelected }) {
     if (intersects.length == 0) return;
     const point = intersects[0].point;
 
-    onAreaSelected(intersects[0].object.name);
+    onAreaSelect(intersects[0].object.name);
   }
 
   function init() {

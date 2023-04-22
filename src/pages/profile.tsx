@@ -1,6 +1,7 @@
 import { AgentCard } from '@/components/inventory/agent.card';
 import { useLayout } from '@/hooks/useLayout';
 import { DefaultLayout } from '@/layouts/default.layout';
+import Image from 'next/image';
 import { useEffect } from 'react';
 
 export default function Profile() {
@@ -22,7 +23,13 @@ export default function Profile() {
         <div className="flex w-full flex-col items-center gap-4">
           <div className="flex w-full flex-col items-center rounded-xl border border-violet-500/10 bg-neutral-900/20 px-6 py-8 backdrop-blur-xl">
             <div className="relative h-32 w-32">
-              <img className="h-32 w-32 rounded-full" src="/art/1.png" alt="" />
+              <Image
+                height={160}
+                width={160}
+                className="h-32 w-32 rounded-full"
+                src="/art/1.png"
+                alt="sd"
+              />
               <i className="ri-vip-crown-2-line absolute right-0 top-0 flex h-11 w-11 items-center justify-center rounded-full bg-white p-2 text-2xl text-yellow-500"></i>
             </div>
             <h1 className="font-inter mt-4 text-2xl">John Due</h1>

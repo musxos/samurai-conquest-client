@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Image from 'next/image';
 
 export type AgentCardProps = {
   image: string;
@@ -25,7 +26,13 @@ export function AgentCard({
 
   return (
     <div onClick={onClick} className={style}>
-      <img className="rounded-2xl" src={image} alt="" />
+      <Image
+        width={290}
+        height={290}
+        className="rounded-2xl"
+        src={image}
+        alt="asd"
+      />
       <div className="mt-4 flex items-center justify-between">
         <h3 className="font-inter font-medium text-neutral-200">{name}</h3>
         <span className="text-sm font-light text-neutral-400">#{number}</span>

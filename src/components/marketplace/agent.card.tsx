@@ -3,11 +3,13 @@ import Image from 'next/image';
 export function AgentCard({ index }) {
   return (
     <div className="group relative flex flex-col rounded-2xl border border-violet-500/10 bg-neutral-900/20 px-6 py-4 backdrop-blur-xl transition hover:bg-neutral-800/50">
-      <img
+      <Image
+        width={290}
+        height={290}
         loading="lazy"
         className="rounded-2xl"
         src={`/art/${index}.png`}
-        alt=""
+        alt="qweqw"
       />
       <div className="mt-4 flex items-center justify-between">
         <h3 className="font-inter font-medium text-neutral-200">

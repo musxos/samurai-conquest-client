@@ -116,7 +116,13 @@ export default function Inventory() {
           <div className="inventory-right-in h-full border-l border-violet-500/50 bg-neutral-950/50 px-6 py-4 text-white backdrop-blur-3xl lg:border-none lg:bg-transparent">
             {active && (
               <div className="flex flex-col lg:sticky lg:top-5">
-                <img className="rounded-2xl" src={active.image} alt="" />
+                <Image
+                  height={512}
+                  width={512}
+                  className="h-full w-full rounded-2xl"
+                  src={active.image}
+                  alt=""
+                />
                 <div className="flex items-end justify-between">
                   <h1 className="mt-8 text-2xl">{active.name}</h1>
                   <span className="text-sm">#{active.number}</span>
