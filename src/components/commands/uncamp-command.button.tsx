@@ -1,15 +1,16 @@
-import useCampCommand from '@/features/commands/camp.command';
+import useUnCampCommand from '@/features/commands/uncamp.command';
 import { useGame } from '@/hooks/useGame';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
-export function CampCommandButton() {
+export function UncampCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } = useCampCommand(
-    game.samurai?.id, // TODO: I'm not sure
-  );
+  const { isError, data, isLoading, isSuccess, write, error } =
+    useUnCampCommand(
+      game.samurai?.id, // TODO: I'm not sure
+    );
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -41,7 +42,11 @@ export function CampCommandButton() {
     <button onClick={handleClick} disabled={isLoading} className={className}>
       <i className="ri-landscape-line mr-1 text-2xl"></i>
       <span>
-        {isLoading ? 'Camping...' : isSuccess && !isLoading ? 'Camped' : 'Camp'}
+        {isLoading
+          ? 'Uncamping...'
+          : isSuccess && !isLoading
+          ? 'Uncamped'
+          : 'Uncamp'}
       </span>
     </button>
   );

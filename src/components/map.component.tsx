@@ -8,6 +8,9 @@ import { DeployCommandButton } from './commands/deploy-command.button';
 import { MoveCommandButton } from './commands/move-command.button';
 import { HealCommandButton } from './commands/heal-command.button';
 import { CampCommandButton } from './commands/camp-command.button';
+import { useGame } from '@/hooks/useGame';
+import { UncampCommandButton } from './commands/uncamp-command.button';
+import { DropButtonCommand } from './commands/drop-command.button';
 
 export function TestCard() {
   return (
@@ -77,6 +80,7 @@ export function Map() {
   const [area, setArea] = useState(null);
   const [agent, setAgent] = useState(null);
   const [land, setLand] = useState(null);
+  const { game } = useGame();
 
   const onAgentSelected = () => {
     setAgent('test');
@@ -186,15 +190,21 @@ export function Map() {
               <DeployCommandButton></DeployCommandButton>
               <MoveCommandButton></MoveCommandButton>
               <HealCommandButton></HealCommandButton>
-              <CampCommandButton></CampCommandButton>
+              {game.samurai &&
+                game.samurai?.camp &&
+                game.samurai?.campPosition == game.land && (
+                  <CampCommandButton></CampCommandButton>
+                )}
+              {game.samurai &&
+                game.samurai?.camp &&
+                game.samurai?.campPosition != game.land && (
+                  <UncampCommandButton></UncampCommandButton>
+                )}
               <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
                 <i className="ri-hand-coin-fill mr-1 text-2xl"></i>
                 <span>Collect</span>
               </button>
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-eject-line mr-1 text-2xl"></i>
-                <span>Drop</span>
-              </button>
+              <DropButtonCommand></DropButtonCommand>
             </div>
           </div>
         </div>
