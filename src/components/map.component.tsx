@@ -4,6 +4,7 @@ import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import gsap from 'gsap';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import * as THREE from 'three';
+import { DeployCommandButton } from './commands/deploy-command.button';
 
 export function TestCard() {
   return (
@@ -179,10 +180,7 @@ export function Map() {
           </div>
           <div className="mt-auto">
             <div className="mt-auto grid grid-cols-3 gap-3">
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-landscape-line mr-1 text-2xl"></i>
-                <span>Deploy</span>
-              </button>
+              <DeployCommandButton></DeployCommandButton>
               <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
                 <i className="ri-landscape-line mr-1 text-2xl"></i>
                 <span>Move</span>
