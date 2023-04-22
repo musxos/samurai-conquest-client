@@ -1,5 +1,5 @@
 import useDeployCommand from '@/features/commands/deploy.command';
-import useMoveCommand from '@/features/commands/move.command';
+import useMoveCommand, { prepareMove } from '@/features/commands/move.command';
 import { useGame } from '@/hooks/useGame';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
@@ -21,6 +21,10 @@ export function DeployCommandButton() {
     }
 
     if (!game.isLoaded || !game.samurai || !game.land) {
+      return;
+    }
+
+    if (!prepareMove(game.land)) {
       return;
     }
 

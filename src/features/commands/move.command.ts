@@ -41,4 +41,8 @@ const useMoveCommand = (_id: any, landId: any) => {
   return { data, error, isError, isLoading, isSuccess, write };
 };
 
+export function prepareMove(targetLand: number) {
+  return true; // TODO: need to check if the move is valid
+}
+
 export default useMoveCommand;
