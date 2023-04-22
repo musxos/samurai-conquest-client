@@ -1,4 +1,3 @@
-import useDeployCommand from '@/features/commands/deploy.command';
 import useMoveCommand, { prepareMove } from '@/features/commands/move.command';
 import { useGame } from '@/hooks/useGame';
 import classNames from 'classnames';

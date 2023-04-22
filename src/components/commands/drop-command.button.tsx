@@ -1,14 +1,14 @@
-import useCampCommand from '@/features/commands/camp.command';
+import useDropCommand from '@/features/commands/drop.command';
 import { useGame } from '@/hooks/useGame';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
-export function CampCommandButton() {
+export function DropButtonCommand() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } = useCampCommand(
-    game.samurai, // TODO: I'm not sure
+  const { isError, data, isLoading, isSuccess, write, error } = useDropCommand(
+    game.samurai,
   );
 
   const handleClick = (e) => {
@@ -18,7 +18,7 @@ export function CampCommandButton() {
       return;
     }
 
-    if (!game.isLoaded || !game.samurai) {
+    if (!game.isLoaded || !game.samurai || !game.land) {
       return;
     }
 
@@ -41,7 +41,7 @@ export function CampCommandButton() {
     <button onClick={handleClick} disabled={isLoading} className={className}>
       <i className="ri-landscape-line mr-1 text-2xl"></i>
       <span>
-        {isLoading ? 'Camping...' : isSuccess && !isLoading ? 'Camped' : 'Camp'}
+        {isLoading ? 'Moving...' : isSuccess && !isLoading ? 'Moved' : 'Move'}
       </span>
     </button>
   );
