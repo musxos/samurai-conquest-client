@@ -1,5 +1,5 @@
 import { useAppSelector, useAppDispatch } from '@/app/hooks';
-import { LayoutState, update } from '@/features/layout/layout-slice';
+import { LayoutState, setColor, update } from '@/features/layout/layout-slice';
 
 export const useLayout = () => {
   const dispatch = useAppDispatch();
@@ -7,6 +7,7 @@ export const useLayout = () => {
 
   return {
     layout,
-    update: (payload: LayoutState) => dispatch(update(payload)),
+    update: (payload: Omit<LayoutState, 'color'>) => dispatch(update(payload)),
+    setColor: (payload: LayoutState['color']) => dispatch(setColor(payload)),
   };
 };

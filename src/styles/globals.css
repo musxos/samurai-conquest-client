@@ -38,16 +38,32 @@
 }
 
 @layer components {
+  .exit-animation {
+    animation: exit-animation 0.5s ease-in-out forwards;
+  }
+
+  @keyframes exit-animation {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(200%);
+      display: none;
+    }
+  }
+
   .crate-inital-animation {
     perspective: 1000px;
     transform-style: preserve-3d;
     position: relative;
-    transition: transform 1s;
+    transition: all 1s ease-in;
   }
 
   .crate-inital-animation.active {
     transition-delay: 0.5s;
-    transform: rotateY(180deg) scale(1.1);
+    transform: rotateY(180deg) scale(1.2);
   }
 
   .crate-front,

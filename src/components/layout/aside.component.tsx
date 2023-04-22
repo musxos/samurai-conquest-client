@@ -19,6 +19,7 @@ export function Aside() {
           <i className="ri-store-2-line text-2xl"></i>
         </Link>
         <Link
+          id="inventory"
           active-class="!text-violet-500"
           href="/inventory"
           className="flex h-12 w-12 items-center justify-center rounded-full hover:bg-neutral-800"

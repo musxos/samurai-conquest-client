@@ -12,6 +12,7 @@ import { useGame } from '@/hooks/useGame';
 import { UncampCommandButton } from './commands/uncamp-command.button';
 import { DropButtonCommand } from './commands/drop-command.button';
 import Image from 'next/image';
+import useAPI from '@/hooks/useAPI';
 
 export function LandCard() {
   return (
@@ -79,12 +80,12 @@ export function LandCard() {
 
 export function Map() {
   const [area, setArea] = useState(null);
-  const [agent, setAgent] = useState(null);
-  const [land, setLand] = useState(null);
-  const { game } = useGame();
+
+  const { game, setLand, setSamurai } = useGame();
+  const { land: landAPI } = useAPI();
 
   const onAgentSelect = () => {
-    setAgent('test');
+    setSamurai(null); // TODO: Need samurai data
   };
 
   const onAreaSelect = (name: string) => {
@@ -99,7 +100,13 @@ export function Map() {
   };
 
   async function onAreaChanged(id: string) {
-    setLand(id);
+    const landData = await landAPI.getLand(id);
+
+    if (landData) {
+      setLand(Number(id));
+    } else {
+      setLand(null);
+    }
   }
 
   useEffect(() => {
@@ -150,7 +157,7 @@ export function Map() {
         </button>
       </div>
 
-      {land && (
+      {game.land && (
         <div className="map-land-in absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
           <h1 className="mb-2 text-2xl font-medium">teeest</h1>
           <p className="text-sm">435345345</p>
@@ -228,7 +235,7 @@ export function Map() {
           </div>
         </div>
       )}
-      {agent && <LandCard></LandCard>}
+      {game.samurai && <LandCard></LandCard>}
     </div>
   );
 }

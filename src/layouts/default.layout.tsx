@@ -1,15 +1,20 @@
 import { Aside } from '@/components/layout/aside.component';
 import { Navbar } from '@/components/layout/navbar.component';
+import { useLayout } from '@/hooks/useLayout';
 
 export type DefaultLayoutProps = {
   children: JSX.Element;
 };
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
+  const layout = useLayout();
+
   return (
     <>
       <div className="sticky top-10 mx-auto flex h-full w-full max-w-screen-lg justify-center">
-        <div className="absolute h-[500px] w-[500px] bg-violet-500 blur-[500px]"></div>
+        <div
+          className={`absolute h-[500px] w-[500px] blur-[500px] transition-all duration-1000 bg-${layout.layout.color}-500`}
+        ></div>
       </div>
       <div className="flex">
         <Aside></Aside>

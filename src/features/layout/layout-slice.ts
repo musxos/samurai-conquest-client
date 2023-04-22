@@ -6,6 +6,7 @@ export interface LayoutState {
   notifications: boolean;
   messages: boolean;
   profile: boolean;
+  color: 'red' | 'green' | 'blue' | 'yellow' | 'indigo' | 'purple' | 'violet';
 }
 
 const initialState: LayoutState = {
@@ -14,20 +15,27 @@ const initialState: LayoutState = {
   notifications: true,
   messages: true,
   profile: true,
+  color: 'violet',
 };
 
 const layoutSlice = createSlice({
   name: 'layout',
   initialState,
   reducers: {
-    update(state, action: PayloadAction<LayoutState>) {
+    update(state, action: PayloadAction<Omit<LayoutState, 'color'>>) {
       return {
         ...state,
         ...action.payload,
       };
     },
+    setColor(state, action: PayloadAction<LayoutState['color']>) {
+      return {
+        ...state,
+        color: action.payload,
+      };
+    },
   },
 });
 
-export const { update } = layoutSlice.actions;
+export const { update, setColor } = layoutSlice.actions;
 export default layoutSlice.reducer;

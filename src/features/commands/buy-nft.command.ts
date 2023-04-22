@@ -26,15 +26,20 @@ const useBuyNftCommand = (_id: any) => {
     functionName: 'buyNFT',
     args: [_id],
     enabled: false,
+    onError: (error: any) => {
+      console.log('onError', error);
+    },
+    onSettled: () => {
+      console.log('onSettled');
+    },
+    onSuccess: (data: any) => {
+      console.log('onSuccess', data);
+    },
   });
 
   const { data, error, isError, write } = useContractWrite(config);
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-  });
-
-  return { data, error, isError, isLoading, isSuccess, write };
+  return { data, error, isError, write };
 };
 
 export default useBuyNftCommand;

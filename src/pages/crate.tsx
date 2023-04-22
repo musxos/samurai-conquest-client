@@ -1,11 +1,57 @@
 import { DefaultLayout } from '@/layouts/default.layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Sword from '@/assets/pngegg_5.png';
+import classNames from 'classnames';
+import { useLayout } from '@/hooks/useLayout';
 
-export function CrateCard() {
+export function CrateCard({ minted, setMint, id }: any) {
+  const { setColor } = useLayout();
+
+  const classStyle = classNames(
+    'crate-inital-animation flex h-[26rem] w-64 items-center justify-center',
+    {
+      active: minted == id,
+      '': minted != id,
+      'exit-animation': minted != id && minted != 0,
+    },
+  );
+
+  function handleClick() {
+    setMint(id);
+  }
+
+  useEffect(() => {
+    if (minted == id) {
+      const element = document.getElementById(`crate-card-${id}`);
+      const inventory = document.getElementById(`inventory`);
+
+      if (element && inventory) {
+        element.style.transition = 'all 1s ease-in-out';
+        element.style.position = 'fixed';
+        element.style.top = `${element.offsetTop}px`;
+        element.style.left = `${element.offsetLeft}px`;
+        setColor('red');
+      }
+
+      setTimeout(() => {
+        element.style.top = `${inventory.clientTop}px`;
+        element.style.left = `${inventory.clientLeft}px`;
+        element.style.transform = 'translate(-50%, -50%)';
+        element.style.scale = '0.1';
+        element.style.opacity = '0';
+        setColor('violet');
+      }, 5000);
+    }
+  }, [minted]);
+
   return (
-    <button className="crate-inital-animation flex h-[26rem] w-64 items-center justify-center">
+    <button
+      id={`crate-card-${id}`}
+      data-delay={`${id}s`}
+      onClick={() => handleClick()}
+      className={classStyle}
+    >
       <div className="crate-front">
         <div className="text flex h-full w-full items-center justify-center rounded-md p-4">
           <Image
@@ -83,26 +129,28 @@ export function CrateCard() {
 }
 
 export function CrateWrapper() {
+  const [minted, setMinted] = useState(false);
+  const list = [1, 2, 3, 4];
+
   return (
     <div className="fixed inset-0 left-0 top-0 flex items-center justify-center gap-12">
-      <CrateCard></CrateCard>
-      <CrateCard></CrateCard>
-      <CrateCard></CrateCard>
+      {list.map((x) => {
+        return (
+          <CrateCard
+            key={x}
+            minted={minted}
+            setMint={setMinted}
+            id={x}
+          ></CrateCard>
+        );
+      })}
     </div>
   );
 }
 
 export default function Crate() {
-  const [open, setOpen] = useState(false);
-
-  const openCase = () => {
-    setOpen(true);
-  };
-
   return (
     <section className="mx-auto mb-8 mt-32 flex max-w-screen-2xl flex-col items-center px-8">
-      {!open && <button onClick={() => openCase()}>Open Case</button>}
-
       <CrateWrapper />
     </section>
   );

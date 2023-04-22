@@ -23,6 +23,7 @@ export default function Marketplace() {
       return;
     }
 
+    // TODO: this function needs to implementaion
     if (!buyNftCommand.write) {
       return;
     }
