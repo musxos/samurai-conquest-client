@@ -8,7 +8,7 @@ export function DropButtonCommand() {
   const account = useAccount();
 
   const { isError, data, isLoading, isSuccess, write, error } = useDropCommand(
-    game.samurai,
+    game.samurai?.id,
   );
 
   const handleClick = (e) => {

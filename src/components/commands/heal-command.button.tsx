@@ -1,14 +1,15 @@
-import useDeployCommand from '@/features/commands/deploy.command';
+import useHealCommand from '@/features/commands/heal.command';
 import { useGame } from '@/hooks/useGame';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
-export function DeployCommandButton() {
+export function HealCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } =
-    useDeployCommand(game.samurai?.id);
+  const { isError, data, isLoading, isSuccess, write, error } = useHealCommand(
+    game.samurai?.id,
+  );
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -40,11 +41,7 @@ export function DeployCommandButton() {
     <button onClick={handleClick} disabled={isLoading} className={className}>
       <i className="ri-landscape-line mr-1 text-2xl"></i>
       <span>
-        {isLoading
-          ? 'Deploying...'
-          : isSuccess && !isLoading
-          ? 'Deployed'
-          : 'Deploy'}
+        {isLoading ? 'Healing...' : isSuccess && !isLoading ? 'Healed' : 'Heal'}
       </span>
     </button>
   );

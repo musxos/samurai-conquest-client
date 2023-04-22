@@ -3,12 +3,12 @@ import { useGame } from '@/hooks/useGame';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
-export function DeployCommandButton() {
+export function MoveCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
   const { isError, data, isLoading, isSuccess, write, error } = useMoveCommand(
-    game.samurai,
+    game.samurai?.id,
     game.land,
   );
 

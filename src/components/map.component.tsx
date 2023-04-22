@@ -5,6 +5,9 @@ import gsap from 'gsap';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import * as THREE from 'three';
 import { DeployCommandButton } from './commands/deploy-command.button';
+import { MoveCommandButton } from './commands/move-command.button';
+import { HealCommandButton } from './commands/heal-command.button';
+import { CampCommandButton } from './commands/camp-command.button';
 
 export function TestCard() {
   return (
@@ -181,18 +184,9 @@ export function Map() {
           <div className="mt-auto">
             <div className="mt-auto grid grid-cols-3 gap-3">
               <DeployCommandButton></DeployCommandButton>
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-landscape-line mr-1 text-2xl"></i>
-                <span>Move</span>
-              </button>
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-landscape-line mr-1 text-2xl"></i>
-                <span>Heal</span>
-              </button>
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-landscape-line mr-1 text-2xl"></i>
-                <span>Camp</span>
-              </button>
+              <MoveCommandButton></MoveCommandButton>
+              <HealCommandButton></HealCommandButton>
+              <CampCommandButton></CampCommandButton>
               <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
                 <i className="ri-hand-coin-fill mr-1 text-2xl"></i>
                 <span>Collect</span>
