@@ -4,10 +4,6 @@ import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import gsap from 'gsap';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import * as THREE from 'three';
-import { useLandStore } from '@/hooks/useLandStore';
-import { DeployButton } from './commands/deploy.button';
-import { MoveButton } from './commands/move.button';
-import { HealButton } from './commands/heal.button';
 
 export function TestCard() {
   return (
@@ -78,8 +74,6 @@ export function Map() {
   const [agent, setAgent] = useState(null);
   const [land, setLand] = useState(null);
 
-  const landStore = useLandStore();
-
   const onAgentSelected = () => {
     setAgent('test');
   };
@@ -96,10 +90,7 @@ export function Map() {
   };
 
   async function onAreaChanged(id: string) {
-    const { payload } = await landStore.fetchLand(id);
-    console.log(id);
-
-    setLand(payload);
+    setLand(id);
   }
 
   useEffect(() => {
@@ -134,12 +125,12 @@ export function Map() {
 
       {land && (
         <div className="map-land-in absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
-          <h1 className="mb-2 text-2xl font-medium">{land.city_name}</h1>
-          <p className="text-sm">{land.desc}</p>
+          <h1 className="mb-2 text-2xl font-medium">teeest</h1>
+          <p className="text-sm">435345345</p>
           <div className="mt-6 grid grid-cols-1 gap-4">
             <div className="col-span-1 flex h-16 items-center justify-between rounded-xl bg-neutral-950/50 px-6">
               <i className="ri-database-line text-2xl"></i>
-              <span className="text-xl">{land.value}</span>
+              <span className="text-xl">33</span>
             </div>
             <div className="col-span-1 h-32">
               <img
@@ -154,13 +145,13 @@ export function Map() {
               <div className="flex flex-col items-center">
                 <i className="ri-shield-line text-4xl"></i>
 
-                <span className="mt-2 text-sm">+{land.defendersPower}</span>
+                <span className="mt-2 text-sm">+33</span>
               </div>
               <div>--------/--------</div>
               <div className="flex flex-col items-center">
                 <i className="ri-sword-line text-4xl"></i>
 
-                <span className="mt-2 text-sm">+{land.attackersPower}</span>
+                <span className="mt-2 text-sm">+44</span>
               </div>
             </div>
           </div>
@@ -169,32 +160,37 @@ export function Map() {
               <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
                 <i className="ri-shield-line text-2xl"></i>
                 <ul className="w-full">
-                  {land.defenderSamurai.map((samurai, index) => (
-                    <li className="flex justify-between" key={index}>
-                      <div>{samurai[0]} </div>
-                      <div className="font-medium">+{samurai[1]}</div>
-                    </li>
-                  ))}
+                  <li className="flex justify-between">
+                    <div>test </div>
+                    <div className="font-medium">+33</div>
+                  </li>
                 </ul>
               </div>
               <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
                 <i className="ri-sword-line text-2xl"></i>
                 <ul className="w-full">
-                  {land.attackerSamurai.map((samurai, index) => (
-                    <li className="flex justify-between" key={index}>
-                      <div>{samurai[0]} </div>
-                      <div className="font-medium">+{samurai[1]}</div>
-                    </li>
-                  ))}
+                  <li className="flex justify-between">
+                    <div>test</div>
+                    <div className="font-medium">+44</div>
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
           <div className="mt-auto">
             <div className="mt-auto grid grid-cols-3 gap-3">
-              <DeployButton nft_id={1}></DeployButton>
-              <MoveButton land_id={1} nft_id={1}></MoveButton>
-              <HealButton nft_id={1}></HealButton>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-landscape-line mr-1 text-2xl"></i>
+                <span>Deploy</span>
+              </button>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-landscape-line mr-1 text-2xl"></i>
+                <span>Move</span>
+              </button>
+              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
+                <i className="ri-landscape-line mr-1 text-2xl"></i>
+                <span>Heal</span>
+              </button>
               <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
                 <i className="ri-landscape-line mr-1 text-2xl"></i>
                 <span>Camp</span>

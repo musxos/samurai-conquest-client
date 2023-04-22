@@ -3,7 +3,6 @@
 import { useLayout } from '@/hooks/useLayout';
 import { CustomConnectButton } from '../rainbow/connect-button.component';
 import { useAccount } from 'wagmi';
-import { useUser } from '@/hooks/useUser';
 import { useEffect, useState } from 'react';
 
 export type NavbarProps = {
@@ -11,14 +10,9 @@ export type NavbarProps = {
 };
 
 export function Navbar({ className }: NavbarProps) {
-  const { user, fetchUser, reset } = useUser();
   const account = useAccount({
-    onConnect({ address }) {
-      fetchUser(address);
-    },
-    onDisconnect() {
-      reset();
-    },
+    onConnect({ address }) {},
+    onDisconnect() {},
   });
   const { layout } = useLayout();
 
@@ -55,7 +49,7 @@ export function Navbar({ className }: NavbarProps) {
         )}
         {mount && account.isConnected && layout.profile && (
           <button className="backdrop-filter-xl hidden h-14 rounded-xl border border-violet-500/10 bg-neutral-900/10 px-6 py-3 transition lg:block">
-            {user.nickName}
+            asdsadasd
           </button>
         )}
       </div>

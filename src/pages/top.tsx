@@ -1,11 +1,10 @@
 import { useLayout } from '@/hooks/useLayout';
-import { useTopStore } from '@/hooks/useTopStore';
 import { DefaultLayout } from '@/layouts/default.layout';
 import { useEffect, useRef, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import classNames from 'classnames';
 
-export function Card({ className, data }: { className?: string; data: any }) {
+export function Card({ className }: { className?: string }) {
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="mb-4 flex flex-col items-center justify-center">
@@ -20,14 +19,14 @@ export function Card({ className, data }: { className?: string; data: any }) {
             />
           </div>
         </div>
-        <h4 className="mt-4 text-xl font-medium">{data.nickName}</h4>
+        <h4 className="mt-4 text-xl font-medium">teeeest</h4>
       </div>
       <div className="top-path h-6 w-72 bg-gradient-to-b from-white/5 to-neutral-950/10"></div>
       <div className="flex h-44 w-72 flex-col items-center bg-gradient-to-b from-white/5 via-neutral-950/50 to-neutral-950/0 px-4 py-2 backdrop-blur-2xl">
         <div className="-mt-6 flex h-10 w-10 items-center justify-center rounded bg-white/80">
           <i className="ri-award-fill text-lg text-black/50"></i>
         </div>
-        <h4 className="mt-3 text-sm">{data.point}</h4>
+        <h4 className="mt-3 text-sm">33333</h4>
         <div className="mt-5 h-0.5 w-full bg-neutral-900"></div>
 
         <div className="mt-4">
@@ -43,16 +42,11 @@ export function Card({ className, data }: { className?: string; data: any }) {
 }
 
 function UsersSection() {
-  const { fetchUsers, top } = useTopStore();
-  const [topPlayers, setTopPlayers] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    Promise.all([fetchUsers()]).then(([users]) => {
-      setTopPlayers(users.payload.slice(0, 3));
+    setLoaded(true);
 
-      setLoaded(true);
-    });
   }, []);
 
   if (!loaded) {
@@ -62,9 +56,9 @@ function UsersSection() {
   return (
     <div>
       <div className="flex gap-8">
-        <Card data={topPlayers[2]} className="mt-12"></Card>
-        <Card data={topPlayers[0]}></Card>
-        <Card data={topPlayers[1]} className="mt-12"></Card>
+        <Card className="mt-12"></Card>
+        <Card></Card>
+        <Card className="mt-12"></Card>
       </div>
 
       <div className="mt-12 max-w-2xl rounded-3xl bg-neutral-950/40 px-6 py-4 backdrop-blur-3xl">
@@ -88,7 +82,7 @@ function UsersSection() {
           </div>
 
           <ul className="flex w-full flex-col gap-y-4">
-            {top.users.map((item, i) => (
+            {new Array(30).fill(0).map((item, i) => (
               <li
                 key={i}
                 className="grid grid-cols-4 rounded-xl bg-neutral-900/40 px-6 py-4 backdrop-blur-3xl"
@@ -119,16 +113,10 @@ function UsersSection() {
 }
 
 function ClansSection() {
-  const { fetchUsers, top } = useTopStore();
-  const [topPlayers, setTopPlayers] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    Promise.all([fetchUsers()]).then(([users]) => {
-      setTopPlayers(users.payload.slice(0, 3));
-
-      setLoaded(true);
-    });
+    setLoaded(true);
   }, []);
 
   if (!loaded) {
@@ -138,9 +126,9 @@ function ClansSection() {
   return (
     <div>
       <div className="flex gap-8">
-        <Card data={topPlayers[2]} className="mt-12"></Card>
-        <Card data={topPlayers[0]}></Card>
-        <Card data={topPlayers[1]} className="mt-12"></Card>
+        <Card className="mt-12"></Card>
+        <Card></Card>
+        <Card className="mt-12"></Card>
       </div>
 
       <div className="mt-12 max-w-2xl rounded-3xl bg-neutral-950/40 px-6 py-4 backdrop-blur-3xl">
@@ -164,7 +152,7 @@ function ClansSection() {
           </div>
 
           <ul className="flex w-full flex-col gap-y-4">
-            {top.users.map((item, i) => (
+            {new Array(30).fill(0).map((item, i) => (
               <li
                 key={i}
                 className="grid grid-cols-4 rounded-xl bg-neutral-900/40 px-6 py-4 backdrop-blur-3xl"

@@ -10,6 +10,7 @@ export function CrateCard() {
         <div className="text flex h-full w-full items-center justify-center rounded-md p-4">
           <Image
             className="h-72 w-48 object-contain grayscale-[100%]"
+            alt="test"
             src={Sword}
           />
         </div>
