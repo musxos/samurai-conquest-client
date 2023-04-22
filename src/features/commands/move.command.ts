@@ -7,7 +7,7 @@ import Config from '@/app/config';
 
 const useMoveCommand = (_id: any, landId: any) => {
   const { config } = usePrepareContractWrite({
-    address: Config.ADDRESS as any,
+    address: Config.GAME_ADDRESS as any,
     abi: [
       {
         inputs: [
@@ -30,6 +30,7 @@ const useMoveCommand = (_id: any, landId: any) => {
     ],
     functionName: 'moveSamurai',
     args: [_id, landId],
+    enabled: false,
   });
 
   const { data, error, isError, write } = useContractWrite(config);

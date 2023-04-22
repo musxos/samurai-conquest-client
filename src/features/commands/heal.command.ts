@@ -7,7 +7,7 @@ import Config from '@/app/config';
 
 const useHealCommand = (_id: any) => {
   const { config } = usePrepareContractWrite({
-    address: Config.ADDRESS as any,
+    address: Config.GAME_ADDRESS as any,
     abi: [
       {
         inputs: [
@@ -25,6 +25,7 @@ const useHealCommand = (_id: any) => {
     ],
     functionName: 'healSamurai',
     args: [_id],
+    enabled: false,
   });
 
   const { data, error, isError, write } = useContractWrite(config);

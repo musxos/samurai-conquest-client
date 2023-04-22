@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export function AgentCard({ index }) {
+export function AgentCard({ index, onClick }) {
   return (
     <div className="group relative flex flex-col rounded-2xl border border-violet-500/10 bg-neutral-900/20 px-6 py-4 backdrop-blur-xl transition hover:bg-neutral-800/50">
       <Image
@@ -76,20 +76,13 @@ export function AgentCard({ index }) {
           </span>
           <span className="font-semibold text-neutral-300">5.54 Eth</span>
         </div>
-        <div className="flex flex-col">
-          <span className="text-neutral-500 group-hover:text-violet-500">
-            Ending In
-          </span>
-          <span className="font-semibold text-neutral-300">08h 11m</span>
-        </div>
       </div>
 
       <div className="mt-6 flex items-center justify-between">
-        <div className="cursor-pointer">
-          <i className="ri-heart-3-line text-2xl text-red-500"></i>
-        </div>
-
-        <button className="ml-auto rounded-xl bg-violet-500 px-6 py-2 hover:bg-violet-600">
+        <button
+          onClick={() => onClick(1)}
+          className="ml-auto rounded-xl bg-violet-500 px-6 py-2 hover:bg-violet-600"
+        >
           Buy Now
         </button>
       </div>

@@ -160,7 +160,7 @@ export function Map() {
               <span className="text-xl">33</span>
             </div>
             <div className="col-span-1 h-32">
-              <Image
+              <img
                 className="h-full w-full rounded-xl"
                 alt="asd"
                 src="https://cdn.discordapp.com/attachments/1097614586724765806/1097711747361669213/f6357992-6d38-4e53-a7aa-d8c57c026523.jpg"

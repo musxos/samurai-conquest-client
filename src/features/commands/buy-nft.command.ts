@@ -5,27 +5,27 @@ import {
 } from 'wagmi';
 import Config from '@/app/config';
 
-const useDeployCommand = (_id: any) => {
+const useBuyNftCommand = (_id: any) => {
   const { config } = usePrepareContractWrite({
-    address: Config.GAME_ADDRESS as any,
+    address: Config.MARKETPLACE_ADDRESS as any,
     abi: [
       {
         inputs: [
           {
             internalType: 'uint256',
-            name: '_id',
+            name: 'Id',
             type: 'uint256',
           },
         ],
-        name: 'deploySamurai',
+        name: 'buyNFT',
         outputs: [],
-        stateMutability: 'nonpayable',
+        stateMutability: 'payable',
         type: 'function',
       },
     ],
-    functionName: 'deploySamurai',
+    functionName: 'buyNFT',
     args: [_id],
-    enabled: false
+    enabled: false,
   });
 
   const { data, error, isError, write } = useContractWrite(config);
@@ -37,4 +37,4 @@ const useDeployCommand = (_id: any) => {
   return { data, error, isError, isLoading, isSuccess, write };
 };
 
-export default useDeployCommand;
+export default useBuyNftCommand;

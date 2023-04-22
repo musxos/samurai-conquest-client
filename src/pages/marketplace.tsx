@@ -1,10 +1,34 @@
 import { AgentCard } from '@/components/marketplace/agent.card';
+import useBuyNftCommand from '@/features/commands/buy-nft.command';
 import { useLayout } from '@/hooks/useLayout';
 import { DefaultLayout } from '@/layouts/default.layout';
-import { useEffect } from 'react';
+import { write } from 'fs';
+import { useEffect, useState } from 'react';
+import { useAccount, useBalance } from 'wagmi';
 
 export default function Marketplace() {
   const { update: updateLayout } = useLayout();
+  const [nft, setNft] = useState(0);
+
+  const account = useAccount();
+  const wallet = useBalance({
+    address: account.address,
+  });
+  const buyNftCommand = useBuyNftCommand(nft);
+
+  const handleBuyClick = async (nft) => {
+    setNft(nft);
+
+    if (!account.isConnected) {
+      return;
+    }
+
+    if (!buyNftCommand.write) {
+      return;
+    }
+
+    buyNftCommand.write();
+  };
 
   useEffect(() => {
     updateLayout({
@@ -44,7 +68,11 @@ export default function Marketplace() {
 
         <div className="marketplace-fade-in mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
           {new Array(99).fill(0).map((_, i) => (
-            <AgentCard index={i + 1} key={i}></AgentCard>
+            <AgentCard
+              onClick={handleBuyClick}
+              index={i + 1}
+              key={i}
+            ></AgentCard>
           ))}
         </div>
       </div>
