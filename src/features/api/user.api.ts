@@ -20,8 +20,8 @@ const getUsers = async () => {
   return null;
 };
 
-const getOwnedNFTs = async () => {
-  const response = await axios.get(`/owner`);
+const getOwnedNFTs = async (address) => {
+  const response = await axios.get(`/owner/` + address);
 
   if (response.status === 200) {
     return response.data;
