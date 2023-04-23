@@ -14,10 +14,31 @@ export type SamuraiState = {
   isTried: boolean;
 };
 
+export type LandSamuraiState = {
+  nickname: string;
+  power: number;
+}
+
+export type LandState = {
+  war_id: number;
+  id: number;
+  name: string;
+  desc: string;
+  uri: string;
+  value: number;
+  roads: number[];
+  attackerClan: number;
+  clan: number;
+  attackersPower: number;
+  defendersPower: number;
+  attackerSamurai: LandSamuraiState[];
+  defenderSamurai: LandSamuraiState[];
+};
+
 export type GameState = {
   clan: number;
   samurai?: SamuraiState;
-  land?: number;
+  land?: LandState;
   deck: SamuraiState[];
   isLoaded: boolean;
 };
@@ -25,7 +46,7 @@ export type GameState = {
 export const initialState: GameState = {
   clan: 0,
   samurai: null,
-  land: 0,
+  land: null,
   deck: [],
   isLoaded: false,
 };
@@ -37,7 +58,7 @@ export const gameSlice = createSlice({
     setSamurai: (state, action: PayloadAction<SamuraiState>) => {
       state.samurai = action.payload;
     },
-    setLand: (state, action: PayloadAction<number>) => {
+    setLand: (state, action: PayloadAction<LandState>) => {
       state.land = action.payload;
     },
     setDeck: (state, action: PayloadAction<SamuraiState[]>) => {

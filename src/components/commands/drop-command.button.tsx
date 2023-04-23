@@ -41,7 +41,7 @@ export function DropButtonCommand() {
     <button onClick={handleClick} disabled={isLoading} className={className}>
       <i className="ri-landscape-line mr-1 text-2xl"></i>
       <span>
-        {isLoading ? 'Moving...' : isSuccess && !isLoading ? 'Moved' : 'Move'}
+        {isLoading ? 'Droping...' : isSuccess && !isLoading ? 'Droped' : 'Drop'}
       </span>
     </button>
   );

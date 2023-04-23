@@ -103,7 +103,7 @@ export function Map() {
     const landData = await landAPI.getLand(id);
 
     if (landData) {
-      setLand(Number(id));
+      setLand(landData[0]);
     } else {
       setLand(null);
     }
@@ -159,33 +159,39 @@ export function Map() {
 
       {game.land && (
         <div className="map-land-in absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
-          <h1 className="mb-2 text-2xl font-medium">teeest</h1>
-          <p className="text-sm">435345345</p>
+          <h1 className="mb-2 text-2xl font-medium">{game.land.name}</h1>
+          <p className="text-sm">{game.land.desc}</p>
           <div className="mt-6 grid grid-cols-1 gap-4">
             <div className="col-span-1 flex h-16 items-center justify-between rounded-xl bg-neutral-950/50 px-6">
               <i className="ri-database-line text-2xl"></i>
-              <span className="text-xl">33</span>
+              <span className="text-xl">{game.land.value}</span>
             </div>
-            <div className="col-span-1 h-32">
-              <img
-                className="h-full w-full rounded-xl"
-                alt="asd"
-                src="https://cdn.discordapp.com/attachments/1097614586724765806/1097711747361669213/f6357992-6d38-4e53-a7aa-d8c57c026523.jpg"
-              />
-            </div>
+            {game.land.uri && (
+              <div className="col-span-1 h-32">
+                <img
+                  className="h-full w-full rounded-xl"
+                  alt="asd"
+                  src={game.land.uri}
+                />
+              </div>
+            )}
           </div>
           <div className="mt-6">
             <div className="flex items-center justify-between gap-4 rounded-xl bg-neutral-950/50 px-6 py-6">
               <div className="flex flex-col items-center">
                 <i className="ri-shield-line text-4xl"></i>
 
-                <span className="mt-2 text-sm">+33</span>
+                <span className="mt-2 text-sm">
+                  +{game.land.defendersPower}
+                </span>
               </div>
               <div>--------/--------</div>
               <div className="flex flex-col items-center">
                 <i className="ri-sword-line text-4xl"></i>
 
-                <span className="mt-2 text-sm">+44</span>
+                <span className="mt-2 text-sm">
+                  +{game.land.attackersPower}
+                </span>
               </div>
             </div>
           </div>
@@ -194,19 +200,23 @@ export function Map() {
               <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
                 <i className="ri-shield-line text-2xl"></i>
                 <ul className="w-full">
-                  <li className="flex justify-between">
-                    <div>test </div>
-                    <div className="font-medium">+33</div>
-                  </li>
+                  {game.land.attackerSamurai.map((x, i) => (
+                    <li key={i} className="flex justify-between">
+                      <div>{x.nickname}</div>
+                      <div className="font-medium">+{x.power}</div>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
                 <i className="ri-sword-line text-2xl"></i>
                 <ul className="w-full">
-                  <li className="flex justify-between">
-                    <div>test</div>
-                    <div className="font-medium">+44</div>
-                  </li>
+                  {game.land.defenderSamurai.map((x, i) => (
+                    <li key={i} className="flex justify-between">
+                      <div>{x.nickname}</div>
+                      <div className="font-medium">+{x.power}</div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -218,12 +228,14 @@ export function Map() {
               <HealCommandButton></HealCommandButton>
               {game.samurai &&
                 game.samurai?.camp &&
-                game.samurai?.campPosition == game.land && (
+                game.land &&
+                game.samurai?.campPosition == game.land.id && (
                   <CampCommandButton></CampCommandButton>
                 )}
               {game.samurai &&
                 game.samurai?.camp &&
-                game.samurai?.campPosition != game.land && (
+                game.land &&
+                game.samurai?.campPosition != game.land.id && (
                   <UncampCommandButton></UncampCommandButton>
                 )}
               <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">

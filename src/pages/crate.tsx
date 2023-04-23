@@ -27,7 +27,7 @@ export function CrateCard({ minted, setMint, id }: any) {
       const inventory = document.getElementById(`inventory`);
 
       if (element && inventory) {
-        element.style.transition = 'all 1s ease-in-out';
+        element.style.transition = 'all 0.5s ease-in-out';
         element.style.position = 'fixed';
         element.style.top = `${element.offsetTop}px`;
         element.style.left = `${element.offsetLeft}px`;

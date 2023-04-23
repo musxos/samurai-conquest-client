@@ -6,7 +6,7 @@ import {
 import Config from '@/app/config';
 
 const useMoveCommand = (_id: any, landId: any) => {
-  const { config } = usePrepareContractWrite({
+  const { config, refetch } = usePrepareContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
@@ -39,7 +39,7 @@ const useMoveCommand = (_id: any, landId: any) => {
     hash: data?.hash,
   });
 
-  return { data, error, isError, isLoading, isSuccess, write };
+  return { data, error, isError, isLoading, isSuccess, write, refetch };
 };
 
 export function prepareMove(targetLand: number) {

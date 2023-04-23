@@ -7,25 +7,29 @@ export function MoveCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } = useMoveCommand(
-    game.samurai?.id,
-    game.land,
-  );
+  const { isError, data, isLoading, isSuccess, write, error, refetch } =
+    useMoveCommand(game.samurai?.id, game.land);
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
 
     if (!account.isConnected) {
       return;
     }
 
-    if (!game.isLoaded || !game.samurai || !game.land) {
+    if (!game.samurai) {
       return;
     }
 
-    if (!prepareMove(game.land)) {
+    if (!game.land) {
       return;
     }
+
+    if (!prepareMove(game.land.id)) {
+      return;
+    }
+
+    await refetch();
 
     if (write) {
       write();
