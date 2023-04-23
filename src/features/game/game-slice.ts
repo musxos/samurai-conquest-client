@@ -15,9 +15,10 @@ export type SamuraiState = {
 };
 
 export type LandSamuraiState = {
-  nickname: string;
+  name: string;
+  samurai: number;
   power: number;
-}
+};
 
 export type LandState = {
   war_id: number;

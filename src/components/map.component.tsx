@@ -202,7 +202,7 @@ export function Map() {
                 <ul className="w-full">
                   {game.land.attackerSamurai.map((x, i) => (
                     <li key={i} className="flex justify-between">
-                      <div>{x.nickname}</div>
+                      <div>{x.name}</div>
                       <div className="font-medium">+{x.power}</div>
                     </li>
                   ))}
@@ -213,7 +213,7 @@ export function Map() {
                 <ul className="w-full">
                   {game.land.defenderSamurai.map((x, i) => (
                     <li key={i} className="flex justify-between">
-                      <div>{x.nickname}</div>
+                      <div>{x.name}</div>
                       <div className="font-medium">+{x.power}</div>
                     </li>
                   ))}

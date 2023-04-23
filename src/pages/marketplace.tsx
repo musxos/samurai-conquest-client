@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 
 export default function Marketplace() {
-  const { update: updateLayout } = useLayout();
+  const { update: updateLayout, setColor } = useLayout();
   const [nft, setNft] = useState(0);
 
   const account = useAccount();

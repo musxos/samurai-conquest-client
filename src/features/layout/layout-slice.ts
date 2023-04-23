@@ -11,7 +11,7 @@ export interface LayoutState {
 
 const initialState: LayoutState = {
   wallet: true,
-  search: true,
+  search: false,
   notifications: true,
   messages: true,
   profile: true,
