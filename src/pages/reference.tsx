@@ -1,12 +1,18 @@
 import { useLayout } from '@/hooks/useLayout';
 import { DefaultLayout } from '@/layouts/default.layout';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Player } from '@lottiefiles/react-lottie-player';
 import Comment from '@/assets/lottie/Comment.json';
+import { useAccount } from 'wagmi';
+import useAPI from '@/hooks/useAPI';
 
 export default function Reference() {
+  const account = useAccount();
   const layout = useLayout();
+  const { refer } = useAPI();
+  const [topRefers, setTopRefers] = useState([]);
+  const [invites, setInvites] = useState([]);
 
   useEffect(() => {
     layout.update({
@@ -16,7 +22,27 @@ export default function Reference() {
       search: false,
       wallet: true,
     });
+
+    updateTopRefers();
   }, []);
+
+  const updateTopRefers = async () => {
+    const data = await refer.getTopRefers();
+    setTopRefers(data);
+  };
+
+  const updateInvites = async () => {
+    const data = await refer.getRefer(account.address);
+    setInvites(data);
+  };
+
+  const handleClick = () => {
+    const currentDomain = window.location.origin;
+
+    navigator.clipboard.writeText(
+      `${currentDomain}/register?refer=${account?.address}`,
+    );
+  };
 
   return (
     <div className="mx-auto mt-24 flex max-w-screen-2xl flex-col gap-8 px-8 py-6">
@@ -30,16 +56,41 @@ export default function Reference() {
             </p>
 
             <div className="mt-12 flex flex-col">
-              <button className="rounded bg-violet-500/50 px-6 py-3 font-medium backdrop-blur-2xl">
-                Connect Wallet
-              </button>
+              <ul className="flex flex-col gap-2">
+                <li>
+                  <div className="flex items-end ">
+                    <span>
+                      <b>Nickname:</b>
+                    </span>
+                    <span className="ml-auto text-lg">Aloshai</span>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex items-end ">
+                    <span>
+                      <b>Invite Point:</b>
+                    </span>
+                    <span className="ml-auto text-lg">73</span>
+                  </div>
+                </li>
+              </ul>
             </div>
 
-            <div className="my-auto text-center">
-              <span className="text-neutral-500/50">
-                Your Samuria Conquest and stats will appear here after
-                connectiong.
-              </span>
+            <div className="mt-auto flex flex-col gap-2">
+              <button
+                onClick={handleClick}
+                className="rounded bg-blue-500/50 px-6 py-3 font-medium backdrop-blur-2xl"
+              >
+                <i className="ri-twitter-fill mr-2"></i>
+                Share on Twitter
+              </button>
+
+              <button
+                onClick={handleClick}
+                className="rounded bg-violet-500/50 px-6 py-3 font-medium backdrop-blur-2xl"
+              >
+                Copy Your Refer Link
+              </button>
             </div>
           </div>
         </div>
@@ -48,7 +99,6 @@ export default function Reference() {
             <div className="items-end rounded-md bg-neutral-950/30 px-8  py-5 backdrop-blur-2xl">
               <div className="flex items-end justify-between">
                 <h2 className="text-xl">Top Accounts</h2>
-                <span className="text-sm">Total Accounts: 1.3M</span>
               </div>
 
               <div className="mt-6 w-full">
@@ -61,12 +111,10 @@ export default function Reference() {
                   </thead>
 
                   <tbody className="divide-y divide-neutral-900 text-sm">
-                    {new Array(5).fill(0).map((x) => (
-                      <tr key={x}>
-                        <td className="py-3">
-                          0x117439E571556Ca211F443f4fc724c85A8e1d28d
-                        </td>
-                        <td className="py-3">48,240,500</td>
+                    {topRefers.map((x, i) => (
+                      <tr key={i}>
+                        <td className="py-3">{x[0]}</td>
+                        <td className="py-3">{x[1]}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -76,11 +124,26 @@ export default function Reference() {
             <div className="flex min-h-[256px] flex-col rounded-md bg-neutral-950/30  px-8 py-5 backdrop-blur-2xl">
               <div className="flex items-end justify-between">
                 <h2 className="text-xl">Your Invites</h2>
-                <span className="text-sm">Total Confirmed: 33</span>
               </div>
 
-              <div className="flex grow items-center justify-center">
-                <span className="text-neutral-500/50">No invites yet!</span>
+              <div className="mt-6 w-full">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-neutral-800 text-left">
+                      <th className="pb-2">Nickname</th>
+                      <th className="pb-2">Address</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y divide-neutral-900 text-sm">
+                    {invites.map((x, i) => (
+                      <tr key={i}>
+                        <td className="py-3">{x.nickName}</td>
+                        <td className="py-3">{x.address}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

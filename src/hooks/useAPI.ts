@@ -1,5 +1,6 @@
 import * as landApi from '@/features/api/land.api';
 import * as boxApi from '@/features/api/box.api';
+import * as referApi from '@/features/api/refer.api';
 
 export default function useAPI() {
   return {
@@ -8,6 +9,9 @@ export default function useAPI() {
     },
     box: {
       ...boxApi,
+    },
+    refer: {
+      ...referApi,
     },
   };
 }
