@@ -1,12 +1,17 @@
+'use client';
+
 import { Aside } from '@/components/layout/aside.component';
 import { Navbar } from '@/components/layout/navbar.component';
 import { useLayout } from '@/hooks/useLayout';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi';
 
 export type DefaultLayoutProps = {
   children: JSX.Element;
 };
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
+  const account = useAccount();
   const layout = useLayout();
 
   return (

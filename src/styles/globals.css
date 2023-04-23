@@ -286,3 +286,12 @@
   --inventory-animation-duration: 0.3s;
   --agent-stats-animation-duration: 0.3s;
 }
+
+.font-jakosta {
+  font-family: 'Jakosta';
+}
+
+@font-face  {
+  font-family: 'Jakosta';
+  src: url('../assets/font.otf');
+}

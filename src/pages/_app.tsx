@@ -21,6 +21,8 @@ import {
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const { chains, provider } = configureChains(
   [mainnet, polygon, optimism, arbitrum, polygonMumbai],
@@ -43,12 +45,38 @@ const wagmiClient = createClient({
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = ((Component as any).getLayout as any) || ((page) => page);
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleStart = (url) => url !== router.asPath && setLoading(true);
+    const handleComplete = (url) => url === router.asPath && setLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  });
 
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider theme={darkTheme()} chains={chains}>
         <Provider store={store}>
-          {getLayout(<Component {...pageProps} />)}
+          {loading && (
+            <div className="absolute left-0 top-0 z-50 flex h-screen w-screen flex-col items-center justify-center">
+              <h1 className="font-jakosta mb-8 text-6xl">Samurai Conquest</h1>
+              <div className="flex h-32 w-32 animate-spin items-center justify-center rounded-full border-r-2 border-white">
+                <i className="ri-sword-fill text-3xl"> </i>
+              </div>
+            </div>
+          )}
+          {!loading && getLayout(<Component {...pageProps} />)}
         </Provider>
       </RainbowKitProvider>
     </WagmiConfig>
