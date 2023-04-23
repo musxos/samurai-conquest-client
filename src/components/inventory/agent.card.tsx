@@ -4,8 +4,8 @@ import Image from 'next/image';
 export type AgentCardProps = {
   image: string;
   name: string;
-  number: number;
   assign: boolean;
+  id: any;
   onClick?: () => void;
 
   attack: number;
@@ -17,8 +17,8 @@ export type AgentCardProps = {
 export function AgentCard({
   image,
   name,
-  number,
   assign,
+  id,
   attack = 0,
   defence = 0,
   agility = 0,
@@ -44,7 +44,7 @@ export function AgentCard({
       />
       <div className="mt-4 flex items-center justify-between">
         <h3 className="font-inter font-medium text-neutral-200">{name}</h3>
-        <span className="text-sm font-light text-neutral-400">#{number}</span>
+        <span className="text-sm font-light text-neutral-400">#{id}</span>
       </div>
 
       <div className="mt-4 flex flex-col gap-4">

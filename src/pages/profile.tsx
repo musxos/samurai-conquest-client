@@ -147,8 +147,8 @@ export default function Profile() {
                     key={i}
                     assign={false}
                     image={`/art/${nft.TokenId}.png`}
-                    number={1}
-                    name={nft.TokenName}
+                    id={nft.TokenId}
+                    name={nft.TokenName || 'Agent'}
                     agility={nft.MaxAgility}
                     attack={nft.Attack}
                     defence={nft.Defence}
