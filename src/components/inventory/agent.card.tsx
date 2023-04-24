@@ -11,6 +11,7 @@ export type AgentCardProps = {
   attack: number;
   defence: number;
   agility: number;
+  maxAgility: number;
   chakra: number;
 };
 
@@ -22,6 +23,7 @@ export function AgentCard({
   attack = 0,
   defence = 0,
   agility = 0,
+  maxAgility,
   chakra = 0,
   onClick,
 }: AgentCardProps) {
@@ -56,7 +58,7 @@ export function AgentCard({
           <div className="h-2 rounded-full bg-neutral-700">
             <div
               className="stats h-2 rounded-full bg-red-500"
-              style={{ maxWidth: `${(agility * 5)}%` }}
+              style={{ maxWidth: `${((agility / maxAgility) * 100)}%` }}
             ></div>
           </div>
         </div>

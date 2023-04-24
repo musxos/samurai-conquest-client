@@ -149,7 +149,8 @@ export default function Profile() {
                     image={`/art/${nft.TokenId}.png`}
                     id={nft.TokenId}
                     name={nft.TokenName || 'Agent'}
-                    agility={nft.MaxAgility}
+                    agility={nft.CurrentAgility}
+                    maxAgility={nft.MaxAgility || 20}
                     attack={nft.Attack}
                     defence={nft.Defence}
                     chakra={nft.Chakra}
