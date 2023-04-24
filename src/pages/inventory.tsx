@@ -6,29 +6,22 @@ import { useEffect, useRef, useState } from 'react';
 
 import HealthPotion from '../assets/health_potion.png';
 import Image from 'next/image';
-
-type InventoryItem = {
-  number: number;
-  name: string;
-  image: string;
-  assign: boolean;
-};
+import { useAccount } from 'wagmi';
+import useAPI from '@/hooks/useAPI';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function Inventory() {
-  const [inventory, setInventory] = useState(
-    new Array(30).fill(0).map((_, i) => {
-      return {
-        number: i + 1,
-        name: 'Green Eyes Samurai',
-        image: `/art/${i + 1}.png`,
-        assign: false,
-      };
-    }),
-  );
+  const MySwal = withReactContent(Swal)
+
+  const account = useAccount();
+  const { alchemy } = useAPI();
+
+  const [inventory, setInventory] = useState([]);
 
   const modal = useRef(null);
 
-  const [active, setActive] = useState<InventoryItem | null>(null);
+  const [active, setActive] = useState<any>(null);
 
   const outsideClick = () => {
     if (active) {
@@ -60,7 +53,51 @@ export default function Inventory() {
       wallet: true,
       search: true,
     });
+
+    getInventory();
   }, []);
+
+  async function getInventory() {
+    const _inventory = await alchemy.getNftsForOwner(account.address);
+
+    setInventory(_inventory.ownedNfts.filter(x => x.rawMetadata.attributes.some(x => x.trait_type != 'Agility' && x.value != 0)).map(x => ({
+      tokenId: x.tokenId,
+      title: x.title,
+      name: x.rawMetadata.name,
+      description: x.rawMetadata.description,
+      attack: x.rawMetadata.attributes[0].value,
+      defence: x.rawMetadata.attributes[1].value,
+      chakra: x.rawMetadata.attributes[2].value,
+      agility: x.rawMetadata.attributes[3].value,
+    })));
+  }
+
+  const handleChangeNickname = async (e: any) => {
+    e.preventDefault();
+
+    MySwal.fire({
+      title: 'Change nickname',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Change',
+      showLoaderOnConfirm: true,
+      preConfirm: (nickname) => {
+        return true;
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      MySwal.fire({
+        title: 'Nickname changed!',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      })
+    })
+  }
 
   return (
     <div className="mt-24 flex h-full flex-col gap-x-12 px-8 py-12 lg:flex-row">
@@ -95,10 +132,13 @@ export default function Inventory() {
           <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {inventory.map((item, i) => (
               <AgentCard
-                assign={item.assign}
-                image={item.image}
-                name={item.name}
-                number={item.number}
+                image={'/art/' + item.tokenId + '.png'}
+                id={item.tokenId}
+                name={item.title}
+                attack={item.attack}
+                defence={item.defence}
+                chakra={item.chakra}
+                agility={item.agility}
                 onClick={() => show(i)}
                 key={i}
               ></AgentCard>
@@ -107,9 +147,8 @@ export default function Inventory() {
         </div>
       </div>
       <div
-        className={`fixed right-0 top-0 h-full w-2/3 lg:sticky lg:w-1/3 ${
-          active ? 'pointer-events-auto' : 'pointer-events-none'
-        }`}
+        className={`fixed right-0 top-0 h-full w-2/3 lg:sticky lg:w-1/3 ${active ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
         ref={modal}
       >
         {active && (
@@ -120,40 +159,27 @@ export default function Inventory() {
                   height={512}
                   width={512}
                   className="h-full w-full rounded-2xl"
-                  src={active.image}
+                  src={'/art/' + active.tokenId + '.png'}
                   alt=""
                 />
                 <div className="flex items-end justify-between">
                   <h1 className="mt-8 text-2xl">{active.name}</h1>
-                  <span className="text-sm">#{active.number}</span>
+                  <span className="text-sm">#{active.tokenId}</span>
                 </div>
                 <p className="mt-2 text-sm text-neutral-400">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-                  quam deserunt, soluta delectus veritatis impedit animi. Ad
-                  maiores veritatis, quo, laudantium beatae et minus quaerat
-                  aperiam ipsum numquam fuga reprehenderit?
+                  {active.description}
                 </p>
 
                 <div className="mt-24 flex w-full flex-row  items-center">
                   <button className="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-950/50 hover:bg-neutral-900">
                     <Image className="h-14 w-14" src={HealthPotion} alt="asd" />
                   </button>
-                  {!active.assign && (
-                    <button
-                      onClick={() => assign()}
-                      className="ml-auto h-14 rounded-full bg-violet-500 px-8 py-3"
-                    >
-                      Assign
-                    </button>
-                  )}
-                  {active.assign && (
-                    <button
-                      onClick={() => unassign()}
-                      className="ml-auto h-14 rounded-full bg-violet-500 px-8 py-3"
-                    >
-                      Unassign
-                    </button>
-                  )}
+                  <button
+                    onClick={handleChangeNickname}
+                    className="ml-auto h-14 rounded-full bg-violet-500 px-8 py-3"
+                  >
+                    Change Nickname
+                  </button>
                 </div>
               </div>
             )}

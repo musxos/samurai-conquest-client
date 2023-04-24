@@ -4,35 +4,27 @@ import Image from 'next/image';
 export type AgentCardProps = {
   image: string;
   name: string;
-  assign: boolean;
   id: any;
   onClick?: () => void;
 
   attack: number;
   defence: number;
   agility: number;
-  maxAgility: number;
   chakra: number;
 };
 
 export function AgentCard({
   image,
   name,
-  assign,
   id,
   attack = 0,
   defence = 0,
   agility = 0,
-  maxAgility,
   chakra = 0,
   onClick,
 }: AgentCardProps) {
   const style = classNames(
     'relative flex flex-col px-6 py-4 bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 rounded-2xl group hover:bg-neutral-800/50 transition cursor-pointer',
-    {
-      'bg-violet-800': assign,
-      'bg-neutral-800': !assign,
-    },
   );
 
   return (
@@ -40,7 +32,7 @@ export function AgentCard({
       <Image
         width={290}
         height={290}
-        className="rounded-2xl"
+        className="rounded-2xl w-full"
         src={image}
         alt="asd"
       />
@@ -58,7 +50,7 @@ export function AgentCard({
           <div className="h-2 rounded-full bg-neutral-700">
             <div
               className="stats h-2 rounded-full bg-red-500"
-              style={{ maxWidth: `${((agility / maxAgility) * 100)}%` }}
+              style={{ maxWidth: `${((agility) * 5)}%` }}
             ></div>
           </div>
         </div>

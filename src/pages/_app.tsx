@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from '@/app/store';
 
 import '@rainbow-me/rainbowkit/styles.css';
+import '@sweetalert2/theme-dark/dark.css';
 
 // #region wagmi
 import {
