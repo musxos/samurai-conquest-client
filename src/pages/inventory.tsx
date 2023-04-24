@@ -6,11 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 
 import HealthPotion from '../assets/health_potion.png';
 import Image from 'next/image';
-import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
+import { useAccount } from 'wagmi';
 import useAPI from '@/hooks/useAPI';
-import { prepareWriteContract, waitForTransaction, writeContract } from '@wagmi/core';
 
-import Config from '@/app/config';
 
 export default function Inventory() {
   const account = useAccount();

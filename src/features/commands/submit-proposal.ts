@@ -5,33 +5,23 @@ import {
 } from 'wagmi';
 import Config from '@/app/config';
 import { useEffect, useState } from 'react';
-import useDebounce from '@/hooks/useDebounce';
-import { BigNumber } from 'alchemy-sdk';
 
-const useVoteCommand = () => {
+const useSubmitProposalCommand = () => {
   const { config, refetch } = usePrepareContractWrite({
     address: Config.VOTE_ADDRESS as any,
     abi: [
       {
         inputs: [
-          {
-            internalType: 'uint32',
-            name: '_id',
-            type: 'uint32',
-          },
-          {
-            internalType: 'bool',
-            name: '_vote',
-            type: 'bool',
-          },
+          { internalType: 'string', name: '_title', type: 'string' },
+          { internalType: 'string', name: '_proposal', type: 'string' },
         ],
-        name: 'voteForProposal',
+        name: 'submitProposal',
         outputs: [],
         stateMutability: 'nonpayable',
         type: 'function',
       },
     ],
-    functionName: 'voteForProposal',
+    functionName: 'submitProposal',
     enabled: false,
   });
 
@@ -49,4 +39,4 @@ const useVoteCommand = () => {
   };
 };
 
-export default useVoteCommand;
+export default useSubmitProposalCommand;

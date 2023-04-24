@@ -1,3 +1,4 @@
+import useSubmitProposalCommand from "@/features/commands/submit-proposal";
 import useVoteCommand from "@/features/commands/vote.command";
 import useAPI from "@/hooks/useAPI";
 import { DefaultLayout } from "@/layouts/default.layout";
@@ -11,7 +12,6 @@ function ProposalCard({ title, status, voters, description, id }) {
     const voteCommand = useVoteCommand();
 
     const sendVote = async (payload) => {
-        console.log(payload)
         const result = await voteCommand.writeAsync?.({
             recklesslySetUnpreparedArgs: [
                 payload.id,
@@ -45,6 +45,10 @@ function ProposalCard({ title, status, voters, description, id }) {
             id: BigNumber.from(id),
             vote: _vote
         };
+
+        if (!voteCommand.writeAsync) {
+            await voteCommand.refetch();
+        }
 
         sendVote(payload);
     }
@@ -93,8 +97,98 @@ function ProposalCard({ title, status, voters, description, id }) {
 }
 
 export default function Vote() {
-    const { proposal } = useAPI();
+    const account = useAccount({
+        onConnect: () => {
+            getProposals();
+            getSize();
+        }
+    });
+    const { proposal, alchemy } = useAPI();
     const [proposals, setProposals] = useState<any[]>([]);
+    const [modal, setModal] = useState({
+        active: false,
+        title: '',
+        description: '',
+    });
+
+    const [size, setSize] = useState(0);
+
+    useEffect(() => {
+        getSize();
+    }, [])
+
+    const getSize = async () => {
+        if (!account.isConnected) {
+            return;
+        }
+
+        const result: any = await alchemy.getNftsForOwner(account.address);
+
+        if (!result) {
+            return;
+        }
+
+        setSize(result.totalCount);
+    }
+
+    const submitProposalCommand = useSubmitProposalCommand();
+
+    const handleModal = (e, payload: any) => {
+        e.preventDefault();
+
+        setModal({
+            ...modal,
+            ...payload
+        })
+    }
+
+    const sendProposal = async () => {
+        if (modal.title.length < 3) {
+            return Swal.fire({
+
+                title: 'Error',
+                text: 'Title must be at least 3 characters',
+                icon: 'error',
+            });
+        }
+
+        if (modal.description.length < 3) {
+            return Swal.fire({
+                title: 'Error',
+                text: 'Description must be at least 3 characters',
+                icon: 'error',
+            });
+        }
+
+        if (!submitProposalCommand.writeAsync) {
+            const result = await submitProposalCommand.refetch();
+
+            if (result.isError) {
+                return Swal.fire({
+                    title: 'Error',
+                    text: 'Something went wrong',
+                    icon: 'error',
+                });
+            }
+        }
+
+        console.log(modal);
+
+        const result = await submitProposalCommand.writeAsync?.({
+            recklesslySetUnpreparedArgs: [
+                modal.title,
+                modal.description
+            ]
+        });
+
+        await result.wait();
+
+        Swal.fire({
+            title: 'Success',
+            text: 'Your proposal has been submitted',
+            icon: 'success',
+        });
+    }
 
     useEffect(() => {
         getProposals();
@@ -132,7 +226,7 @@ export default function Vote() {
                                 <div className="flex items-center justify-center w-6 h-6 border border-green-500/50 rounded-full">
                                     <i className="ri-add-line text-green-500/50"></i>
                                 </div>
-                                <span className="text-green-500/50">New Proposal</span>
+                                <span onClick={(e) => handleModal(e, { active: true })} className="text-green-500/50">New Proposal</span>
                             </button>
                         </div>
                     </div>
@@ -145,13 +239,14 @@ export default function Vote() {
                 <div className="rounded-md bg-neutral-950/50 backdrop-blur-2xl px-6 py-6">
                     <div className="flex items-center">
                         <h1 className="text-lg font-medium">My governance power</h1>
-                        <span className="flex items-center ml-auto text-white/50">
-                            View
+                        <a href={`https://mumbai.polygonscan.com/address/${account.address}`} className="flex items-center ml-auto text-white/50">
+                            View On Mumbaiscan
                             <i className="ri-arrow-right-s-line text-sm ml-1 text-white/50"></i>
-                        </span>
+                        </a>
                     </div>
-
-                    <p className="mt-8 text-white/50 text-sm">Connect your wallet to see governance power</p>
+                    <p className="mt-8 text-white/50 text-sm">
+                        Your NFTs = <span className="text-lg">{size}</span>
+                    </p>
                 </div>
                 <div className="rounded-md bg-neutral-950/50 backdrop-blur-2xl px-6 py-6">
                     <div className="flex items-center">
@@ -173,17 +268,26 @@ export default function Vote() {
                                 <span className="text-xs text-white/50">0.000000 ETH</span>
                             </div>
                         </div>
-                        <div className="flex items-center p-4 rounded-lg border border-neutral-100/20">
-                            <img className="w-9 h-9 object-contain" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ethereum_logo_2014.svg/1257px-Ethereum_logo_2014.svg.png" />
-                            <div className="flex flex-col">
-                                <h3 className="text-sm">Ethereum</h3>
-                                <span className="text-xs text-white/50">0.000000 ETH</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        {modal.active && <div className="min-h-screen h-full fixed right-0 top-0 bg-neutral-950/50 backdrop-blur-2xl max-w-screen-sm w-full">
+            <div className="flex flex-col px-6 py-4">
+                <h1 className="mt-4 text-2xl font-medium">New Proposal</h1>
+                <div className="mt-6 w-full">
+                    <input onChange={(e) => handleModal(e, { title: e.target.value })} value={modal.title} className="px-4 py-3 rounded-md bg-neutral-950 border border-white/50 w-full" placeholder="Title" type="text" />
+                    <div className="mt-4">
+                        <textarea onChange={(e) => handleModal(e, { description: e.target.value })} value={modal.description} placeholder="Proposal description..." className="px-4 py-3 rounded-md bg-neutral-950 border border-white/50 w-full"></textarea>
+                    </div>
+                </div>
+
+                <div className="flex gap-4 ml-auto">
+                    <button onClick={(e) => handleModal(e, { active: false })} className="bg-neutral-900/90 rounded-md text-white mt-12 px-6 py-3">Cancel</button>
+                    <button onClick={sendProposal} className="bg-white rounded-md text-black mt-12 px-6 py-3">Submit</button>
+                </div>
+            </div>
+        </div>}
     </div >
 }
 
