@@ -6,22 +6,17 @@ import { useEffect, useRef, useState } from 'react';
 
 import HealthPotion from '../assets/health_potion.png';
 import Image from 'next/image';
-import { useAccount } from 'wagmi';
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import useAPI from '@/hooks/useAPI';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import { prepareWriteContract, waitForTransaction, writeContract } from '@wagmi/core';
+
+import Config from '@/app/config';
 
 export default function Inventory() {
-  const MySwal = withReactContent(Swal)
-
   const account = useAccount();
-  const { alchemy } = useAPI();
-
   const [inventory, setInventory] = useState([]);
-
-  const modal = useRef(null);
-
   const [active, setActive] = useState<any>(null);
+  const { alchemy } = useAPI();
 
   const outsideClick = () => {
     if (active) {
@@ -29,18 +24,11 @@ export default function Inventory() {
     }
   };
 
+  const modal = useRef(null);
   useOutsideAlerter(modal, outsideClick);
 
   const show = (index: number) => {
     setActive(inventory[index]);
-  };
-
-  const assign = () => {
-    setActive({ ...active, assign: true });
-  };
-
-  const unassign = () => {
-    setActive({ ...active, assign: false });
   };
 
   const { update: updateLayout } = useLayout();
@@ -71,34 +59,6 @@ export default function Inventory() {
       agility: x.rawMetadata.attributes[3].value,
     })));
   }
-
-  const handleChangeNickname = async (e: any) => {
-    e.preventDefault();
-
-    MySwal.fire({
-      title: 'Change nickname',
-      input: 'text',
-      inputAttributes: {
-        autocapitalize: 'off'
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Change',
-      showLoaderOnConfirm: true,
-      preConfirm: (nickname) => {
-        return true;
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      MySwal.fire({
-        title: 'Nickname changed!',
-        icon: 'success',
-        timer: 2000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      })
-    })
-  }
-
   return (
     <div className="mt-24 flex h-full flex-col gap-x-12 px-8 py-12 lg:flex-row">
       <div className="flex w-full flex-col lg:w-2/3">
@@ -175,7 +135,6 @@ export default function Inventory() {
                     <Image className="h-14 w-14" src={HealthPotion} alt="asd" />
                   </button>
                   <button
-                    onClick={handleChangeNickname}
                     className="ml-auto h-14 rounded-full bg-violet-500 px-8 py-3"
                   >
                     Change Nickname

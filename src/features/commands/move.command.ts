@@ -29,7 +29,7 @@ const useMoveCommand = (_id: any, landId: any) => {
       },
     ],
     functionName: 'moveSamurai',
-    args: [1, landId],
+    args: [_id, landId],
     enabled: false,
   });
 
