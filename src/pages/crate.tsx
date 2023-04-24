@@ -13,13 +13,14 @@ export function CrateCard({ minted, setMint, id }: any) {
   const account = useAccount();
   const { setColor } = useLayout();
   const openBoxCommand = useOpenboxCommand(id);
+  const [active, setActive] = useState(false);
 
   const classStyle = classNames(
-    'crate-inital-animation flex h-[26rem] w-64 items-center justify-center',
+    'crate-inital-animation flex h-[26rem] w-64 items-center justify-center z-50 pointer-events-auto mt-4',
     {
       active: minted == id,
-      '': minted != id,
-      'exit-animation': minted != id && minted != 0,
+      '': minted != id || !active,
+      'animation-shake': active,
     },
   );
 
@@ -28,13 +29,18 @@ export function CrateCard({ minted, setMint, id }: any) {
       return;
     }
 
+    setActive(true);
+
     await openBoxCommand.refetch();
 
     const result = await openBoxCommand.writeAsync();
 
     await result.wait();
+    setActive(false);
 
-    setMint(id);
+    setTimeout(() => {
+      setMint(id);
+    }, 1000);
   }
 
   useEffect(() => {
@@ -148,7 +154,7 @@ export function CrateWrapper({ boxs }: any) {
   const [minted, setMinted] = useState(false);
 
   return (
-    <div className="fixed inset-0 left-0 top-0 flex items-center justify-center gap-12">
+    <div className="grid grid-cols-3 gap-y-4 gap-x-4 pointer-events-none">
       {boxs.map((box, i) => {
         return (
           <CrateCard
@@ -164,6 +170,8 @@ export function CrateWrapper({ boxs }: any) {
 }
 
 export default function Crate() {
+  const layout = useLayout();
+
   const account = useAccount();
   const mintCommand = useMintCommand(account.address);
   const { box: boxApi } = useAPI();
@@ -171,6 +179,14 @@ export default function Crate() {
   const [boxs, setBoxs] = useState([]);
 
   useEffect(() => {
+    layout.update({
+      search: false,
+      messages: true,
+      notifications: true,
+      profile: true,
+      wallet: true
+    })
+
     updateBoxs();
   }, []);
 
@@ -195,17 +211,64 @@ export default function Crate() {
   };
 
   return (
-    <section className=" mx-auto mb-8 mt-32 flex max-w-screen-2xl flex-col items-center px-8">
-      <button className="z-50" onClick={() => handleMint()}>
-        {mintCommand.isLoading
-          ? 'Loading...'
-          : mintCommand.isSuccess
-          ? 'Minted'
-          : mintCommand.isError
-          ? 'Error'
-          : 'Mint'}
-      </button>
-      <CrateWrapper boxs={boxs} />
+    <section className="mx-auto mb-8 mt-32 flex max-w-screen-2xl flex-col items-center px-8">
+      <div className='px-8 py-6 rounded-md bg-neutral-950/50'>
+        <h1 className='mb-4 text-2xl font-semibold'>Boxs</h1>
+        <p className='w-1/2 text-sm'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum, officiis sit adipisci modi eius ad atque saepe et numquam rem quia id recusandae totam delectus fuga alias molestias, blanditiis molestiae maxime ea beatae, harum magni vel? Hic fugiat cupiditate architecto at? Incidunt distinctio assumenda veritatis, blanditiis explicabo libero enim rerum!</p>
+      </div>
+      <div className='my-6 relative w-full min-h-[512px] grid grid-cols-3 gap-6'>
+        <div className='col-span-1 px-8 py-6 rounded-md bg-neutral-950/50 h-max'>
+          <h1 className='text-2xl font-semibold'>
+            Boxes
+          </h1>
+          <div className='mt-6 w-full grid grid-cols-1 gap-6'>
+            <div className='flex flex-col items-center justify-center col-span-1 px-4 py-4 rounded-md border border-violet-500/50 max-w-xs mx-auto'>
+              <div style={{
+                transformStyle: 'preserve-3d',
+                transform: 'rotateX(45deg) rotateZ(45deg) translateY(-10px)'
+              }} className='h-44 w-28 rounded bg-neutral-800 flex items-center justify-center'>
+                <Image
+                  className=" h-32 w-20 object-contain grayscale-[100%]"
+                  alt="test"
+                  src={Sword}
+                />
+              </div>
+
+              <div className='mt-2 text-center flex flex-col'>
+                <h5 className='text-xl font-medium'>Legendary Card</h5>
+                <p className='mt-4 text-white/50'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae libero maiores blanditiis accusamus molestiae.</p>
+                <button onClick={handleMint} className='mt-12 ml-auto px-12 py-3 rounded-md bg-violet-900'>
+                  {
+                    mintCommand.isLoading ? (
+                      <div className='flex items-center justify-center'>
+                        <div className='animate-spin rounded-full h-4 w-4 border border-t-2 border-t-white border-violet-900 mr-2'></div>
+                        Minting
+                      </div>
+                    ) : mintCommand.isError ? (
+                      <div className='flex items-center justify-center'>
+                        <div className='rounded-full h-4 w-4 border border-t-2 border-t-white border-violet-900 mr-2'></div>
+                        Error
+                      </div>
+                    ) : mintCommand.isSuccess ? (
+                      <div className='flex items-center justify-center'>
+                        Minted
+                      </div>
+                    ) : (
+                      <div className='flex items-center justify-center'>
+                        Mint
+                      </div>
+                    )
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='flex flex-col col-span-2 px-8 py-6 rounded-md bg-neutral-950/50'>
+          <h1 className='mb-8 text-2xl font-semibold'>My Boxes</h1>
+          <CrateWrapper boxs={boxs} />
+        </div>
+      </div>
     </section>
   );
 }
