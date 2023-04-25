@@ -27,6 +27,22 @@ export function Aside() {
           <i className="ri-briefcase-3-line text-2xl"></i>
         </Link>
         <Link
+          id="crate"
+          active-class="!text-violet-500"
+          href="/crate"
+          className="flex h-12 w-12 items-center justify-center rounded-full hover:bg-neutral-800"
+        >
+          <i className="ri-dropbox-fill text-2xl"></i>
+        </Link>
+        <Link
+          id="vote"
+          active-class="!text-violet-500"
+          href="/vote"
+          className="flex h-12 w-12 items-center justify-center rounded-full hover:bg-neutral-800"
+        >
+          <i className="ri-chat-poll-fill text-2xl"></i>
+        </Link>
+        <Link
           href="/profile"
           active-class="!text-violet-500"
           className="flex h-12 w-12 items-center justify-center rounded-full hover:bg-neutral-800"
