@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Water } from 'three/examples/jsm/objects/Water.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import gsap from 'gsap';
@@ -16,6 +16,9 @@ import Image from 'next/image';
 import useAPI from '@/hooks/useAPI';
 import { useUser } from '@/hooks/useUser';
 import { UndeployCommandButton } from './commands/undeploy-command.button';
+import { CollectCommandButton } from './commands/collect.button';
+import { prepareMove } from '@/features/commands/move.command';
+import useOutsideAlerter from '@/hooks/useOutsideAlerter';
 
 export function LandCard() {
   const { game } = useGame();
@@ -93,32 +96,45 @@ export function Map() {
   const user = useUser();
   const [area, setArea] = useState(null);
 
-  const { game, setLand, setSamurai } = useGame();
+  const { game, setLand, setSamurai, setLands, setClans } = useGame();
   const { land: landAPI, user: userApi } = useAPI();
-  const [lands, setLands] = useState([])
   const [locations, setLocations] = useState([])
   const [deck, setDeck] = useState([]);
+
+  const [landModal, setLandModal] = useState(false);
 
   const onAgentSelect = (data) => {
     setSamurai(data); // TODO: Need samurai data
   };
 
   const onAreaSelect = (name: string) => {
-    if (area == name) {
+    const [_, id] = name.split('_');
+
+    if (area == id) {
       return;
     }
 
-    const [_, id] = name.split('_');
-
-    setArea(id);
-    onAreaChanged(id);
+    setArea(Number(id));
   };
 
-  async function onAreaChanged(id: string) {
-    const landData = await landAPI.getLand(id);
+  useEffect(() => {
+    onAreaChanged(area);
+  }, [area])
+
+  const onAreaChanged = (id: number) => {
+    if (id == null) {
+      setLandModal(false);
+      return;
+    }
+
+    const landData = game.lands.find((x) => x.id == id);
+
+    if (!landModal) {
+      setLandModal(true);
+    }
 
     if (landData) {
-      setLand(landData[0]);
+      setLand(landData);
     } else {
       setLand(null);
     }
@@ -127,6 +143,10 @@ export function Map() {
   useEffect(() => {
     landAPI.getLands().then((data) => {
       setLands(data);
+    });
+
+    landAPI.getClans().then((data) => {
+      setClans(data);
     });
 
     getDeck().then(async () => {
@@ -181,10 +201,17 @@ export function Map() {
         </button>))}
       </div>
 
-      {game.land && (
+      {landModal && game.land && (
         <div className="map-land-in absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl z-50">
-          <h1 className="mb-2 text-2xl font-medium">{game.land.name}</h1>
-          <p className="text-sm">{game.land.desc}</p>
+          <div className='flex items-center justify-between'>
+            <div className='flex flex-col'>
+              <h1 className="mb-2 text-2xl font-medium">{game.land.name}</h1>
+              <p className="text-sm">{game.land.desc}</p>
+            </div>
+            <button onClick={() => setLandModal(false)}>
+              <i className='ri-close-fill text-2xl'></i>
+            </button>
+          </div>
           <div className="mt-6 grid grid-cols-1 gap-4">
             <div className="col-span-1 flex flex-col rounded-xl bg-neutral-950/50 px-6 py-4">
               <div className='flex justify-between items-center'>
@@ -213,7 +240,7 @@ export function Map() {
                   <div className="flex items-center justify-center rounded-xl ">
                     <span className='text-sm text-white/80 mr-2'>Governance:</span>
                     <span className="text-base">
-                      {lands.find(x => x.id == game.land.clan)?.name || 'Neutral zone'}
+                      {game.lands.find(x => x.id == game.land.clan)?.name || 'Neutral zone'}
                     </span>
                   </div>
                 </div>
@@ -256,7 +283,7 @@ export function Map() {
                   <div className="flex flex-col justify-center items-center">
                     <div className='flex flex-col items-center'>
                       <i className="ri-shield-fill text-2xl mb-1"></i>
-                      <span className='text-sm'>{lands.find(x => x.id == game.land.clan)?.name || 'Neutral zone'}</span>
+                      <span className='text-sm'>{game.lands.find(x => x.id == game.land.clan)?.name || 'Neutral zone'}</span>
                     </div>
                     <div className='w-full mt-8 text-sm '>
                       <ul className='flex flex-col gap-1'>
@@ -270,7 +297,7 @@ export function Map() {
                   <div className="flex flex-col justify-center items-center">
                     <div className='flex flex-col items-center'>
                       <i className="ri-sword-fill text-2xl mb-1"></i>
-                      <span className='text-sm'> {lands.find(x => x.id == game.land.attackerClan)?.name || 'Neutral zone'}</span>
+                      <span className='text-sm'> {game.lands.find(x => x.id == game.land.attackerClan)?.name || 'Neutral zone'}</span>
                     </div>
                     <div className='w-full mt-8 text-sm'>
                       <ul className='flex flex-col gap-1'>
@@ -306,17 +333,14 @@ export function Map() {
           }
           <div className="mt-auto">
             <div className="mt-auto grid grid-cols-3 gap-3">
-              {game.samurai && game.land && game.samurai?.Location == game.land.id && game.land.id != user.user.clan && game.samurai.DeploymentTime == 0 && <DeployCommandButton></DeployCommandButton>}
+              {game.samurai && game.land && game.samurai?.Location == game.land.id && game.land.id != game.clans.find(x => x.ID == user.user.clan)?.baseLocation && game.samurai.DeploymentTime == 0 && <DeployCommandButton></DeployCommandButton>}
               {game.samurai && game.land && game.samurai?.Location == game.land.id && game.samurai.DeploymentTime != 0 && <UndeployCommandButton></UndeployCommandButton>}
-              <MoveCommandButton></MoveCommandButton>
-              {game.samurai && game.land && user.user.clan == game.land.id && <HealCommandButton></HealCommandButton>}
-              <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
-                <i className="ri-hand-coin-fill mr-1 text-2xl"></i>
-                <span>Collect</span>
-              </button>
-              {game.samurai && game.land && user.user.clan == game.land.id && <DropButtonCommand></DropButtonCommand>}
-              {game.samurai && game.land && user.user.clan == game.land.clan && game.samurai.CampTime == 0 && <CampCommandButton></CampCommandButton>}
-              {game.samurai && game.land && user.user.clan == game.land.clan && game.samurai.CampTime != 0 && <UncampCommandButton></UncampCommandButton>}
+              {game.samurai && game.land && game.samurai?.Location != game.land.id && game.samurai.CampTime == 0 && game.samurai.DeploymentTime == 0 && prepareMove(game.lands.find(x => x.id == game.samurai?.Location), game.land) && (game.lands.find(x => x.id == game.samurai.Location)?.id == game.clans.find(x => x.ID == user.user.clan)?.baseLocation || game.land.id == game.clans.find(x => x.ID == user.user.clan)?.baseLocation) && <MoveCommandButton></MoveCommandButton>}
+              {game.samurai && game.land && game.samurai.Location == game.land.id && game.clans.find(x => x.ID == user.user.clan)?.baseLocation == game.samurai?.Location && <HealCommandButton></HealCommandButton>}
+              {game.samurai && game.land && game.samurai.Location == game.land.id && user.user.clan == game.land.clan && <CollectCommandButton></CollectCommandButton>}
+              {game.samurai && game.land && game.samurai.Location == game.land.id && user.user.clan == game.land.clan && <DropButtonCommand></DropButtonCommand>}
+              {game.samurai && game.land && game.samurai.Location == game.land.id && user.user.clan == game.land.clan && game.samurai.CampTime == 0 && <CampCommandButton></CampCommandButton>}
+              {game.samurai && game.land && game.samurai.Location == game.land.id && user.user.clan == game.land.clan && game.samurai.CampTime != 0 && <UncampCommandButton></UncampCommandButton>}
             </div>
           </div>
         </div>
@@ -357,8 +381,10 @@ async function setup({ onAreaSelect, locations, setLocations, deck }) {
 
   function onMouseClick(event: MouseEvent) {
     mouse.x = (event.clientX / container.clientWidth) * 2 - 1;
-    mouse.y = -(event.clientY / container.clientHeight) * 2 + 1;
+    mouse.y = - (event.clientY / container.clientHeight) * 2 + 1;
+
     raycaster.setFromCamera(mouse, camera);
+
     var intersects = raycaster
       .intersectObjects(scene.children, true)
       .filter((x) => x.object.name.includes('side'));
@@ -408,7 +434,7 @@ async function setup({ onAreaSelect, locations, setLocations, deck }) {
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(
-      55,
+      45,
       container.clientWidth / container.clientHeight,
       1,
       10000,

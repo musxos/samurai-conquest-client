@@ -4,6 +4,8 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import Config from '@/app/config';
+import { useGame } from '@/hooks/useGame';
+import { LandState } from '../game/game-slice';
 
 const useMoveCommand = () => {
   const { config, refetch } = usePrepareContractWrite({
@@ -12,9 +14,9 @@ const useMoveCommand = () => {
       {
         inputs: [
           {
-            internalType: 'uint8',
+            internalType: 'uint256',
             name: '_id',
-            type: 'uint8',
+            type: 'uint256',
           },
           {
             internalType: 'uint8',
@@ -44,8 +46,26 @@ const useMoveCommand = () => {
   return { data, error, isError, isLoading, isSuccess, writeAsync, refetch };
 };
 
-export function prepareMove(targetLand: number) {
-  return true; // TODO: need to check if the move is valid
+export function prepareMove(currentLand: LandState, targetLand: LandState) {
+  if (!currentLand) {
+    console.log("No current land");
+    return false;
+  }
+
+  if (!targetLand) {
+    console.log("No target land");
+    return false;
+  }
+
+  const flag = targetLand.roads.some(x => x == currentLand.id);
+
+
+  if (!flag) {
+    console.log("No road");
+    return false;
+  }
+
+  return true;
 }
 
 export default useMoveCommand;

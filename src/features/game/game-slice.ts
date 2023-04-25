@@ -22,12 +22,20 @@ export type LandState = {
   defenderSamurai: LandSamuraiState[];
 };
 
+export type ClanState = {
+  lightStones: number;
+  ID: number;
+  baseLocation: number;
+}
+
 export type GameState = {
   clan: number;
   samurai?: any;
   land?: LandState;
   deck: any[];
   isLoaded: boolean;
+  lands: LandState[];
+  clans: ClanState[];
 };
 
 export const initialState: GameState = {
@@ -36,6 +44,8 @@ export const initialState: GameState = {
   land: null,
   deck: [],
   isLoaded: false,
+  lands: [],
+  clans: []
 };
 
 export const gameSlice = createSlice({
@@ -51,9 +61,15 @@ export const gameSlice = createSlice({
     setDeck: (state, action: PayloadAction<any[]>) => {
       state.deck = action.payload;
     },
+    setLands: (state, action: PayloadAction<LandState[]>) => {
+      state.lands = action.payload;
+    },
+    setClans: (state, action: PayloadAction<ClanState[]>) => {
+      state.clans = action.payload;
+    }
   },
 });
 
-export const { setSamurai, setDeck, setLand } = gameSlice.actions;
+export const { setSamurai, setDeck, setLand, setLands, setClans } = gameSlice.actions;
 
 export default gameSlice.reducer;

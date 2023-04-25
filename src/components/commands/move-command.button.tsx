@@ -22,13 +22,19 @@ export function MoveCommandButton() {
       return;
     }
 
-    if (!prepareMove(game.land.id)) {
+    const currentLand = game.lands.find(x => x.id === game.samurai?.Location);
+
+    if (!currentLand) {
+      return;
+    }
+
+    if (!prepareMove(currentLand, game.land)) {
       return;
     }
 
     await writeAsync({
       recklesslySetUnpreparedArgs: [
-        game.samurai?.TokenId,
+        BigNumber.from(game.samurai?.TokenId),
         game.land?.id,
       ]
     });

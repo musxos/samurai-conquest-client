@@ -20,4 +20,14 @@ const getLand = async (id: any) => {
   return null;
 };
 
-export { getLands, getLand };
+const getClans = async () => {
+  const response = await axios.get('/clans');
+
+  if (response.status === 200) {
+    return response.data;
+  }
+
+  return null;
+}
+
+export { getLands, getLand, getClans };
