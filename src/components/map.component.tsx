@@ -3,6 +3,7 @@ import { Water } from 'three/examples/jsm/objects/Water.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import gsap from 'gsap';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { BloomEffect, EffectComposer, EffectPass, RenderPass, OutlineEffect, BlendFunction, KernelSize } from 'postprocessing'
 import * as THREE from 'three';
 import { DeployCommandButton } from './commands/deploy-command.button';
 import { MoveCommandButton } from './commands/move-command.button';
@@ -13,62 +14,64 @@ import { UncampCommandButton } from './commands/uncamp-command.button';
 import { DropButtonCommand } from './commands/drop-command.button';
 import Image from 'next/image';
 import useAPI from '@/hooks/useAPI';
+import { useUser } from '@/hooks/useUser';
 
 export function LandCard() {
+  const { game } = useGame();
+
   return (
     <div className="map-agent-in absolute bottom-0 flex w-full justify-center">
       <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
-        <Image className="h-20 w-20 rounded-2xl" alt="test" src="/art/1.png" />
+        <Image width={256} height={256} className="h-20 w-20 rounded-2xl" alt="test" src={"/art/" + game.samurai.TokenId + ".png"} />
         <div className="ml-4 flex h-full flex-col">
-          <h4 className="font-medium">Green Samurai</h4>
-          <span>In Bilmem ne krallığı.</span>
+          <h4 className="font-medium">{game.samurai.TokenName}</h4>
         </div>
         <div className="ml-auto grid w-full max-w-sm grid-cols-2 gap-4">
           <div className="col-span-1">
             <span className="mb-1 flex items-center text-red-500">
               <i className="ri-sword-fill mr-1"></i>{' '}
-              <span className="text-sm">32</span>
+              <span className="text-sm">{game.samurai.Attack}</span>
             </span>
             <div className="h-2 rounded-full bg-neutral-800">
               <div
                 className="stats h-2 rounded-full bg-red-500"
-                style={{ maxWidth: '72%' }}
+                style={{ maxWidth: game.samurai.Attack * 5 + '%' }}
               ></div>
             </div>
           </div>
           <div className="col-span-1">
             <span className="mb-1 flex items-center text-blue-500">
               <i className="ri-shield-fill mr-1"></i>{' '}
-              <span className="text-sm">32</span>
+              <span className="text-sm">{game.samurai.Defence}</span>
             </span>
             <div className="h-2 rounded-full bg-neutral-800">
               <div
                 className="stats h-2 rounded-full bg-blue-500"
-                style={{ maxWidth: '72%' }}
+                style={{ maxWidth: (game.samurai.Defence * 5) + '%' }}
               ></div>
             </div>
           </div>
           <div className="col-span-1">
             <span className="mb-1 flex items-center text-yellow-500">
               <i className="ri-sword-fill mr-1"></i>{' '}
-              <span className="text-sm">32</span>
+              <span className="text-sm">{game.samurai.Chakra}</span>
             </span>
             <div className="h-2 rounded-full bg-neutral-800">
               <div
                 className="stats h-2 rounded-full bg-yellow-500"
-                style={{ maxWidth: '72%' }}
+                style={{ maxWidth: (game.samurai.Chakra * 5) + '%' }}
               ></div>
             </div>
           </div>
           <div className="col-span-1">
             <span className="mb-1 flex items-center text-green-500">
               <i className="ri-sword-fill mr-1"></i>{' '}
-              <span className="text-sm">32</span>
+              <span className="text-sm">{game.samurai.CurrentAgility}</span>
             </span>
             <div className="h-2 rounded-full bg-neutral-800">
               <div
                 className="stats h-2 rounded-full bg-green-500"
-                style={{ maxWidth: '72%' }}
+                style={{ maxWidth: (game.samurai.CurrentAgility * 5) + '%' }}
               ></div>
             </div>
           </div>
@@ -79,13 +82,16 @@ export function LandCard() {
 }
 
 export function Map() {
+  const user = useUser();
   const [area, setArea] = useState(null);
 
   const { game, setLand, setSamurai } = useGame();
-  const { land: landAPI } = useAPI();
+  const { land: landAPI, user: userApi } = useAPI();
+  const [locations, setLocations] = useState([])
+  const [deck, setDeck] = useState([]);
 
-  const onAgentSelect = () => {
-    setSamurai(null); // TODO: Need samurai data
+  const onAgentSelect = (data) => {
+    setSamurai(data); // TODO: Need samurai data
   };
 
   const onAreaSelect = (name: string) => {
@@ -110,17 +116,53 @@ export function Map() {
   }
 
   useEffect(() => {
-    setup({
-      onAreaSelect,
-    });
+    getDeck().then(async () => {
+      console.log(1)
+      await setup({
+        locations: locations,
+        setLocations: setLocations,
+        onAreaSelect,
+        deck,
+      });
+      console.log(2)
+      setLocations([...locations]);
+    })
   }, []);
+
+  useEffect(() => {
+    const _window = window as any
+    const scene = _window.scene;
+    console.log(locations);
+
+    locations.forEach((location) => {
+      const agentInLocation = deck.some(x => x.Location == location.id);
+
+      if (agentInLocation) {
+        gsap.to(location.mesh.position, {
+          x: location.mesh.position.x,
+          y: location.mesh.position.y + 0.5,
+          z: location.mesh.position.z,
+          duration: 1,
+          ease: 'power2.inOut',
+        });
+      }
+
+    })
+  }, [locations])
+
+  const getDeck = async () => {
+    const _deck = await userApi.getOwnedNFTs(user.user.address);
+
+    setDeck(_deck);
+  }
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
       <div className="h-full w-full" id="canvas"></div>
       <div className="absolute top-5 flex w-full justify-center gap-2">
-        <button
-          onClick={onAgentSelect}
+        {deck.map((x, i) => (<button
+          key={i}
+          onClick={() => onAgentSelect(x)}
           className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
         >
           <Image
@@ -128,33 +170,9 @@ export function Map() {
             width={56}
             className="h-14 w-14 rounded-full"
             alt="test"
-            src="/art/1.png"
+            src={"/art/" + x.TokenId + ".png"}
           />
-        </button>
-        <button
-          onClick={onAgentSelect}
-          className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
-        >
-          <Image
-            height={56}
-            width={56}
-            className="rounded-full"
-            alt="test"
-            src="/art/2.png"
-          />
-        </button>
-        <button
-          onClick={onAgentSelect}
-          className="rounded-full border-4 border-neutral-800 border-l-blue-500 border-r-red-500"
-        >
-          <Image
-            height={56}
-            width={56}
-            className="h-14 w-14 rounded-full"
-            alt="test"
-            src="/art/3.png"
-          />
-        </button>
+        </button>))}
       </div>
 
       {game.land && (
@@ -162,9 +180,12 @@ export function Map() {
           <h1 className="mb-2 text-2xl font-medium">{game.land.name}</h1>
           <p className="text-sm">{game.land.desc}</p>
           <div className="mt-6 grid grid-cols-1 gap-4">
-            <div className="col-span-1 flex h-16 items-center justify-between rounded-xl bg-neutral-950/50 px-6">
-              <i className="ri-database-line text-2xl"></i>
-              <span className="text-xl">{game.land.value}</span>
+            <div className="col-span-1 flex flex-col rounded-xl bg-neutral-950/50 px-6 py-4">
+              <h1 className='text-white/80'>Land Details</h1>
+              <div className="col-span-1 flex h-16 items-center justify-between rounded-xl ">
+                <i className="ri-database-line text-xl"></i>
+                <span className="text-lg">{game.land.value}</span>
+              </div>
             </div>
             {game.land.uri && (
               <div className="col-span-1 h-32">
@@ -252,9 +273,9 @@ export function Map() {
   );
 }
 
-function setup({ onAreaSelect }) {
+async function setup({ onAreaSelect, locations, setLocations, deck }) {
   let container;
-  let camera, scene, renderer;
+  let camera, scene, renderer, composer;
   let cloudMesh, water, sun;
 
   const textureLoader = new THREE.TextureLoader();
@@ -272,58 +293,14 @@ function setup({ onAreaSelect }) {
   cloudPlaneMaterial.alphaMap.repeat.set(10, 10);
   cloudPlaneMaterial.opacity = 0.3;
 
-  init();
+  await init();
   animate();
 
   let mouse = new THREE.Vector2();
   let raycaster = new THREE.Raycaster();
   let activeSide;
 
-  document.addEventListener('mousemove', onMouseMove, false);
   document.addEventListener('click', onMouseClick, false);
-
-  function rotateSmooth(rotation: any) {
-    gsap.to(camera.rotation, {
-      x: rotation.x,
-      y: rotation.y,
-      z: rotation.z,
-      duration: 2,
-      ease: 'power2.inOut',
-    });
-  }
-  function moveSmooth(position: any) {
-    gsap.to(camera.position, {
-      x: position.x,
-      y: position.y - 1,
-      z: position.z,
-      duration: 2,
-      ease: 'power2.inOut',
-    });
-  }
-
-  function onMouseMove(event: MouseEvent) {
-    return;
-    mouse.x = (event.clientX / container.clientWidth) * 2 - 1;
-    mouse.y = -(event.clientY / container.clientHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    var intersects = raycaster
-      .intersectObjects(scene.children, true)
-      .filter((x) => x.object.name == 'side');
-    if (intersects.length == 0) return;
-
-    if (activeSide) {
-      var material = activeSide.material;
-      if (material.color) {
-        material.color.set(0xffffff);
-      }
-    }
-    activeSide = intersects[0].object;
-    var material = (intersects[0].object as any).material;
-
-    if (material.color) {
-      material.color.set(0xff0000);
-    }
-  }
 
   function onMouseClick(event: MouseEvent) {
     mouse.x = (event.clientX / container.clientWidth) * 2 - 1;
@@ -338,7 +315,7 @@ function setup({ onAreaSelect }) {
     onAreaSelect(intersects[0].object.name);
   }
 
-  function init() {
+  async function init() {
     container = document.getElementById('canvas');
 
     //
@@ -346,6 +323,7 @@ function setup({ onAreaSelect }) {
     renderer = new THREE.WebGLRenderer({
       antialias: false,
       powerPreference: 'high-performance',
+      stencil: false,
     });
 
     renderer.outputEncoding = THREE.sRGBEncoding;
@@ -355,6 +333,21 @@ function setup({ onAreaSelect }) {
 
     renderer.setPixelRatio(window.devicePixelRatio * 0.9);
     renderer.setSize(container.clientWidth, container.clientHeight);
+
+    composer = new EffectComposer(renderer);
+    composer.autoRenderToScreen = true;
+    composer.addPass(new RenderPass(scene, camera))
+    composer.addPass(new EffectPass(camera, new BloomEffect({
+      blendFunction: BlendFunction.COLOR_DODGE,
+      kernelSize: KernelSize.VERY_LARGE,
+      intensity: 60,
+      luminanceThreshold: 0.9,
+      luminanceSmoothing: 0.1,
+      height: container.clientHeight,
+      width: container.clientWidth,
+    })))
+
+
     container.appendChild(renderer.domElement);
 
     //
@@ -489,38 +482,50 @@ function setup({ onAreaSelect }) {
     const loader = new FBXLoader();
     loader.setResourcePath('/');
 
-    loader.load(
-      '/hexagons.fbx',
-      function (object) {
-        object.scale.set(100, 100, 100);
-
-        object.traverse(function (child) {
-          if (child instanceof THREE.Mesh) {
-            const formattedName = 'side_' + child.name;
-            child.name = formattedName;
-            child.material = material;
-          }
-
-          child.castShadow = true;
-          child.receiveShadow = true;
-        });
-
-        new THREE.Box3()
-          .setFromObject(object)
-          .getCenter(object.position)
-          .multiplyScalar(-1);
-        object.position.y = 50;
-
-        scene.add(object);
-      },
-      function (xhr) {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-      },
-      function (error) {
-        console.log('An error happened');
-        console.error(error);
+    const group = await loader.loadAsync(
+      '/map.fbx',
+      function (event) {
+        console.log((event.loaded / event.total) * 100 + '% loaded');
       },
     );
+
+
+    group.traverse(function (child: any) {
+      if (child instanceof THREE.Mesh) {
+
+        if (!isNaN(Number(child.name))) {
+          const payload = {
+            name: child.name,
+            id: Number(child.name),
+            location: child.position,
+            mesh: child,
+          }
+
+          locations.push(payload)
+        }
+
+        const formattedName = 'side_' + child.name;
+        child.name = formattedName;
+        child.material = material;
+      }
+
+
+      child.castShadow = true;
+      child.receiveShadow = true;
+    });
+
+    group.scale.set(100, 100, 100)
+
+    new THREE.Box3()
+      .setFromObject(group)
+      .getCenter(group.position)
+      .multiplyScalar(-1);
+    group.position.y = 50;
+
+    scene.add(group);
+
+
+    (window as any).scene = scene;
   }
 
   function onWindowResize() {
@@ -534,14 +539,13 @@ function setup({ onAreaSelect }) {
     requestAnimationFrame(animate);
 
     cloudPlaneMaterial.alphaMap.offset.y -= 0.00005;
-    // console.log("Number of Triangles :", renderer.info.render.triangles);
 
+    composer.render()
     render();
   }
 
   function render() {
     water.material.uniforms['time'].value += 1.0 / 90.0;
-
     renderer.render(scene, camera);
   }
 }

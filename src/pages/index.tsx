@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 
 export default function Home() {
-  useAuth();
+  const auth = useAuth();
   const { update: updateLayout } = useLayout();
 
   useEffect(() => {
@@ -18,6 +18,10 @@ export default function Home() {
       search: false,
     });
   }, []);
+
+  if (!auth.user.user.isLogged) {
+    return <span>loading</span>
+  }
 
   return (
     <>

@@ -1,7 +1,6 @@
 import { useAppSelector, useAppDispatch } from '@/app/hooks';
 import {
   LandState,
-  SamuraiState,
   setDeck,
   setLand,
   setSamurai,
@@ -13,8 +12,8 @@ export const useGame = () => {
 
   return {
     game,
-    setSamurai: (payload: SamuraiState) => dispatch(setSamurai(payload)),
-    setDeck: (payload: SamuraiState[]) => dispatch(setDeck(payload)),
+    setSamurai: (payload: any) => dispatch(setSamurai(payload)),
+    setDeck: (payload: any[]) => dispatch(setDeck(payload)),
     setLand: (payload: LandState) => dispatch(setLand(payload)),
   };
 };

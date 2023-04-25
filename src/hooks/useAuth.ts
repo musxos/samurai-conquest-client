@@ -9,11 +9,11 @@ export function useAuth() {
   const user = useUser();
 
   const router = useRouter();
-  const route = router.route != '/login' ? router.route : '/';
+  const route = router.route != '/register' ? router.route : '/';
   const { user: userApi } = useAPI();
   const account = useAccount({
     onConnect: async () => {
-      if (route == '/login' || route == '/register') {
+      if (route == '/register') {
         const result = await fetchUser();
 
         if (result) {
@@ -22,29 +22,37 @@ export function useAuth() {
       }
     },
     onDisconnect: () => {
-      router.push('/login');
+      router.push('/register');
       user.reset();
     },
   });
 
   useEffect(() => {
-    if (account.address) {
+    if (account.address && account.isConnected) {
       fetchUser();
-    } else {
-      router.push('/login');
+    } else if (router.route != '/register') {
+      router.push('/register');
     }
   }, [account.address]);
 
   const fetchUser = async () => {
     const data = await userApi.getUser(account.address);
 
-    if (!data) {
-      router.push('/register');
+    if (!data || (data && data.length <= 0)) {
+      if (router.route != '/register') {
+        router.push('/register');
+      }
       return false;
     }
 
-    user.update(data);
+    user.update(data[0]);
     user.setLogged(true);
+
+    if (router.route == '/register' && data[0]) {
+      console.log(data[0]);
+
+      router.push('/');
+    }
 
     return true;
   };

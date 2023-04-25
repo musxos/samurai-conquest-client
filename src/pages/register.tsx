@@ -6,12 +6,15 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import localFont from 'next/font/local'
+import { useAuth } from '@/hooks/useAuth';
+import { LoginConnectButton } from '@/components/rainbow/login-connect-button.component';
 
 const myFont = localFont({
   src: '../assets/font.otf',
 })
 
 export default function Register() {
+  useAuth();
   const [connected, setConnected] = useState(false);
   const account = useAccount({
     onConnect: () => {
@@ -81,7 +84,7 @@ export default function Register() {
           </p>
         </div>
         <div className="col-span-2 flex items-center justify-center rounded-md border border-violet-500/10 bg-neutral-950/20 px-8 py-6 backdrop-blur-3xl">
-          {!connected && <ConnectButton></ConnectButton>}
+          {!connected && <LoginConnectButton></LoginConnectButton>}
           {connected && (
             <div className="flex h-full w-full flex-col gap-8">
               <div className={"text-4xl text-white " + myFont.className}>Nickname</div>

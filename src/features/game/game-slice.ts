@@ -1,19 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-export type SamuraiState = {
-  id: number;
-  stats: {
-    attack: number;
-    defend: number;
-    health: number;
-    stamina: number;
-  };
-  position: number;
-  camp: boolean;
-  campPosition: number;
-  isTried: boolean;
-};
-
 export type LandSamuraiState = {
   name: string;
   samurai: number;
@@ -38,9 +24,9 @@ export type LandState = {
 
 export type GameState = {
   clan: number;
-  samurai?: SamuraiState;
+  samurai?: any;
   land?: LandState;
-  deck: SamuraiState[];
+  deck: any[];
   isLoaded: boolean;
 };
 
@@ -56,13 +42,13 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    setSamurai: (state, action: PayloadAction<SamuraiState>) => {
+    setSamurai: (state, action: PayloadAction<any>) => {
       state.samurai = action.payload;
     },
     setLand: (state, action: PayloadAction<LandState>) => {
       state.land = action.payload;
     },
-    setDeck: (state, action: PayloadAction<SamuraiState[]>) => {
+    setDeck: (state, action: PayloadAction<any[]>) => {
       state.deck = action.payload;
     },
   },
