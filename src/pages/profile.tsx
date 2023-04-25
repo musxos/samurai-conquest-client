@@ -1,6 +1,7 @@
 import { AgentCard } from '@/components/inventory/agent.card';
 import { resolveClan } from '@/features/mock/clan.resolver';
 import useAPI from '@/hooks/useAPI';
+import { useAuth } from '@/hooks/useAuth';
 import { useLayout } from '@/hooks/useLayout';
 import { DefaultLayout } from '@/layouts/default.layout';
 import Image from 'next/image';
@@ -8,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 
 export default function Profile() {
+  useAuth();
   const account = useAccount();
   const {
     user: { getUser, getOwnedNFTs },
@@ -145,12 +147,10 @@ export default function Profile() {
                 .map((nft, i) => (
                   <AgentCard
                     key={i}
-                    assign={false}
                     image={`/art/${nft.TokenId}.png`}
                     id={nft.TokenId}
                     name={nft.TokenName || 'Agent'}
                     agility={nft.CurrentAgility}
-                    maxAgility={nft.MaxAgility || 20}
                     attack={nft.Attack}
                     defence={nft.Defence}
                     chakra={nft.Chakra}

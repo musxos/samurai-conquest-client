@@ -6,8 +6,10 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import Comment from '@/assets/lottie/Comment.json';
 import { useAccount } from 'wagmi';
 import useAPI from '@/hooks/useAPI';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Reference() {
+  useAuth();
   const account = useAccount();
   const layout = useLayout();
   const { refer } = useAPI();

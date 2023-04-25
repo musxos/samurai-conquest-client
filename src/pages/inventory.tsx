@@ -95,6 +95,10 @@ export default function Inventory() {
   }, []);
 
   async function getInventory() {
+    if (!account.isConnected) {
+      return;
+    }
+
     const [alchemyResponse, inventoryResponse] = await Promise.all([
       alchemy.getNftsForOwner(account.address),
       user.getOwnedNFTs(account.address),

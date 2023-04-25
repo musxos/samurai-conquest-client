@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Card({ className, data }: { className?: string; data: any }) {
+  useAuth();
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="mb-4 flex flex-col items-center justify-center">

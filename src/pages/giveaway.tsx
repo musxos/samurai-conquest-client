@@ -6,6 +6,7 @@ import { EffectCards } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/effect-cards';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Card() {
   return (
@@ -78,6 +79,7 @@ export function Card() {
 }
 
 export default function Giveaway() {
+  useAuth();
   const layout = useLayout();
 
   useEffect(() => {

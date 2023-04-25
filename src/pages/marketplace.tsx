@@ -1,5 +1,6 @@
 import { AgentCard } from '@/components/marketplace/agent.card';
 import useBuyNftCommand from '@/features/commands/buy-nft.command';
+import { useAuth } from '@/hooks/useAuth';
 import { useLayout } from '@/hooks/useLayout';
 import { DefaultLayout } from '@/layouts/default.layout';
 import { write } from 'fs';
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 
 export default function Marketplace() {
+  useAuth();
   const { update: updateLayout, setColor } = useLayout();
   const [nft, setNft] = useState(0);
 

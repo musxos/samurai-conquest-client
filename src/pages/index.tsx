@@ -1,10 +1,12 @@
 import { Map } from '@/components/map.component';
+import { useAuth } from '@/hooks/useAuth';
 import { useLayout } from '@/hooks/useLayout';
 import { DefaultLayout } from '@/layouts/default.layout';
 import Head from 'next/head';
 import { useEffect } from 'react';
 
 export default function Home() {
+  useAuth();
   const { update: updateLayout } = useLayout();
 
   useEffect(() => {

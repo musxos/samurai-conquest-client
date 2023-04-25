@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { UserState, update } from '@/features/user-reducer';
+import { UserState, reset, setLogged, update } from '@/features/user-reducer';
 
 export function useUser() {
   const dispatch = useAppDispatch();
@@ -8,5 +8,7 @@ export function useUser() {
   return {
     user,
     update: (payload: UserState) => dispatch(update(payload)),
+    setLogged: (payload: boolean) => dispatch(setLogged(payload)),
+    reset: () => dispatch(reset()),
   };
 }

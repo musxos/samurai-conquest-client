@@ -8,6 +8,7 @@ import useMintCommand from '@/features/commands/mint.command';
 import useOpenboxCommand from '@/features/commands/open-box.command';
 import { useAccount } from 'wagmi';
 import useAPI from '@/hooks/useAPI';
+import { useAuth } from '@/hooks/useAuth';
 
 export function CrateCard({ minted, setMint, id }: any) {
   const account = useAccount();
@@ -170,6 +171,7 @@ export function CrateWrapper({ boxs }: any) {
 }
 
 export default function Crate() {
+  useAuth();
   const layout = useLayout();
 
   const account = useAccount();

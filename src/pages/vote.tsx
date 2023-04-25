@@ -1,6 +1,7 @@
 import useSubmitProposalCommand from "@/features/commands/submit-proposal";
 import useVoteCommand from "@/features/commands/vote.command";
 import useAPI from "@/hooks/useAPI";
+import { useAuth } from "@/hooks/useAuth";
 import { DefaultLayout } from "@/layouts/default.layout";
 import { BigNumber } from "alchemy-sdk";
 import { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import Swal from "sweetalert2";
 import { useAccount } from "wagmi";
 
 function ProposalCard({ title, status, voters, description, id }) {
+    useAuth();
     const account = useAccount();
     const voteCommand = useVoteCommand();
 
