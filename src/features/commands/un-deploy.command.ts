@@ -5,31 +5,31 @@ import {
 } from 'wagmi';
 import Config from '@/app/config';
 
-const useUncampCommand = () => {
+const useUndeployCommand = () => {
   const { config, refetch } = usePrepareContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'uint256',
-            name: '_id',
-            type: 'uint256',
-          },
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          }
         ],
-        name: 'uncamp',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
+        "name": "undeploySamurai",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
     ],
-    functionName: 'uncamp',
-    enabled: false,
+    functionName: 'undeploySamurai',
+    enabled: false
   });
 
   const { data, error, isError, writeAsync } = useContractWrite({
     ...config,
-    mode: 'recklesslyUnprepared',
+    mode: 'recklesslyUnprepared'
   });
 
   const { isLoading, isSuccess } = useWaitForTransaction({
@@ -39,4 +39,4 @@ const useUncampCommand = () => {
   return { data, error, isError, isLoading, isSuccess, writeAsync, refetch };
 };
 
-export default useUncampCommand;
+export default useUndeployCommand;

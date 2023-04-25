@@ -1,5 +1,6 @@
 import useDropCommand from '@/features/commands/drop.command';
 import { useGame } from '@/hooks/useGame';
+import { BigNumber } from 'alchemy-sdk';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
@@ -7,24 +8,24 @@ export function DropButtonCommand() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } = useDropCommand(
-    game.samurai?.id,
-  );
+  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } = useDropCommand();
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
 
     if (!account.isConnected) {
       return;
     }
 
-    if (!game.isLoaded || !game.samurai || !game.land) {
+    if (!game.samurai) {
       return;
     }
 
-    if (write) {
-      write();
-    }
+    await writeAsync({
+      recklesslySetUnpreparedArgs: [
+        BigNumber.from(game.samurai.TokenId),
+      ]
+    });
   };
 
   const className = classNames(

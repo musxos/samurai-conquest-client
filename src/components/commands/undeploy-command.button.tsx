@@ -1,15 +1,15 @@
-import useMoveCommand, { prepareMove } from '@/features/commands/move.command';
+import useDeployCommand from '@/features/commands/deploy.command';
+import useUndeployCommand from '@/features/commands/un-deploy.command';
 import { useGame } from '@/hooks/useGame';
-import { BigNumber } from 'alchemy-sdk';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
-export function MoveCommandButton() {
+export function UndeployCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, writeAsync, error, refetch } =
-    useMoveCommand();
+  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } =
+    useUndeployCommand();
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -18,18 +18,17 @@ export function MoveCommandButton() {
       return;
     }
 
-    if (!game.land && !game.samurai) {
+    if (!game.samurai) {
       return;
     }
 
-    if (!prepareMove(game.land.id)) {
-      return;
+    if (!writeAsync) {
+      await refetch();
     }
 
     await writeAsync({
       recklesslySetUnpreparedArgs: [
-        game.samurai?.TokenId,
-        game.land?.id,
+        game.samurai.id,
       ]
     });
   };
@@ -46,9 +45,12 @@ export function MoveCommandButton() {
 
   return (
     <button onClick={handleClick} className={className}>
-      <i className="ri-landscape-line mr-1 text-2xl"></i>
       <span>
-        {isLoading ? 'Moving...' : isSuccess && !isLoading ? 'Moved' : 'Move'}
+        {isLoading
+          ? 'Undeploying...'
+          : isSuccess && !isLoading
+            ? 'Undeployed'
+            : 'Undeploy'}
       </span>
     </button>
   );

@@ -5,8 +5,8 @@ import {
 } from 'wagmi';
 import Config from '@/app/config';
 
-const useHealCommand = (_id: any) => {
-  const { config } = usePrepareContractWrite({
+const useHealCommand = () => {
+  const { config, refetch } = usePrepareContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
@@ -24,17 +24,15 @@ const useHealCommand = (_id: any) => {
       },
     ],
     functionName: 'healSamurai',
-    args: [_id],
     enabled: false,
   });
 
-  const { data, error, isError, write } = useContractWrite(config);
-
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
+  const { data, error, isError, writeAsync } = useContractWrite({
+    ...config,
+    mode: 'recklesslyUnprepared',
   });
 
-  return { data, error, isError, isLoading, isSuccess, write };
+  return { data, error, isError, writeAsync, refetch };
 };
 
 export default useHealCommand;

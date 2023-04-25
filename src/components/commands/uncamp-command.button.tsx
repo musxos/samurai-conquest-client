@@ -1,5 +1,6 @@
-import useUnCampCommand from '@/features/commands/uncamp.command';
+import useUncampCommand from '@/features/commands/uncamp.command';
 import { useGame } from '@/hooks/useGame';
+import { BigNumber } from 'alchemy-sdk';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
@@ -7,25 +8,25 @@ export function UncampCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } =
-    useUnCampCommand(
-      game.samurai?.id, // TODO: I'm not sure
-    );
+  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } =
+    useUncampCommand();
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
 
     if (!account.isConnected) {
       return;
     }
 
-    if (!game.isLoaded || !game.samurai) {
+    if (!game.samurai) {
       return;
     }
 
-    if (write) {
-      write();
-    }
+    await writeAsync({
+      recklesslySetUnpreparedArgs: [
+        BigNumber.from(game.samurai.TokenId),
+      ]
+    })
   };
 
   const className = classNames(

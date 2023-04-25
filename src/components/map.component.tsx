@@ -15,6 +15,7 @@ import { DropButtonCommand } from './commands/drop-command.button';
 import Image from 'next/image';
 import useAPI from '@/hooks/useAPI';
 import { useUser } from '@/hooks/useUser';
+import { UndeployCommandButton } from './commands/undeploy-command.button';
 
 export function LandCard() {
   const { game } = useGame();
@@ -25,6 +26,13 @@ export function LandCard() {
         <Image width={256} height={256} className="h-20 w-20 rounded-2xl" alt="test" src={"/art/" + game.samurai.TokenId + ".png"} />
         <div className="ml-4 flex h-full flex-col">
           <h4 className="font-medium">{game.samurai.TokenName}</h4>
+          <p className={'mt-1 text-sm ' + (game.samurai.IsInjured == true ? 'text-red-500' : 'text-green-500')}>
+            <span>Health: </span>
+            {game.samurai.IsInjured ? 'Injured' : 'Healtly'}</p>
+          <p className='mt-1 text-sm'>
+            <span>Status: </span>
+            {game.samurai.DeploymentTime != 0 && game.samurai.CampTime == 0 ? 'In War' : game.samurai.CampTime != 0 ? 'Resting' : 'Available'}
+          </p>
         </div>
         <div className="ml-auto grid w-full max-w-sm grid-cols-2 gap-4">
           <div className="col-span-1">
@@ -87,6 +95,7 @@ export function Map() {
 
   const { game, setLand, setSamurai } = useGame();
   const { land: landAPI, user: userApi } = useAPI();
+  const [lands, setLands] = useState([])
   const [locations, setLocations] = useState([])
   const [deck, setDeck] = useState([]);
 
@@ -116,24 +125,22 @@ export function Map() {
   }
 
   useEffect(() => {
+    landAPI.getLands().then((data) => {
+      setLands(data);
+    });
+
     getDeck().then(async () => {
-      console.log(1)
       await setup({
         locations: locations,
         setLocations: setLocations,
         onAreaSelect,
         deck,
       });
-      console.log(2)
       setLocations([...locations]);
     })
   }, []);
 
   useEffect(() => {
-    const _window = window as any
-    const scene = _window.scene;
-    console.log(locations);
-
     locations.forEach((location) => {
       const agentInLocation = deck.some(x => x.Location == location.id);
 
@@ -146,7 +153,6 @@ export function Map() {
           ease: 'power2.inOut',
         });
       }
-
     })
   }, [locations])
 
@@ -176,94 +182,141 @@ export function Map() {
       </div>
 
       {game.land && (
-        <div className="map-land-in absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl">
+        <div className="map-land-in absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-neutral-950/50 px-8 py-4 backdrop-blur-2xl z-50">
           <h1 className="mb-2 text-2xl font-medium">{game.land.name}</h1>
           <p className="text-sm">{game.land.desc}</p>
           <div className="mt-6 grid grid-cols-1 gap-4">
             <div className="col-span-1 flex flex-col rounded-xl bg-neutral-950/50 px-6 py-4">
-              <h1 className='text-white/80'>Land Details</h1>
-              <div className="col-span-1 flex h-16 items-center justify-between rounded-xl ">
-                <i className="ri-database-line text-xl"></i>
-                <span className="text-lg">{game.land.value}</span>
-              </div>
-            </div>
-            {game.land.uri && (
-              <div className="col-span-1 h-32">
-                <img
-                  className="h-full w-full rounded-xl"
-                  alt="asd"
-                  src={game.land.uri}
-                />
-              </div>
-            )}
-          </div>
-          <div className="mt-6">
-            <div className="flex items-center justify-between gap-4 rounded-xl bg-neutral-950/50 px-6 py-6">
-              <div className="flex flex-col items-center">
-                <i className="ri-shield-line text-4xl"></i>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-white/90 font-medium'>Land Details</h1>
 
-                <span className="mt-2 text-sm">
-                  +{game.land.defendersPower}
-                </span>
+                <div className="ml-auto">
+                  <div className={'h-6 w-10 rounded flex items-center justify-center ' + (game.land.clan == 1 ? 'bg-red-300' : game.land.clan == 2 ? 'bg-green-300' : game.land.clan == 3 ? 'bg-purple-300' : game.land.clan == 4 ? 'bg-blue-300' : 'bg-white')}>
+                    <i className='ri-sword-fill text-black text-lg'></i>
+                  </div>
+                </div>
               </div>
-              <div>--------/--------</div>
-              <div className="flex flex-col items-center">
-                <i className="ri-sword-line text-4xl"></i>
+              <div className='grid grid-cols-2 gap-6 mt-4'>
+                <div className="col-span-1">
+                  <div className="flex items-end justify-between rounded-xl ">
+                    <span className='text-sm text-white/80'>Resource:</span>
+                    <span className="text-base">{game.land.value}</span>
+                  </div>
+                </div>
+                <div className='col-span-1'>
+                  <div className="flex items-end justify-between rounded-xl ">
+                    <span className='text-sm text-white/80'>Status:</span>
+                    <span className="text-base">{game.land.war_id == 0 ? 'Peace' : 'War'}</span>
+                  </div>
+                </div>
+                <div className='col-span-2'>
+                  <div className="flex items-center justify-center rounded-xl ">
+                    <span className='text-sm text-white/80 mr-2'>Governance:</span>
+                    <span className="text-base">
+                      {lands.find(x => x.id == game.land.clan)?.name || 'Neutral zone'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className='mt-4 bg-neutral-950/50 px-6 py-4 backdrop-blur-2xl flex flex-col rounded-xl'>
+            <h1 className='text-white/90 font-medium'>Your NFTs is here</h1>
 
-                <span className="mt-2 text-sm">
-                  +{game.land.attackersPower}
-                </span>
+            <div className='mt-4'>
+              <div className='flex flex-col gap-4'>
+                <h2 className='text-sm text-white/50'>Avaiable NFTs</h2>
+                {deck.filter(x => x.Location == game.land.id && x.CampTime == 0).map((x, i) => (
+                  <Image className='rounded-full' src={'/art/' + x.TokenId + ".png"} width={48} height={48} alt='no_camped' />
+                ))}
+              </div>
+              <div className='flex flex-col gap-4 mt-4'>
+                <h2 className='text-sm text-white/50'>Camped NFTs</h2>
+                {deck.filter(x => x.Location == game.land.id && x.CampTime != 0).map((x, i) => (
+                  <Image className='rounded-full' src={'/art/' + x.TokenId + ".png"} width={48} height={48} alt='no_camped' />
+                ))}
               </div>
             </div>
           </div>
-          <div className="mt-6">
-            <div className="flex justify-between gap-4">
-              <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
-                <i className="ri-shield-line text-2xl"></i>
-                <ul className="w-full">
-                  {game.land.attackerSamurai.map((x, i) => (
-                    <li key={i} className="flex justify-between">
-                      <div>{x.name}</div>
-                      <div className="font-medium">+{x.power}</div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex w-1/2 flex-col gap-4 rounded-xl bg-neutral-950/50 px-4 py-4">
-                <i className="ri-sword-line text-2xl"></i>
-                <ul className="w-full">
-                  {game.land.defenderSamurai.map((x, i) => (
-                    <li key={i} className="flex justify-between">
-                      <div>{x.name}</div>
-                      <div className="font-medium">+{x.power}</div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          {game.land.war_id != 0 && game.land.uri && (
+            <div className="col-span-1 h-32 mt-6">
+              <img
+                className="h-full w-full rounded-xl"
+                alt="asd"
+                src={game.land.uri + ".ads.png"}
+              />
             </div>
-          </div>
+          )}
+
+          {
+            game.land.war_id == 0 &&
+            <>
+              <div className="mt-6">
+                <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-neutral-950/50 px-6 py-6">
+                  <div className="flex flex-col justify-center items-center">
+                    <div className='flex flex-col items-center'>
+                      <i className="ri-shield-fill text-2xl mb-1"></i>
+                      <span className='text-sm'>{lands.find(x => x.id == game.land.clan)?.name || 'Neutral zone'}</span>
+                    </div>
+                    <div className='w-full mt-8 text-sm '>
+                      <ul className='flex flex-col gap-1'>
+                        <li className='text-white/70'>
+                          Total Power: {game.land.defendersPower}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div>/</div>
+                  <div className="flex flex-col justify-center items-center">
+                    <div className='flex flex-col items-center'>
+                      <i className="ri-sword-fill text-2xl mb-1"></i>
+                      <span className='text-sm'> {lands.find(x => x.id == game.land.attackerClan)?.name || 'Neutral zone'}</span>
+                    </div>
+                    <div className='w-full mt-8 text-sm'>
+                      <ul className='flex flex-col gap-1'>
+                        <li className='text-white/70'>
+                          Total Power: {game.land.attackersPower}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className='w-full mt-4'>
+                    <h2 className='text-sm text-white'>Your NFTs</h2>
+                    <div className='flex flex-col mt-4'>
+                      <ul className='flex flex-col w-full'>
+                        {deck.filter(x => x.Location == game.land.id && x.DeploymentTime != 0).map((x, i) => (<li key={i} className='flex items-center'>
+                          <span>{x.TokenName}</span>
+                          <div className='ml-auto text-sm flex items-center gap-2'>
+                            <span className='flex items-center'>
+                              <i className='ri-sword-fill mr-1'></i>
+                              {x.Attack}
+                            </span>
+                            <span className='flex items-center'>
+                              <i className='ri-shield-fill mr-1'></i>
+                              {x.Defence}
+                            </span>
+                          </div>
+                        </li>))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          }
           <div className="mt-auto">
             <div className="mt-auto grid grid-cols-3 gap-3">
-              <DeployCommandButton></DeployCommandButton>
+              {game.samurai && game.land && game.samurai?.Location == game.land.id && game.land.id != user.user.clan && game.samurai.DeploymentTime == 0 && <DeployCommandButton></DeployCommandButton>}
+              {game.samurai && game.land && game.samurai?.Location == game.land.id && game.samurai.DeploymentTime != 0 && <UndeployCommandButton></UndeployCommandButton>}
               <MoveCommandButton></MoveCommandButton>
-              <HealCommandButton></HealCommandButton>
-              {game.samurai &&
-                game.samurai?.camp &&
-                game.land &&
-                game.samurai?.campPosition == game.land.id && (
-                  <CampCommandButton></CampCommandButton>
-                )}
-              {game.samurai &&
-                game.samurai?.camp &&
-                game.land &&
-                game.samurai?.campPosition != game.land.id && (
-                  <UncampCommandButton></UncampCommandButton>
-                )}
+              {game.samurai && game.land && user.user.clan == game.land.id && <HealCommandButton></HealCommandButton>}
               <button className="flex items-center justify-center rounded-full bg-neutral-950/50 px-4 py-2">
                 <i className="ri-hand-coin-fill mr-1 text-2xl"></i>
                 <span>Collect</span>
               </button>
-              <DropButtonCommand></DropButtonCommand>
+              {game.samurai && game.land && user.user.clan == game.land.id && <DropButtonCommand></DropButtonCommand>}
+              {game.samurai && game.land && user.user.clan == game.land.clan && game.samurai.CampTime == 0 && <CampCommandButton></CampCommandButton>}
+              {game.samurai && game.land && user.user.clan == game.land.clan && game.samurai.CampTime != 0 && <UncampCommandButton></UncampCommandButton>}
             </div>
           </div>
         </div>

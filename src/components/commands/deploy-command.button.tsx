@@ -7,23 +7,25 @@ export function DeployCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } =
-    useDeployCommand(game.samurai?.id);
+  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } =
+    useDeployCommand();
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
 
     if (!account.isConnected) {
       return;
     }
 
-    if (!game.isLoaded || !game.samurai) {
+    if (!game.samurai) {
       return;
     }
 
-    if (write) {
-      write();
-    }
+    await writeAsync({
+      recklesslySetUnpreparedArgs: [
+        game.samurai.TokenId,
+      ]
+    });
   };
 
   const className = classNames(
@@ -37,8 +39,7 @@ export function DeployCommandButton() {
   );
 
   return (
-    <button onClick={handleClick} disabled={isLoading} className={className}>
-      <i className="ri-landscape-line mr-1 text-2xl"></i>
+    <button onClick={handleClick} className={className}>
       <span>
         {isLoading
           ? 'Deploying...'

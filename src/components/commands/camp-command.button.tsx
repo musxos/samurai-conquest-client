@@ -1,5 +1,6 @@
 import useCampCommand from '@/features/commands/camp.command';
 import { useGame } from '@/hooks/useGame';
+import { BigNumber } from 'alchemy-sdk';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 
@@ -7,24 +8,24 @@ export function CampCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, write, error } = useCampCommand(
-    game.samurai?.id, // TODO: I'm not sure
-  );
+  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } = useCampCommand();
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
 
     if (!account.isConnected) {
       return;
     }
 
-    if (!game.isLoaded || !game.samurai) {
+    if (!game.samurai) {
       return;
     }
 
-    if (write) {
-      write();
-    }
+    await writeAsync({
+      recklesslySetUnpreparedArgs: [
+        BigNumber.from(game.samurai.TokenId),
+      ]
+    });
   };
 
   const className = classNames(
@@ -38,7 +39,7 @@ export function CampCommandButton() {
   );
 
   return (
-    <button onClick={handleClick} disabled={isLoading} className={className}>
+    <button onClick={handleClick} className={className}>
       <i className="ri-landscape-line mr-1 text-2xl"></i>
       <span>
         {isLoading ? 'Camping...' : isSuccess && !isLoading ? 'Camped' : 'Camp'}
