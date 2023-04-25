@@ -5,7 +5,7 @@ import {
 } from 'wagmi';
 import Config from '@/app/config';
 
-const useRegisterCommand = (nickname: string, refer: any) => {
+const useRegisterCommand = () => {
   const { config, refetch } = usePrepareContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
@@ -29,10 +29,13 @@ const useRegisterCommand = (nickname: string, refer: any) => {
       },
     ],
     functionName: 'register',
-    args: [nickname, refer],
+    enabled: false,
   });
 
-  const { data, error, isError, reset, writeAsync } = useContractWrite(config);
+  const { data, error, isError, reset, writeAsync } = useContractWrite({
+    ...config,
+    mode: 'recklesslyUnprepared',
+  });
 
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,

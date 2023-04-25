@@ -1,10 +1,9 @@
+import '@sweetalert2/theme-dark/dark.css';
+import '@rainbow-me/rainbowkit/styles.css';
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { store } from '@/app/store';
-
-import '@rainbow-me/rainbowkit/styles.css';
-import '@sweetalert2/theme-dark/dark.css';
 
 // #region wagmi
 import {
