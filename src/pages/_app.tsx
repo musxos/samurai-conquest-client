@@ -25,7 +25,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const { chains, provider } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, polygonMumbai],
+  [polygonMumbai],
   [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()],
 );
 

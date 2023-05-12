@@ -9,12 +9,16 @@ import useOpenboxCommand from '@/features/commands/open-box.command';
 import { useAccount } from 'wagmi';
 import useAPI from '@/hooks/useAPI';
 import { useAuth } from '@/hooks/useAuth';
+import { alchemy } from '@/features/api/alchemy.api';
+import config from '@/app/config';
 
 export function CrateCard({ minted, setMint, id }: any) {
   const account = useAccount();
   const { setColor } = useLayout();
-  const openBoxCommand = useOpenboxCommand(id);
+  const openBoxCommand = useOpenboxCommand();
   const [active, setActive] = useState(false);
+
+  const [data, setData] = useState<any>(null);
 
   const classStyle = classNames(
     'crate-inital-animation flex h-[26rem] w-64 items-center justify-center z-50 pointer-events-auto mt-4',
@@ -32,11 +36,18 @@ export function CrateCard({ minted, setMint, id }: any) {
 
     setActive(true);
 
-    await openBoxCommand.refetch();
-
-    const result = await openBoxCommand.writeAsync();
+    const result = await openBoxCommand.writeAsync({
+      recklesslySetUnpreparedArgs: [
+        id
+      ],
+    });
 
     await result.wait();
+
+    const boxResult = await alchemy.nft.getNftMetadata(config.SAMURAI_WARRIORS_ADDRESS, id);
+
+    setData(boxResult.rawMetadata);
+
     setActive(false);
 
     setTimeout(() => {
@@ -83,76 +94,79 @@ export function CrateCard({ minted, setMint, id }: any) {
             src={Sword}
           />
         </div>
+        <div className='absolute bottom-0 left-1/2 text-white/50'>
+          #{id}
+        </div>
       </div>
-      <div className="crate-back">
+      {data && <div className="crate-back">
         <div className="h-full w-full rounded-md bg-neutral-950 p-4">
           <img
             className="h-54 w-full rounded-md object-cover"
-            src="/art/1.png"
+            src={'/art/' + id + '.png'}
             alt=""
           />
-          <h1 className="mb-2 mt-4 w-full text-center text-2xl font-semibold">
-            Yasuo
+          <h1 className="mb-2 mt-4 w-full text-center text-xl font-semibold">
+            {data.name}
           </h1>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col">
               <span className="mb-1 flex items-center text-red-500">
                 <i className="ri-sword-fill mr-1"></i>{' '}
-                <span className="text-sm">32</span>
+                <span className="text-sm">{data.attributes[3].value}</span>
               </span>
               <div className="h-2 rounded-full bg-neutral-800">
                 <div
                   className="stats h-2 rounded-full bg-red-500"
-                  style={{ maxWidth: '72%' }}
+                  style={{ maxWidth: `${((data.attributes[3].value) * 5)}%` }}
                 ></div>
               </div>
             </div>
             <div className="flex flex-col">
               <span className="mb-1 flex items-center text-blue-500">
                 <i className="ri-shield-fill mr-1"></i>{' '}
-                <span className="text-sm">55</span>
+                <span className="text-sm">{data.attributes[1].value}</span>
               </span>
               <div className="h-2 rounded-full bg-neutral-800">
                 <div
                   className="stats h-2 rounded-full bg-blue-500"
-                  style={{ maxWidth: '72%' }}
+                  style={{ maxWidth: `${((data.attributes[1].value) * 5)}%` }}
                 ></div>
               </div>
             </div>
             <div className="flex flex-col">
               <span className="mb-1 flex items-center text-yellow-500">
                 <i className="ri-sword-fill mr-1"></i>{' '}
-                <span className="text-sm">72</span>
+                <span className="text-sm">{data.attributes[0].value}</span>
               </span>
               <div className="h-2 rounded-full bg-neutral-800">
                 <div
                   className="stats h-2 rounded-full bg-yellow-500"
-                  style={{ maxWidth: '72%' }}
+                  style={{ maxWidth: `${((data.attributes[0].value) * 5)}%` }}
                 ></div>
               </div>
             </div>
             <div className="flex flex-col">
               <span className="mb-1 flex items-center text-green-500">
                 <i className="ri-sword-fill mr-1"></i>{' '}
-                <span className="text-sm">72</span>
+                <span className="text-sm">{data.attributes[2].value}</span>
               </span>
               <div className="h-2 rounded-full bg-neutral-800">
                 <div
                   className="stats h-2 rounded-full bg-green-500"
-                  style={{ maxWidth: '72%' }}
+                  style={{ maxWidth: `${((data.attributes[2].value) * 5)}%` }}
                 ></div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </button>
   );
 }
 
 export function CrateWrapper({ boxs }: any) {
-  const [minted, setMinted] = useState(false);
+  const [minted, setMinted] = useState(null);
 
   return (
     <div className="grid grid-cols-3 gap-y-4 gap-x-4 pointer-events-none">
@@ -162,7 +176,7 @@ export function CrateWrapper({ boxs }: any) {
             key={i}
             minted={minted}
             setMint={setMinted}
-            id={box.boxId}
+            id={box.tokenId}
           ></CrateCard>
         );
       })}
@@ -175,8 +189,7 @@ export default function Crate() {
   const layout = useLayout();
 
   const account = useAccount();
-  const mintCommand = useMintCommand(account.address);
-  const { box: boxApi } = useAPI();
+  const mintCommand = useMintCommand();
 
   const [boxs, setBoxs] = useState([]);
 
@@ -197,9 +210,11 @@ export default function Crate() {
       return;
     }
 
-    await mintCommand.refetch();
-
-    const result = await mintCommand.writeAsync();
+    const result = await mintCommand.writeAsync({
+      recklesslySetUnpreparedArgs: [
+        account.address
+      ]
+    });
 
     await result.wait();
 
@@ -207,9 +222,12 @@ export default function Crate() {
   };
 
   const updateBoxs = async () => {
-    const _boxs = await boxApi.getUserBox(account.address);
+    const result = await alchemy.nft.getNftsForOwner(account.address, {
+      contractAddresses: ["0x294072A07858d37480be0e24b2d4e3B4b63C76E6"]
+    });
+    console.log(result);
 
-    setBoxs(_boxs);
+    setBoxs(result.ownedNfts);
   };
 
   return (

@@ -29,7 +29,7 @@ const useRegisterCommand = () => {
       },
     ],
     functionName: 'register',
-    enabled: false,
+    enabled: true,
   });
 
   const { data, error, isError, reset, writeAsync } = useContractWrite({

@@ -24,7 +24,7 @@ export default function Profile() {
       notifications: true,
       profile: true,
       wallet: true,
-      search: true,
+      search: false,
     });
 
     fetchUser();
@@ -33,7 +33,7 @@ export default function Profile() {
 
   const fetchUser = async () => {
     const data = await getUser(account.address);
-    setUser(data[0]);
+    setUser(data);
   };
 
   const fetchOwnedNFTs = async () => {

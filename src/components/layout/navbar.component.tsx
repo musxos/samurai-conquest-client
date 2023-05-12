@@ -4,6 +4,7 @@ import { useLayout } from '@/hooks/useLayout';
 import { CustomConnectButton } from '../rainbow/connect-button.component';
 import { useAccount } from 'wagmi';
 import { useEffect, useState } from 'react';
+import { useUser } from '@/hooks/useUser';
 
 export type NavbarProps = {
   className?: string;
@@ -15,6 +16,7 @@ export function Navbar({ className }: NavbarProps) {
     onDisconnect() {},
   });
   const { layout } = useLayout();
+  const user = useUser();
 
   const [mount, setMount] = useState(false);
 
@@ -49,7 +51,7 @@ export function Navbar({ className }: NavbarProps) {
         )}
         {mount && account.isConnected && layout.profile && (
           <button className="backdrop-filter-xl hidden h-14 rounded-xl border border-violet-500/10 bg-neutral-900/10 px-6 py-3 transition lg:block">
-            asdsadasd
+            {user.user.nickName}
           </button>
         )}
       </div>

@@ -42,10 +42,6 @@ export default function Register() {
       return;
     }
 
-    if (!registerCommand.writeAsync) {
-      await registerCommand.refetch();
-    }
-
     const writeResult = await registerCommand.writeAsync({
       recklesslySetUnpreparedArgs: [nickname, refer as any]
     });

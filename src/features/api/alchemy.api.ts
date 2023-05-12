@@ -2,7 +2,7 @@ import { Alchemy, Network } from 'alchemy-sdk';
 import Config from '@/app/config';
 
 const config = {
-  apiKey: 'AixyU8upWib0zCUT1ezDSJ2m6cGjdWZh',
+  apiKey: '_bRRvCIltATq3Pb04FYULVSpBBvoJLIq',
   network: Network.MATIC_MUMBAI,
 };
 
@@ -18,4 +18,4 @@ const getNftsForOwner = async (owner: any) => {
   };
 };
 
-export { getNftsForOwner };
+export { getNftsForOwner, alchemy };

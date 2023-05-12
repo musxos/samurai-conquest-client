@@ -38,18 +38,18 @@ export function useAuth() {
   const fetchUser = async () => {
     const data = await userApi.getUser(account.address);
 
-    if (!data || (data && data.length <= 0)) {
+    if (!data) {
       if (router.route != '/register') {
         router.push('/register');
       }
       return false;
     }
 
-    user.update(data[0]);
+    user.update(data);
     user.setLogged(true);
 
-    if (router.route == '/register' && data[0]) {
-      console.log(data[0]);
+    if (router.route == '/register' && data) {
+      console.log(data);
 
       router.push('/');
     }
