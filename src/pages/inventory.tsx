@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { useAccount } from 'wagmi';
 import useAPI from '@/hooks/useAPI';
 import Swal from 'sweetalert2';
-import useNameSamuraiCommand from '@/features/commands/name-samurai.command';
+import useJoinWarCommand from '@/features/commands/name-samurai.command';
 import { BigNumber } from 'alchemy-sdk';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -33,51 +33,27 @@ export default function Inventory() {
     setActive(inventory[index]);
   };
 
-  const nameSamuraiCommand = useNameSamuraiCommand();
+  const joinWarCommand = useJoinWarCommand();
 
-  const handleChangeNicknameModal = async () => {
+  const handleJoinWar = async () => {
     if (!account.isConnected) {
       return;
     }
 
+    console.log(active)
     if (!active) {
       return;
     }
 
+    const result = await joinWarCommand.writeAsync({
+      recklesslySetUnpreparedArgs: [
+        BigNumber.from(Number(active.tokenId))
+      ]
+    });
 
-    Swal.fire({
-      title: 'Write new nickname',
-      input: 'text',
-      inputAttributes: {
-        autocapitalize: 'off'
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Change',
-      showLoaderOnConfirm: true,
-      preConfirm: async (nickname) => {
-        if (!nickname) {
-          return;
-        }
+    await result.wait();
 
-        const result = await nameSamuraiCommand.writeAsync({
-          recklesslySetUnpreparedArgs: [
-            BigNumber.from(Number(active.tokenId)),
-            String(nickname),
-          ]
-        });
-
-        return result;
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then(async (result) => {
-      await result.value.wait();
-
-      Swal.fire({
-        title: 'Success',
-        icon: 'success',
-        text: 'Nickname changed successfully',
-      })
-    })
+    getInventory();
   }
 
   const { update: updateLayout } = useLayout();
@@ -113,6 +89,7 @@ export default function Inventory() {
       defence: x.rawMetadata.attributes[1].value,
       chakra: x.rawMetadata.attributes[2].value,
       agility: x.rawMetadata.attributes[3].value,
+      player: x.rawMetadata.attributes[4].value,
     }));
 
     setInventory(_inventory);
@@ -157,6 +134,7 @@ export default function Inventory() {
                 defence={item.defence}
                 chakra={item.chakra}
                 agility={item.agility}
+                player={item.player}
                 onClick={() => show(i)}
                 key={i}
               ></AgentCard>
@@ -193,10 +171,11 @@ export default function Inventory() {
                     <Image className="h-14 w-14" src={HealthPotion} alt="asd" />
                   </button>
                   <button
-                    onClick={handleChangeNicknameModal}
-                    className="ml-auto h-14 rounded-full bg-violet-500 px-8 py-3"
+                    disabled={active.player == account.address}
+                    onClick={handleJoinWar}
+                    className="ml-auto h-14 rounded-full bg-violet-500 disabled:bg-violet-500/50 px-8 py-3"
                   >
-                    Change Nickname
+                    Join War
                   </button>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import Image from 'next/image';
+import { useAccount } from 'wagmi';
 
 export type AgentCardProps = {
   image: string;
@@ -11,6 +12,7 @@ export type AgentCardProps = {
   defence: number;
   agility: number;
   chakra: number;
+  player: string;
 };
 
 export function AgentCard({
@@ -21,8 +23,10 @@ export function AgentCard({
   defence = 0,
   agility = 0,
   chakra = 0,
+  player = null,
   onClick,
 }: AgentCardProps) {
+  const account = useAccount();
   const style = classNames(
     'relative flex flex-col px-6 py-4 bg-neutral-900/20 backdrop-blur-xl border border-violet-500/10 rounded-2xl group hover:bg-neutral-800/50 transition cursor-pointer',
   );
@@ -90,6 +94,10 @@ export function AgentCard({
             ></div>
           </div>
         </div>
+      </div>
+      <div className='mt-6 flex justify-end text-sm'>
+        {String(player).toLocaleLowerCase() == String(account.address).toLocaleLowerCase() && <div className='px-3 py-1 rounded-full bg-red-500/10 text-red-500'>In War</div>}
+        {String(player).toLocaleLowerCase() != String(account.address).toLocaleLowerCase() && <div className='px-3 py-1 rounded-full bg-green-500/10 text-green-500'>New</div>}
       </div>
     </div>
   );

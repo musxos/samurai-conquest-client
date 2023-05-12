@@ -1,30 +1,25 @@
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import Config from '@/app/config';
 
-const useNameSamuraiCommand = () => {
+const useJoinWarCommand = () => {
   const { config, refetch } = usePrepareContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'uint256',
-            name: '_id',
-            type: 'uint256',
-          },
-          {
-            internalType: 'string',
-            name: '_name',
-            type: 'string',
-          },
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          }
         ],
-        name: 'nameSamurai',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
+        "name": "jSamurai",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
     ],
-    functionName: 'nameSamurai',
+    functionName: 'jSamurai',
     enabled: false,
   });
 
@@ -42,4 +37,4 @@ const useNameSamuraiCommand = () => {
   };
 };
 
-export default useNameSamuraiCommand;
+export default useJoinWarCommand;
