@@ -3,25 +3,25 @@ import useVoteCommand from "@/features/commands/vote.command";
 import useAPI from "@/hooks/useAPI";
 import { useAuth } from "@/hooks/useAuth";
 import { DefaultLayout } from "@/layouts/default.layout";
-import { BigNumber } from "alchemy-sdk";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { useAccount } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
+import config from "@/app/config";
 
-function ProposalCard({ title, status, voters, description, id }) {
+
+
+function ProposalCard({ title, status, yesVote, noVote, description, id }) {
     useAuth();
     const account = useAccount();
     const voteCommand = useVoteCommand();
 
     const sendVote = async (payload) => {
         const result = await voteCommand.writeAsync?.({
-            recklesslySetUnpreparedArgs: [
+            args: [
                 payload.id,
                 payload.vote
             ]
         });
-
-        await result.wait();
 
         Swal.fire({
             title: 'Success',
@@ -44,17 +44,12 @@ function ProposalCard({ title, status, voters, description, id }) {
         }
 
         const payload = {
-            id: BigNumber.from(id),
-            vote: _vote
+            id: id,
+            vote: Boolean(_vote)
         };
-
-        if (!voteCommand.writeAsync) {
-            await voteCommand.refetch();
-        }
 
         sendVote(payload);
     }
-
 
     return <div className="border border-white/20 rounded-xl">
         <div className="flex items-center justify-between px-4 py-4">
@@ -72,16 +67,16 @@ function ProposalCard({ title, status, voters, description, id }) {
                 <div className="flex justify-between w-full">
                     <div className="flex flex-col">
                         <h2>Yes Votes</h2>
-                        <p className="text-sm mt-1"><b>{voters.filter(x => x.vote).length}</b> <span className="text-xs text-gray-100/50">{voters.filter(x => x.vote).length / voters.length * 100}%</span></p>
+                        <p className="text-sm mt-1"><b>{Number(yesVote)}</b> <span className="text-xs text-gray-100/50">{yesVote ? Number(yesVote) / (Number(yesVote) + Number(noVote)) * 100 : 0}%</span></p>
                     </div>
                     <div className="flex flex-col">
                         <h2>No Votes</h2>
-                        <p className="text-sm mt-1"><b>{voters.filter(x => !x.vote).length}</b> <span className="text-xs text-gray-100/50">{voters.filter(x => !x.vote).length / voters.length * 100}%</span></p>
+                        <p className="text-sm mt-1"><b>{Number(noVote)}</b> <span className="text-xs text-gray-100/50">{noVote ? Number(noVote) / (Number(yesVote) + Number(noVote)) * 100 : 0}%</span></p>
                     </div>
                 </div>
                 <div className="relative mt-2 rounded-full bg-cyan-500 h-2 w-full">
                     <div style={{
-                        width: `${voters.filter(x => x.vote).length / voters.length * 100}%`
+                        width: `${Number(yesVote) / (Number(yesVote) + Number(noVote)) * 100}%`
                     }} className="absolute top-0 left-0 bg-cyan-500 rounded-full z-20 h-2"></div>
                     <div className="absolute top-0 right-0 h-2 w-full bg-white rounded-full z-10"> </div>
                 </div>
@@ -99,38 +94,151 @@ function ProposalCard({ title, status, voters, description, id }) {
 }
 
 export default function Vote() {
+    const [enabled, setEnabled] = useState(true);
     const account = useAccount({
         onConnect: () => {
-            getProposals();
-            getSize();
+            setEnabled(true);
         }
     });
+    const [size, setSize] = useState(0);
+    const sizeContract = useContractRead({
+        address: config.VOTE_ADDRESS,
+        abi: [
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_owner",
+                        "type": "address"
+                    }
+                ],
+                "name": "getNFTBalance",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+        ],
+        functionName: 'getNFTBalance',
+        args: [account.address],
+        enabled: enabled && account.isConnected,
+        onSuccess(data) {
+            setSize(Number(data))
+        },
+    })
+
     const { proposal, alchemy } = useAPI();
     const [proposals, setProposals] = useState<any[]>([]);
+    const [proposalTest, setProposalTest] = useState<number>(1);
+    const [proposalSend, setProposalSend] = useState<boolean>(false);
+    const [proposalCount, setProposalCount] = useState(0);
     const [modal, setModal] = useState({
         active: false,
         title: '',
         description: '',
     });
 
-    const [size, setSize] = useState(0);
+    useContractRead({
+        address: config.VOTE_ADDRESS,
+        abi: [
+            {
+                "inputs": [],
+                "name": "proposalCount",
+                "outputs": [
+                    {
+                        "internalType": "uint32",
+                        "name": "",
+                        "type": "uint32"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+
+        ],
+        functionName: 'proposalCount',
+        args: [],
+        enabled: true,
+        onSuccess(data) {
+            setProposalCount(Number(data))
+        },
+    })
+
+
+    useContractRead({
+        address: config.VOTE_ADDRESS,
+        abi: [
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint32",
+                        "name": "",
+                        "type": "uint32"
+                    }
+                ],
+                "name": "proposals",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "proposal",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "proposalOwner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "yesVote",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "noVote",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "status",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+        ],
+        functionName: 'proposals',
+        args: [proposalTest],
+        enabled: proposalSend,
+        onSuccess(data) {
+            proposals.push(data);
+        },
+    })
 
     useEffect(() => {
-        getSize();
-    }, [])
+        if (proposalCount > 0) {
+            setProposalSend(true)
 
-    const getSize = async () => {
-        if (!account.isConnected) {
-            return;
+            for (let i = 1; i < proposalCount; i++) {
+                setTimeout(() => {
+                    setProposalTest(i)
+                }, 500 * i)
+            }
         }
+    }, [proposalCount])
 
-        const result: any = await alchemy.getNftsForOwner(account.address);
-
-        if (!result) {
-            return;
-        }
-
-        setSize(result.totalCount);
+    const getPropsalCount = async () => {
     }
 
     const submitProposalCommand = useSubmitProposalCommand();
@@ -177,7 +285,7 @@ export default function Vote() {
         console.log(modal);
 
         const result = await submitProposalCommand.writeAsync?.({
-            recklesslySetUnpreparedArgs: [
+            args: [
                 modal.title,
                 modal.description
             ]
@@ -193,7 +301,6 @@ export default function Vote() {
     }
 
     useEffect(() => {
-        getProposals();
     }, []);
 
     const getProposals = async () => {
@@ -221,7 +328,7 @@ export default function Vote() {
                 <div className="mt-6 w-full">
                     <div className="flex justify-between">
                         <div className="text-sm text-neutral-100/50">
-                            {proposals.length} Proposals
+                            {proposalCount} Proposals
                         </div>
                         <div className="flex items-center">
                             <button className="flex gap-2 items-center">
@@ -233,7 +340,7 @@ export default function Vote() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-y-4 w-full mt-4">
-                        {proposals.map((x, i) => (<ProposalCard id={x.id} title={x.title_} description={x.proposal} status={x.status} voters={x.voters} key={i}></ProposalCard>))}
+                        {proposals.map((x, i) => (<ProposalCard id={i + 1} title={x[0]} description={x[1]} status={Boolean(x[5])} yesVote={Number(x[3])} noVote={Number(x[4])} key={i}></ProposalCard>))}
                     </div>
                 </div>
             </div>

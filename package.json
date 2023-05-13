@@ -12,7 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.14",
     "@lottiefiles/react-lottie-player": "^3.5.3",
-    "@rainbow-me/rainbowkit": "^0.12.8",
+    "@rainbow-me/rainbowkit": "^1.0.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@sweetalert2/theme-dark": "^5.0.15",
     "@types/node": "18.15.11",
@@ -25,7 +25,6 @@
     "classnames": "^2.3.2",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
-    "ethers": "5",
     "gsap": "^3.11.5",
     "next": "13.2.4",
     "postprocessing": "^6.30.2",
@@ -39,7 +38,8 @@
     "swiper": "^9.2.0",
     "three": "^0.151.3",
     "typescript": "5.0.3",
-    "wagmi": "^0.12.10"
+    "viem": "^0.3.24",
+    "wagmi": "^1.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

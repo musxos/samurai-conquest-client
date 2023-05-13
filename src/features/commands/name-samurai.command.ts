@@ -2,7 +2,7 @@ import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import Config from '@/app/config';
 
 const useJoinWarCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, writeAsync } = useContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
@@ -20,11 +20,6 @@ const useJoinWarCommand = () => {
       }
     ],
     functionName: 'jSamurai',
-    enabled: false,
-  });
-
-  const { data, error, isError, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 
@@ -33,7 +28,6 @@ const useJoinWarCommand = () => {
     error,
     isError,
     writeAsync,
-    refetch,
   };
 };
 

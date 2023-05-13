@@ -11,22 +11,19 @@ import {
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { configureChains, createConfig, WagmiConfig, } from 'wagmi';
 import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
   polygonMumbai,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { createPublicClient, http } from 'viem';
 
 const { chains, provider } = configureChains(
   [polygonMumbai],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()],
+  [alchemyProvider({ apiKey: '_bRRvCIltATq3Pb04FYULVSpBBvoJLIq' }), publicProvider()],
 );
 
 const { connectors } = getDefaultWallets({
@@ -35,8 +32,12 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-const wagmiClient = createClient({
+const wagmiConfig = createConfig({
   autoConnect: true,
+  publicClient: createPublicClient({
+    transport: http(),
+    chain: polygonMumbai,
+  }),
   connectors,
   provider,
 });
@@ -65,7 +66,7 @@ export default function App({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider theme={darkTheme()} chains={chains}>
         <Provider store={store}>
           {loading && (

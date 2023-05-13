@@ -6,11 +6,11 @@ import classNames from 'classnames';
 import { useLayout } from '@/hooks/useLayout';
 import useMintCommand from '@/features/commands/mint.command';
 import useOpenboxCommand from '@/features/commands/open-box.command';
-import { useAccount } from 'wagmi';
-import useAPI from '@/hooks/useAPI';
+import { useAccount, useWaitForTransaction } from 'wagmi';
 import { useAuth } from '@/hooks/useAuth';
 import { alchemy } from '@/features/api/alchemy.api';
 import config from '@/app/config';
+import { waitForTransaction } from '@wagmi/core';
 
 export function CrateCard({ minted, setMint, id }: any) {
   const account = useAccount();
@@ -36,24 +36,31 @@ export function CrateCard({ minted, setMint, id }: any) {
 
     setActive(true);
 
-    const result = await openBoxCommand.writeAsync({
-      recklesslySetUnpreparedArgs: [
+    await openBoxCommand.writeAsync({
+      args: [
         id
       ],
     });
-
-    await result.wait();
-
-    const boxResult = await alchemy.nft.getNftMetadata(config.SAMURAI_WARRIORS_ADDRESS, id);
-
-    setData(boxResult.rawMetadata);
-
-    setActive(false);
-
-    setTimeout(() => {
-      setMint(id);
-    }, 1000);
   }
+
+  useEffect(() => {
+    if (!openBoxCommand.isSuccess) {
+      return;
+    }
+
+    (async () => {
+      const boxResult = await alchemy.nft.getNftMetadata(config.SAMURAI_WARRIORS_ADDRESS, id);
+
+      setData(boxResult.rawMetadata);
+
+      setActive(false);
+
+      setTimeout(() => {
+        setMint(id);
+      }, 1000);
+
+    })()
+  }, [openBoxCommand.isSuccess])
 
   useEffect(() => {
     if (minted == id) {
@@ -205,27 +212,34 @@ export default function Crate() {
     updateBoxs();
   }, []);
 
+  useEffect(() => {
+    if (!mintCommand.isSuccess) {
+      return;
+    }
+
+    updateBoxs();
+  }, [mintCommand.isSuccess])
+
   const handleMint = async () => {
     if (!account.isConnected) {
       return;
     }
 
+    if (!mintCommand) {
+      return;
+    }
+
     const result = await mintCommand.writeAsync({
-      recklesslySetUnpreparedArgs: [
+      args: [
         account.address
-      ]
+      ],
     });
-
-    await result.wait();
-
-    updateBoxs();
   };
 
   const updateBoxs = async () => {
     const result = await alchemy.nft.getNftsForOwner(account.address, {
-      contractAddresses: ["0x294072A07858d37480be0e24b2d4e3B4b63C76E6"]
+      contractAddresses: [config.SAMURAI_CARD]
     });
-    console.log(result);
 
     setBoxs(result.ownedNfts);
   };

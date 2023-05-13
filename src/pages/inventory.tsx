@@ -8,11 +8,9 @@ import HealthPotion from '../assets/health_potion.png';
 import Image from 'next/image';
 import { useAccount } from 'wagmi';
 import useAPI from '@/hooks/useAPI';
-import Swal from 'sweetalert2';
 import useJoinWarCommand from '@/features/commands/name-samurai.command';
-import { BigNumber } from 'alchemy-sdk';
 import { useAuth } from '@/hooks/useAuth';
-
+import { BigNumber } from 'alchemy-sdk';
 
 export default function Inventory() {
   const auth = useAuth();
@@ -40,18 +38,17 @@ export default function Inventory() {
       return;
     }
 
-    console.log(active)
     if (!active) {
       return;
     }
 
-    const result = await joinWarCommand.writeAsync({
-      recklesslySetUnpreparedArgs: [
+    console.log(BigNumber.from(Number(active.tokenId)));
+
+    await joinWarCommand.writeAsync({
+      args: [
         BigNumber.from(Number(active.tokenId))
       ]
     });
-
-    await result.wait();
 
     getInventory();
   }

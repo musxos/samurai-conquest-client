@@ -1,13 +1,15 @@
 import {
   useContractWrite,
   usePrepareContractWrite,
-  useWaitForTransaction,
 } from 'wagmi';
 import Config from '@/app/config';
-import { useEffect, useState } from 'react';
 
 const useSubmitProposalCommand = () => {
   const { config, refetch } = usePrepareContractWrite({
+    enabled: false,
+  });
+
+  const { data, error, isError, writeAsync } = useContractWrite({
     address: Config.VOTE_ADDRESS as any,
     abi: [
       {
@@ -22,11 +24,6 @@ const useSubmitProposalCommand = () => {
       },
     ],
     functionName: 'submitProposal',
-    enabled: false,
-  });
-
-  const { data, error, isError, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 

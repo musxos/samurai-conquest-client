@@ -22,7 +22,7 @@ export function useAuth() {
       }
     },
     onDisconnect: () => {
-      router.push('/register');
+      router.replace('/register');
       user.reset();
     },
   });
@@ -30,8 +30,6 @@ export function useAuth() {
   useEffect(() => {
     if (account.address && account.isConnected) {
       fetchUser();
-    } else if (router.route != '/register') {
-      router.push('/register');
     }
   }, [account.address]);
 

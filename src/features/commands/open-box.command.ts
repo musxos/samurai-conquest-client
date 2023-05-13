@@ -6,7 +6,7 @@ import {
 import Config from '@/app/config';
 
 const useOpenboxCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, reset, writeAsync } = useContractWrite({
     address: Config.SAMURAI_WARRIORS_ADDRESS as any,
     abi: [
       {
@@ -24,12 +24,7 @@ const useOpenboxCommand = () => {
       }
     ],
     functionName: 'openCard',
-    enabled: false,
-  });
-
-  const { data, error, isError, reset, writeAsync } = useContractWrite({
-    ...config,
-    mode: 'recklesslyUnprepared',
+    mode: 'recklesslyUnprepared'
   });
 
   const { isLoading, isSuccess } = useWaitForTransaction({
@@ -44,7 +39,6 @@ const useOpenboxCommand = () => {
     isSuccess,
     reset,
     writeAsync,
-    refetch,
   };
 };
 

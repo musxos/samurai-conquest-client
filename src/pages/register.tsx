@@ -8,6 +8,7 @@ import { useAccount } from 'wagmi';
 import localFont from 'next/font/local'
 import { useAuth } from '@/hooks/useAuth';
 import { LoginConnectButton } from '@/components/rainbow/login-connect-button.component';
+import Swal from 'sweetalert2';
 
 const myFont = localFont({
   src: '../assets/font.otf',
@@ -43,17 +44,15 @@ export default function Register() {
     }
 
     const writeResult = await registerCommand.writeAsync({
-      recklesslySetUnpreparedArgs: [nickname, refer as any]
+      args: [nickname, refer as any]
     });
-
-    const result = await writeResult.wait();
-
-    if (result.status !== 1) {
-      return;
-    }
-
-    router.push('/');
   };
+
+  useEffect(() => {
+    if (registerCommand.isSuccess) {
+      router.push('/');
+    }
+  }, [registerCommand.isSuccess])
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
@@ -96,9 +95,13 @@ export default function Register() {
               </div>
               <button
                 onClick={handleClick}
+                disabled={!nickname && registerCommand.isLoading}
                 className="ml-auto mt-auto rounded-md bg-neutral-950/50 px-12 py-3 text-white"
               >
-                Submit
+                {registerCommand.isLoading && (
+                  <i className="ri-loader-4-line animate-spin mr-2"></i>
+                )}
+                Register
               </button>
             </div>
           )}

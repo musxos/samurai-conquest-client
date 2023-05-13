@@ -6,7 +6,7 @@ import {
 import Config from '@/app/config';
 
 const useRegisterCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, reset, writeAsync } = useContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
@@ -29,11 +29,6 @@ const useRegisterCommand = () => {
       },
     ],
     functionName: 'register',
-    enabled: true,
-  });
-
-  const { data, error, isError, reset, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 
@@ -49,7 +44,6 @@ const useRegisterCommand = () => {
     isSuccess,
     reset,
     writeAsync,
-    refetch,
   };
 };
 export default useRegisterCommand;

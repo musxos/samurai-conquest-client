@@ -1,12 +1,10 @@
 import {
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
+  useContractWrite, useWaitForTransaction,
 } from 'wagmi';
 import Config from '@/app/config';
 
 const useMintCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, write, writeAsync } = useContractWrite({
     address: Config.SAMURAI_WARRIORS_ADDRESS as any,
     abi: [
       {
@@ -24,11 +22,6 @@ const useMintCommand = () => {
       }
     ],
     functionName: 'buyCard',
-    enabled: false
-  });
-
-  const { data, error, isError, write, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 
@@ -40,11 +33,9 @@ const useMintCommand = () => {
     data,
     error,
     isError,
-    isLoading,
-    isSuccess,
     write,
     writeAsync,
-    refetch,
+    isLoading, isSuccess
   };
 };
 

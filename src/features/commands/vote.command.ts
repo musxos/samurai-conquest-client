@@ -9,34 +9,29 @@ import useDebounce from '@/hooks/useDebounce';
 import { BigNumber } from 'alchemy-sdk';
 
 const useVoteCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, writeAsync } = useContractWrite({
     address: Config.VOTE_ADDRESS as any,
     abi: [
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'uint32',
-            name: '_id',
-            type: 'uint32',
+            "internalType": "uint32",
+            "name": "_id",
+            "type": "uint32"
           },
           {
-            internalType: 'bool',
-            name: '_vote',
-            type: 'bool',
-          },
+            "internalType": "bool",
+            "name": "_vote",
+            "type": "bool"
+          }
         ],
-        name: 'voteForProposal',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
+        "name": "voteForProposal",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
       },
     ],
     functionName: 'voteForProposal',
-    enabled: false,
-  });
-
-  const { data, error, isError, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 
@@ -45,7 +40,6 @@ const useVoteCommand = () => {
     error,
     isError,
     writeAsync,
-    refetch,
   };
 };
 
