@@ -154,6 +154,12 @@ export default function Top() {
     'bg-neutral-950/50': type === 0,
   });
 
+  if (true) {
+    return <div className='w-full h-full flex items-center justify-center'>
+      <h1 className='text-4xl font-semibold'>Any Season not played yet</h1>
+    </div>
+  }
+
   return (
     <div className="mx-auto mb-8 mt-24 flex max-w-screen-2xl flex-col items-center">
       <div className="mx-auto mb-12 rounded-2xl bg-neutral-950/30 p-2 backdrop-blur-2xl">

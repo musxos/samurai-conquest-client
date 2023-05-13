@@ -1,3 +1,4 @@
+import config from '@/app/config';
 import { AgentCard } from '@/components/inventory/agent.card';
 import { resolveClan } from '@/features/mock/clan.resolver';
 import useAPI from '@/hooks/useAPI';
@@ -11,9 +12,7 @@ import { useAccount } from 'wagmi';
 export default function Profile() {
   useAuth();
   const account = useAccount();
-  const {
-    user: { getUser, getOwnedNFTs },
-  } = useAPI();
+  const { alchemy, user: { getUser } } = useAPI();
   const { update: updateLayout } = useLayout();
   const [user, setUser] = useState(null);
   const [ownedNFTs, setOwnedNFTs] = useState(null);
@@ -28,7 +27,7 @@ export default function Profile() {
     });
 
     fetchUser();
-    fetchOwnedNFTs();
+    getInventory();
   }, []);
 
   const fetchUser = async () => {
@@ -36,10 +35,25 @@ export default function Profile() {
     setUser(data);
   };
 
-  const fetchOwnedNFTs = async () => {
-    const data = await getOwnedNFTs(account.address);
-    setOwnedNFTs(data);
-  };
+  const getInventory = async () => {
+    const data = await alchemy.alchemy.nft.getNftsForOwner(account.address, {
+      contractAddresses: [config.SAMURAI_WARRIORS_ADDRESS]
+    });
+
+    setOwnedNFTs(data.ownedNfts.map((nft) => {
+      return {
+        ...nft,
+        tokenId: nft.tokenId,
+        title: nft.title,
+        name: nft.rawMetadata.name,
+        description: nft.rawMetadata.description,
+        attack: nft.rawMetadata.attributes[0].value,
+        defence: nft.rawMetadata.attributes[1].value,
+        chakra: nft.rawMetadata.attributes[2].value,
+        agility: nft.rawMetadata.attributes[3].value,
+      }
+    }));
+  }
 
   if (!user) return null;
 
@@ -83,7 +97,7 @@ export default function Profile() {
                   <span className="text-sm text-white/60">War Power</span>
                   <span className="text-white">
                     {ownedNFTs && ownedNFTs.reduce(
-                      (acc, x) => acc + x.Attack + x.Defence,
+                      (acc, x) => acc + x.attack + x.defence + x.chakra + x.agility,
                       0,
                     )}
                   </span>
@@ -94,7 +108,7 @@ export default function Profile() {
                 <div className="flex flex-col">
                   <span className="text-sm text-white/60">Attack Power</span>
                   <span className="text-white">
-                    {ownedNFTs && ownedNFTs.reduce((acc, x) => acc + x.Attack, 0)}
+                    {ownedNFTs && ownedNFTs.reduce((acc, x) => acc + x.attack, 0)}
                   </span>
                 </div>
               </div>
@@ -103,7 +117,7 @@ export default function Profile() {
                 <div className="flex flex-col">
                   <span className="text-sm text-white/60">Defens Power</span>
                   <span className="text-white">
-                    {ownedNFTs && ownedNFTs.reduce((acc, x) => acc + x.Defence, 0)}
+                    {ownedNFTs && ownedNFTs.reduce((acc, x) => acc + x.defence, 0)}
                   </span>
                 </div>
               </div>
@@ -140,21 +154,21 @@ export default function Profile() {
                 Your Best Agents
               </h2>
             </div>
-            <div className="flex flex-row gap-4">
+            <div className="grid grid-cols-3 gap-4">
               {ownedNFTs && ownedNFTs
-                .sort((a, b) => b.Defence + b.Attack - a)
+                .sort((a, b) => b.defence + b.attack + b.chakra + b.agility - a)
                 .slice(0, 3)
                 .map((nft, i) => (
                   <AgentCard
                     key={i}
-                    image={`/art/${nft.TokenId}.png`}
-                    id={nft.TokenId}
-                    name={nft.TokenName || 'Agent'}
-                    agility={nft.CurrentAgility}
-                    attack={nft.Attack}
-                    defence={nft.Defence}
-                    chakra={nft.Chakra}
-                    player={nft.player}
+                    image={`/art/${nft.tokenId}.png`}
+                    id={nft.tokenId}
+                    name={nft.name || 'Agent'}
+                    agility={nft.agility}
+                    attack={nft.attack}
+                    defence={nft.defence}
+                    chakra={nft.chakra}
+                    status={null}
                   ></AgentCard>
                 ))}
             </div>

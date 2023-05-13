@@ -1,7 +1,7 @@
 import axios from '@/app/axios';
 
 const getTopRefers = async () => {
-  const response = await axios.get('/toprefer');
+  const response = await axios.get('/refer');
 
   if (response.status === 200) {
     return response.data;

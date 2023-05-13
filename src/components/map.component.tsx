@@ -33,7 +33,17 @@ export function LandCard() {
   return (
     <div className="map-agent-in absolute bottom-0 flex w-full justify-center">
       <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
-        <Image width={256} height={256} className="h-20 w-20 rounded-2xl" alt="test" src={"/art/" + game.samurai.Id + ".png"} />
+        <div className='flex flex-col w-max'>
+          <Image width={256} height={256} className="h-20 w-20 rounded-2xl" alt="test" src={"/art/" + game.samurai.Id + ".png"} />
+          <div className="flex flex-col items-center">
+            <div className='w-full mt-1'>
+              <span className="mb-0.5 flex items-center text-yellow-500">
+                <i className="ri-run-fill mr-1"></i>{' '}
+                <span className="text-sm">{game.samurai.CurrentAgility}/{game.samurai.MaxAgility}</span>
+              </span>
+            </div>
+          </div>
+        </div>
         <div className="ml-4 flex h-full flex-col">
           <h4 className="font-medium">SamuraiWarrior #{game.samurai.Id}</h4>
           <p className={'mt-1 text-sm ' + (game.samurai.IsInjured == true ? 'text-red-500' : 'text-green-500')}>
@@ -43,7 +53,7 @@ export function LandCard() {
             <span>Status: </span>
             {game.samurai?.Status == 1 ? 'In War' : game.samurai?.Status == 2 ? 'Camp' : 'Available'}
           </p>
-          {game.samurai?.Status != 3 && <p>
+          {(game.samurai?.Status == 1 || game.samurai?.Status == 2) && <p>
             {DateFormatter.format(new Date(game.samurai.Status == 2 ? Number(game.samurai.CampTime) : Number(game.samurai.DeploymentTime)))}
           </p>}
         </div>
@@ -226,6 +236,8 @@ export function Map() {
         id: selectedAgent,
       }
 
+      console.log(payload, data.status)
+
       setSamurai(payload);
     }
   })
@@ -336,7 +348,7 @@ export function Map() {
               <p className="text-sm">{game.land.desc}</p>
             </div>
             <button onClick={() => setLandModal(false)}>
-              <i className='ri-close-fill text-2xl'></i>w
+              <i className='ri-close-fill text-2xl'></i>
             </button>
           </div>
           <div className="mt-6 grid grid-cols-1 gap-4">
