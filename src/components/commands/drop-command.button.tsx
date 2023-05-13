@@ -22,7 +22,7 @@ export function DropButtonCommand() {
     }
 
     await writeAsync({
-      recklesslySetUnpreparedArgs: [
+      args: [
         BigNumber.from(game.samurai.TokenId),
       ]
     });

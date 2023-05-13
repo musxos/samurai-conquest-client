@@ -18,7 +18,14 @@ import { useUser } from '@/hooks/useUser';
 import { UndeployCommandButton } from './commands/undeploy-command.button';
 import { CollectCommandButton } from './commands/collect.button';
 import { prepareMove } from '@/features/commands/move.command';
-import useOutsideAlerter from '@/hooks/useOutsideAlerter';
+import { useContractRead } from 'wagmi';
+import config from '@/app/config';
+
+const DateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 
 export function LandCard() {
   const { game } = useGame();
@@ -26,16 +33,19 @@ export function LandCard() {
   return (
     <div className="map-agent-in absolute bottom-0 flex w-full justify-center">
       <div className="mx-auto flex w-full max-w-screen-md items-center rounded-t-xl bg-neutral-950/50 px-6 py-6 backdrop-blur-2xl">
-        <Image width={256} height={256} className="h-20 w-20 rounded-2xl" alt="test" src={"/art/" + game.samurai.TokenId + ".png"} />
+        <Image width={256} height={256} className="h-20 w-20 rounded-2xl" alt="test" src={"/art/" + game.samurai.Id + ".png"} />
         <div className="ml-4 flex h-full flex-col">
-          <h4 className="font-medium">{game.samurai.TokenName}</h4>
+          <h4 className="font-medium">SamuraiWarrior #{game.samurai.Id}</h4>
           <p className={'mt-1 text-sm ' + (game.samurai.IsInjured == true ? 'text-red-500' : 'text-green-500')}>
             <span>Health: </span>
-            {game.samurai.IsInjured ? 'Injured' : 'Healtly'}</p>
+            {game.samurai?.IsInjured ? 'Injured' : 'Healtly'}</p>
           <p className='mt-1 text-sm'>
             <span>Status: </span>
-            {game.samurai.DeploymentTime != 0 && game.samurai.CampTime == 0 ? 'In War' : game.samurai.CampTime != 0 ? 'Resting' : 'Available'}
+            {game.samurai?.Status == 1 ? 'In War' : game.samurai?.Status == 2 ? 'Camp' : 'Available'}
           </p>
+          {game.samurai?.Status != 3 && <p>
+            {DateFormatter.format(new Date(game.samurai.Status == 2 ? Number(game.samurai.CampTime) : Number(game.samurai.DeploymentTime)))}
+          </p>}
         </div>
         <div className="ml-auto grid w-full max-w-sm grid-cols-2 gap-4">
           <div className="col-span-1">
@@ -101,10 +111,126 @@ export function Map() {
   const [locations, setLocations] = useState([])
   const [deck, setDeck] = useState([]);
 
+  const [selectedAgent, setSelectedAgent] = useState(0);
+
   const [landModal, setLandModal] = useState(false);
 
-  const onAgentSelect = (data) => {
-    setSamurai(data); // TODO: Need samurai data
+  useContractRead({
+    address: config.GAME_ADDRESS as any,
+    abi: [{
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "viewSamurai",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "season",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "lightStones",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "campTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deploymentTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint8",
+              "name": "location",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "attack",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "defence",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "chakra",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "maxAgility",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "currentAgility",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isInjured",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint8",
+              "name": "status",
+              "type": "uint8"
+            }
+          ],
+          "internalType": "struct Registration.Samurai",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }],
+    functionName: 'viewSamurai',
+    args: [BigInt(Number(selectedAgent))],
+    enabled: true,
+
+    onSuccess: (data) => {
+      const payload = {
+        Season: Number(data.season),
+        LightStones: Number(data.lightStones),
+        Chakra: Number(data.chakra),
+        Attack: Number(data.attack),
+        Defence: Number(data.defence),
+        MaxAgility: Number(data.maxAgility),
+        CurrentAgility: Number(data.currentAgility),
+        Location: Number(data.location),
+        Status: Number(data.status),
+        IsInjured: data.isInjured,
+        CampTime: Number(data.campTime),
+        DeploymentTime: Number(data.deploymentTime),
+        Owner: data.owner,
+        Id: selectedAgent,
+      }
+
+      setSamurai(payload);
+    }
+  })
+
+  const onAgentSelect = async (data) => {
+    setSelectedAgent(data);
   };
 
   const onAreaSelect = (name: string) => {
@@ -209,7 +335,7 @@ export function Map() {
               <p className="text-sm">{game.land.desc}</p>
             </div>
             <button onClick={() => setLandModal(false)}>
-              <i className='ri-close-fill text-2xl'></i>
+              <i className='ri-close-fill text-2xl'></i>w
             </button>
           </div>
           <div className="mt-6 grid grid-cols-1 gap-4">
@@ -254,13 +380,13 @@ export function Map() {
               <div className='flex flex-col gap-4'>
                 <h2 className='text-sm text-white/50'>Avaiable NFTs</h2>
                 {deck.filter(x => x.Location == game.land.id && x.CampTime == 0).map((x, i) => (
-                  <Image className='rounded-full' src={'/art/' + x.TokenId + ".png"} width={48} height={48} alt='no_camped' />
+                  <Image className='rounded-full' src={'/art/' + x.Id + ".png"} width={48} height={48} alt='no_camped' />
                 ))}
               </div>
               <div className='flex flex-col gap-4 mt-4'>
                 <h2 className='text-sm text-white/50'>Camped NFTs</h2>
                 {deck.filter(x => x.Location == game.land.id && x.CampTime != 0).map((x, i) => (
-                  <Image className='rounded-full' src={'/art/' + x.TokenId + ".png"} width={48} height={48} alt='no_camped' />
+                  <Image className='rounded-full' src={'/art/' + x.Id + ".png"} width={48} height={48} alt='no_camped' />
                 ))}
               </div>
             </div>

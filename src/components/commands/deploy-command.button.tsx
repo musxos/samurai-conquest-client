@@ -22,7 +22,7 @@ export function DeployCommandButton() {
     }
 
     await writeAsync({
-      recklesslySetUnpreparedArgs: [
+      args: [
         game.samurai.TokenId,
       ]
     });

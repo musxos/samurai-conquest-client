@@ -27,7 +27,7 @@ export function UndeployCommandButton() {
     }
 
     await writeAsync({
-      recklesslySetUnpreparedArgs: [
+      args: [
         game.samurai.id,
       ]
     });

@@ -45,6 +45,8 @@ const wagmiConfig = createConfig({
 // #endregion
 
 export default function App({ Component, pageProps }: AppProps) {
+
+
   const getLayout = ((Component as any).getLayout as any) || ((page) => page);
   const router = useRouter();
 

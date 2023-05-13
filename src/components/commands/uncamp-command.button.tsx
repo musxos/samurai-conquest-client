@@ -23,7 +23,7 @@ export function UncampCommandButton() {
     }
 
     await writeAsync({
-      recklesslySetUnpreparedArgs: [
+      args: [
         BigNumber.from(game.samurai.TokenId),
       ]
     })

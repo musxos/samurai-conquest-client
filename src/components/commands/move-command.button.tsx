@@ -33,7 +33,7 @@ export function MoveCommandButton() {
     }
 
     await writeAsync({
-      recklesslySetUnpreparedArgs: [
+      args: [
         BigNumber.from(game.samurai?.TokenId),
         game.land?.id,
       ]
