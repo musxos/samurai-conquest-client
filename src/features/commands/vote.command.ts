@@ -1,12 +1,7 @@
 import {
   useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
 } from 'wagmi';
 import Config from '@/app/config';
-import { useEffect, useState } from 'react';
-import useDebounce from '@/hooks/useDebounce';
-import { BigNumber } from 'alchemy-sdk';
 
 const useVoteCommand = () => {
   const { data, error, isError, writeAsync } = useContractWrite({

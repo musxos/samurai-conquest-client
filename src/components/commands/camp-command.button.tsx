@@ -8,7 +8,7 @@ export function CampCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } = useCampCommand();
+  const { isError, data, isLoading, isSuccess, writeAsync, error } = useCampCommand();
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ export function CampCommandButton() {
 
     await writeAsync({
       args: [
-        BigNumber.from(game.samurai.TokenId),
+        BigInt(game.samurai.Id),
       ]
     });
   };

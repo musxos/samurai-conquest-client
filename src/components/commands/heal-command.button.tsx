@@ -8,7 +8,7 @@ export function HealCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, writeAsync, refetch, error } = useHealCommand();
+  const { isError, data, writeAsync, error } = useHealCommand();
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ export function HealCommandButton() {
 
     await writeAsync({
       args: [
-        BigNumber.from(game.samurai.TokenId),
+        BigInt(game.samurai.Id),
       ]
     })
   };

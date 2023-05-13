@@ -6,7 +6,7 @@ import {
 import Config from '@/app/config';
 
 const useHealCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, writeAsync } = useContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
@@ -24,15 +24,10 @@ const useHealCommand = () => {
       },
     ],
     functionName: 'healSamurai',
-    enabled: false,
-  });
-
-  const { data, error, isError, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 
-  return { data, error, isError, writeAsync, refetch };
+  return { data, error, isError, writeAsync };
 };
 
 export default useHealCommand;

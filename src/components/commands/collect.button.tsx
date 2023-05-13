@@ -8,7 +8,7 @@ export function CollectCommandButton() {
     const { game } = useGame();
     const account = useAccount();
 
-    const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } = useCollectCommand();
+    const { isError, data, isLoading, isSuccess, writeAsync, error } = useCollectCommand();
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -23,7 +23,7 @@ export function CollectCommandButton() {
 
         await writeAsync({
             args: [
-                BigNumber.from(game.samurai.TokenId),
+                BigInt(game.samurai.Id),
             ]
         });
     };

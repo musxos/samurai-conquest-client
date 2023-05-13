@@ -111,7 +111,7 @@ export function Map() {
   const [locations, setLocations] = useState([])
   const [deck, setDeck] = useState([]);
 
-  const [selectedAgent, setSelectedAgent] = useState(0);
+  const [selectedAgent, setSelectedAgent] = useState(-1);
 
   const [landModal, setLandModal] = useState(false);
 
@@ -223,6 +223,7 @@ export function Map() {
         DeploymentTime: Number(data.deploymentTime),
         Owner: data.owner,
         Id: selectedAgent,
+        id: selectedAgent,
       }
 
       setSamurai(payload);

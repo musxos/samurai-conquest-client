@@ -8,7 +8,7 @@ export function UndeployCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } =
+  const { isError, data, isLoading, isSuccess, writeAsync, error } =
     useUndeployCommand();
 
   const handleClick = async (e) => {
@@ -20,10 +20,6 @@ export function UndeployCommandButton() {
 
     if (!game.samurai) {
       return;
-    }
-
-    if (!writeAsync) {
-      await refetch();
     }
 
     await writeAsync({

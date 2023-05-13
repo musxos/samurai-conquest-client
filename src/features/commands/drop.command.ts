@@ -6,7 +6,7 @@ import {
 import Config from '@/app/config';
 
 const useDropCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, writeAsync } = useContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
@@ -24,11 +24,6 @@ const useDropCommand = () => {
       },
     ],
     functionName: 'lightStoneDrop',
-    enabled: false,
-  });
-
-  const { data, error, isError, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 
@@ -36,7 +31,7 @@ const useDropCommand = () => {
     hash: data?.hash,
   });
 
-  return { data, error, isError, isLoading, isSuccess, writeAsync, refetch };
+  return { data, error, isError, isLoading, isSuccess, writeAsync };
 };
 
 export default useDropCommand;

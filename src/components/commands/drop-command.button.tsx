@@ -8,7 +8,7 @@ export function DropButtonCommand() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } = useDropCommand();
+  const { isError, data, isLoading, isSuccess, writeAsync, error } = useDropCommand();
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ export function DropButtonCommand() {
 
     await writeAsync({
       args: [
-        BigNumber.from(game.samurai.TokenId),
+        BigInt(game.samurai.Id),
       ]
     });
   };

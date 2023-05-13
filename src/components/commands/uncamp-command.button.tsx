@@ -8,7 +8,7 @@ export function UncampCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } =
+  const { isError, data, isLoading, isSuccess, writeAsync, error } =
     useUncampCommand();
 
   const handleClick = async (e) => {
@@ -24,7 +24,7 @@ export function UncampCommandButton() {
 
     await writeAsync({
       args: [
-        BigNumber.from(game.samurai.TokenId),
+        BigInt(game.samurai.Id),
       ]
     })
   };
@@ -46,8 +46,8 @@ export function UncampCommandButton() {
         {isLoading
           ? 'Uncamping...'
           : isSuccess && !isLoading
-          ? 'Uncamped'
-          : 'Uncamp'}
+            ? 'Uncamped'
+            : 'Uncamp'}
       </span>
     </button>
   );

@@ -7,7 +7,7 @@ export function DeployCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, writeAsync, refetch, error } =
+  const { isError, data, isLoading, isSuccess, writeAsync, error } =
     useDeployCommand();
 
   const handleClick = async (e) => {
@@ -23,7 +23,7 @@ export function DeployCommandButton() {
 
     await writeAsync({
       args: [
-        game.samurai.TokenId,
+        BigInt(game.samurai.Id),
       ]
     });
   };

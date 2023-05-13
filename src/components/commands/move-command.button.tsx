@@ -8,7 +8,7 @@ export function MoveCommandButton() {
   const { game } = useGame();
   const account = useAccount();
 
-  const { isError, data, isLoading, isSuccess, writeAsync, error, refetch } =
+  const { isError, data, isLoading, isSuccess, writeAsync, error } =
     useMoveCommand();
 
   const handleClick = async (e) => {
@@ -34,7 +34,7 @@ export function MoveCommandButton() {
 
     await writeAsync({
       args: [
-        BigNumber.from(game.samurai?.TokenId),
+        BigInt(game.samurai?.Id),
         game.land?.id,
       ]
     });

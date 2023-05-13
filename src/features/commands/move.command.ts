@@ -8,7 +8,7 @@ import { useGame } from '@/hooks/useGame';
 import { LandState } from '../game/game-slice';
 
 const useMoveCommand = () => {
-  const { config, refetch } = usePrepareContractWrite({
+  const { data, error, isError, writeAsync } = useContractWrite({
     address: Config.GAME_ADDRESS as any,
     abi: [
       {
@@ -31,11 +31,6 @@ const useMoveCommand = () => {
       },
     ],
     functionName: 'moveSamurai',
-    enabled: false,
-  });
-
-  const { data, error, isError, writeAsync } = useContractWrite({
-    ...config,
     mode: 'recklesslyUnprepared',
   });
 
@@ -43,7 +38,7 @@ const useMoveCommand = () => {
     hash: data?.hash,
   });
 
-  return { data, error, isError, isLoading, isSuccess, writeAsync, refetch };
+  return { data, error, isError, isLoading, isSuccess, writeAsync };
 };
 
 export function prepareMove(currentLand: LandState, targetLand: LandState) {

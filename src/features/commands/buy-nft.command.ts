@@ -6,7 +6,7 @@ import {
 import Config from '@/app/config';
 
 const useBuyNftCommand = (_id: any) => {
-  const { config } = usePrepareContractWrite({
+  const { data, error, isError, write } = useContractWrite({
     address: Config.MARKETPLACE_ADDRESS as any,
     abi: [
       {
@@ -25,19 +25,8 @@ const useBuyNftCommand = (_id: any) => {
     ],
     functionName: 'buyNFT',
     args: [_id],
-    enabled: false,
-    onError: (error: any) => {
-      console.log('onError', error);
-    },
-    onSettled: () => {
-      console.log('onSettled');
-    },
-    onSuccess: (data: any) => {
-      console.log('onSuccess', data);
-    },
+    mode: 'recklesslyUnprepared',
   });
-
-  const { data, error, isError, write } = useContractWrite(config);
 
   return { data, error, isError, write };
 };
