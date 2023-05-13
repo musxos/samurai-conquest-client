@@ -154,6 +154,7 @@ export default function Profile() {
                     attack={nft.Attack}
                     defence={nft.Defence}
                     chakra={nft.Chakra}
+                    player={nft.player}
                   ></AgentCard>
                 ))}
             </div>
