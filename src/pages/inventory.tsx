@@ -80,13 +80,13 @@ export default function Inventory() {
     const _inventory = alchemyResponse.ownedNfts.filter(x => x.rawMetadata.attributes.some(x => x.trait_type != 'Agility' && x.value != 0)).map(x => ({
       tokenId: x.tokenId,
       title: x.title,
-      name: inventoryResponse.find(y => y.TokenId == x.tokenId)?.TokenName || x.title,
+      name: x.rawMetadata.name,
       description: x.rawMetadata.description,
       attack: x.rawMetadata.attributes[0].value,
       defence: x.rawMetadata.attributes[1].value,
       chakra: x.rawMetadata.attributes[2].value,
       agility: x.rawMetadata.attributes[3].value,
-      player: x.rawMetadata.attributes[4].value,
+      status: inventoryResponse.some(y => y == x.tokenId) ? true : false,
     }));
 
     setInventory(_inventory);
@@ -131,7 +131,7 @@ export default function Inventory() {
                 defence={item.defence}
                 chakra={item.chakra}
                 agility={item.agility}
-                player={item.player}
+                status={item.status}
                 onClick={() => show(i)}
                 key={i}
               ></AgentCard>

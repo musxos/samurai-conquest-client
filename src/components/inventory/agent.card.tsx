@@ -12,7 +12,7 @@ export type AgentCardProps = {
   defence: number;
   agility: number;
   chakra: number;
-  player: string;
+  status: boolean;
 };
 
 export function AgentCard({
@@ -23,7 +23,7 @@ export function AgentCard({
   defence = 0,
   agility = 0,
   chakra = 0,
-  player = null,
+  status = false,
   onClick,
 }: AgentCardProps) {
   const account = useAccount();
@@ -96,8 +96,8 @@ export function AgentCard({
         </div>
       </div>
       <div className='mt-6 flex justify-end text-sm'>
-        {String(player).toLocaleLowerCase() == String(account.address).toLocaleLowerCase() && <div className='px-3 py-1 rounded-full bg-red-500/10 text-red-500'>In War</div>}
-        {String(player).toLocaleLowerCase() != String(account.address).toLocaleLowerCase() && <div className='px-3 py-1 rounded-full bg-green-500/10 text-green-500'>New</div>}
+        {status == true && <div className='px-3 py-1 rounded-full bg-red-500/10 text-red-500'>In War</div>}
+        {status == false && <div className='px-3 py-1 rounded-full bg-green-500/10 text-green-500'>New</div>}
       </div>
     </div>
   );

@@ -196,7 +196,7 @@ export function Map() {
             width={56}
             className="h-14 w-14 rounded-full"
             alt="test"
-            src={"/art/" + x.TokenId + ".png"}
+            src={"/art/" + x + ".png"}
           />
         </button>))}
       </div>
