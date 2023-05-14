@@ -393,13 +393,13 @@ export function Map() {
               <div className='flex flex-col gap-4'>
                 <h2 className='text-sm text-white/50'>Avaiable NFTs</h2>
                 {deck.filter(x => x.Location == game.land.id && x.CampTime == 0).map((x, i) => (
-                  <Image className='rounded-full' src={'/art/' + x.Id + ".png"} width={48} height={48} alt='no_camped' />
+                  <Image key={i} className='rounded-full' src={'/art/' + x.Id + ".png"} width={48} height={48} alt='no_camped' />
                 ))}
               </div>
               <div className='flex flex-col gap-4 mt-4'>
                 <h2 className='text-sm text-white/50'>Camped NFTs</h2>
                 {deck.filter(x => x.Location == game.land.id && x.CampTime != 0).map((x, i) => (
-                  <Image className='rounded-full' src={'/art/' + x.Id + ".png"} width={48} height={48} alt='no_camped' />
+                  <Image key={i} className='rounded-full' src={'/art/' + x.Id + ".png"} width={48} height={48} alt='no_camped' />
                 ))}
               </div>
             </div>

@@ -1,6 +1,5 @@
 import {
   useContractWrite,
-  usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
 import Config from '@/app/config';
