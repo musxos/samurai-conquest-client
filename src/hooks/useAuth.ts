@@ -28,10 +28,15 @@ export function useAuth() {
   });
 
   useEffect(() => {
+    if ((!account.address || !account.isConnected) && router.route != '/register') {
+      router.replace('/register');
+      return;
+    }
+
     if (account.address && account.isConnected) {
       fetchUser();
     }
-  }, [account.address]);
+  }, [account.address, account.isConnected]);
 
   const fetchUser = async () => {
     const data = await userApi.getUser(account.address);
